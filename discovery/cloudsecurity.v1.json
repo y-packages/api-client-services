@@ -1,0 +1,235 @@
+{
+    "kind": "discovery#restDescription",
+    "discoveryVersion": "v1",
+    "id": "cloudsecurity:v1",
+    "name": "cloudsecurity",
+    "canonicalName": "CloudSecurity",
+    "version": "v1",
+    "title": "YakNet Cloud Security & WebRisk API",
+    "description": "Harici WAF yük denetimi, SSRF/oltalama URL analizi ve durumsuz parola entropi denetçisi.",
+    "ownerDomain": "yakhub.com.tr",
+    "ownerName": "YakNet",
+    "protocol": "rest",
+    "rootUrl": "https://developer-console.yakhub.com.tr/",
+    "servicePath": "api/cloud/security/",
+    "auth": {
+        "apiKey": {
+            "header": "X-API-Key",
+            "prefix": "yk_live_"
+        },
+        "oauth2Client": {
+            "clientIdHeader": "X-Client-ID",
+            "clientSecretHeader": "X-Client-Secret"
+        }
+    },
+    "schemas": {
+        "WafInspectRequest": {
+            "id": "WafInspectRequest",
+            "type": "object",
+            "properties": {
+                "method": {
+                    "type": "string"
+                },
+                "uri": {
+                    "type": "string"
+                },
+                "ip": {
+                    "type": "string"
+                },
+                "user_agent": {
+                    "type": "string"
+                },
+                "params": {
+                    "type": "object"
+                },
+                "waf_mode": {
+                    "type": "string"
+                }
+            }
+        },
+        "WafInspectResponse": {
+            "id": "WafInspectResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "allowed": {
+                    "type": "boolean"
+                },
+                "action": {
+                    "type": "string"
+                },
+                "threat_score": {
+                    "type": "integer"
+                },
+                "detected_threats": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "rules_triggered": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "timestamp": {
+                    "type": "string"
+                }
+            }
+        },
+        "UrlCheckRequest": {
+            "id": "UrlCheckRequest",
+            "type": "object",
+            "properties": {
+                "url": {
+                    "type": "string"
+                }
+            }
+        },
+        "UrlCheckResponse": {
+            "id": "UrlCheckResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "url": {
+                    "type": "string"
+                },
+                "safe": {
+                    "type": "boolean"
+                },
+                "ssrf_safe": {
+                    "type": "boolean"
+                },
+                "risk_score": {
+                    "type": "integer"
+                },
+                "scheme": {
+                    "type": "string"
+                },
+                "host": {
+                    "type": "string"
+                },
+                "warnings": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "PasswordCharsets": {
+            "id": "PasswordCharsets",
+            "type": "object",
+            "properties": {
+                "lowercase": {
+                    "type": "boolean"
+                },
+                "uppercase": {
+                    "type": "boolean"
+                },
+                "digits": {
+                    "type": "boolean"
+                },
+                "symbols": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "PasswordAuditRequest": {
+            "id": "PasswordAuditRequest",
+            "type": "object",
+            "properties": {
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "PasswordAuditResponse": {
+            "id": "PasswordAuditResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "score": {
+                    "type": "integer"
+                },
+                "strength": {
+                    "type": "string"
+                },
+                "entropy_bits": {
+                    "type": "number"
+                },
+                "length": {
+                    "type": "integer"
+                },
+                "charsets": {
+                    "$ref": "PasswordCharsets"
+                },
+                "estimated_crack_time": {
+                    "type": "string"
+                },
+                "suggestions": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    },
+    "resources": {
+        "threats": {
+            "methods": {
+                "wafInspect": {
+                    "id": "cloudsecurity.threats.wafInspect",
+                    "path": "waf-inspect",
+                    "httpMethod": "POST",
+                    "description": "HTTP isteğini SQLi, XSS, LFI, RCE ve kötü amaçlı tarayıcılara karşı denetler.",
+                    "parameters": [],
+                    "request": {
+                        "$ref": "WafInspectRequest"
+                    },
+                    "response": {
+                        "$ref": "WafInspectResponse"
+                    }
+                },
+                "checkUrl": {
+                    "id": "cloudsecurity.threats.checkUrl",
+                    "path": "url-check",
+                    "httpMethod": "POST",
+                    "description": "Bağlantıyı SSRF, iç ağ hedefleri, punycode ve oltalama göstergelerine karşı analiz eder.",
+                    "parameters": [],
+                    "request": {
+                        "$ref": "UrlCheckRequest"
+                    },
+                    "response": {
+                        "$ref": "UrlCheckResponse"
+                    }
+                }
+            }
+        },
+        "passwords": {
+            "methods": {
+                "audit": {
+                    "id": "cloudsecurity.passwords.audit",
+                    "path": "password-audit",
+                    "httpMethod": "POST",
+                    "description": "Parolayı kaydetmeden entropi, kırılma süresi ve zayıf kalıp açısından değerlendirir.",
+                    "parameters": [],
+                    "request": {
+                        "$ref": "PasswordAuditRequest"
+                    },
+                    "response": {
+                        "$ref": "PasswordAuditResponse"
+                    }
+                }
+            }
+        }
+    }
+}

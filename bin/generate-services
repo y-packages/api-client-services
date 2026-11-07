@@ -1,0 +1,92 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+$autoloadPaths = [
+    __DIR__ . '/../vendor/autoload.php',
+    __DIR__ . '/../../../autoload.php',
+];
+
+$loaded = false;
+foreach ($autoloadPaths as $autoload) {
+    if (file_exists($autoload)) {
+        require_once $autoload;
+        $loaded = true;
+        break;
+    }
+}
+
+// Bootstrap PSR-4 fallback if `composer install` hasn't run yet
+if (!$loaded) {
+    spl_autoload_register(static function (string $class): void {
+        if (str_starts_with($class, 'YakNet\\Api\\Generator\\')) {
+            $file = __DIR__ . '/../generator/' . str_replace('\\', DIRECTORY_SEPARATOR, substr($class, strlen('YakNet\\Api\\Generator\\'))) . '.php';
+            if (file_exists($file)) {
+                require_once $file;
+                return;
+            }
+        }
+        $prefix = 'YakNet\\Api\\';
+        if (!str_starts_with($class, $prefix)) {
+            return;
+        }
+        $rel = str_replace('\\', DIRECTORY_SEPARATOR, substr($class, strlen($prefix))) . '.php';
+        $file = __DIR__ . '/../src/' . $rel;
+        if (file_exists($file)) {
+            require_once $file;
+        }
+    });
+}
+
+use YakNet\Api\Generator\DiscoveryGenerator;
+
+$options = getopt('', ['url::', 'discovery-dir::', 'src-dir::', 'help']);
+
+if (isset($options['help'])) {
+    echo <<<TXT
+YakNet API Client Services — Otomatik Kod Üretici (DiscoveryGenerator)
+
+Kullanım:
+  php bin/generate-services                              Yerel discovery/*.json şemalarından sınıfları üretir
+  php bin/generate-services --url=https://developer-console.yakhub.com.tr/api/discovery/v1/apis
+                                                         Canlı konsoldan Discovery şemalarını indirip tüm sınıfları üretir
+
+Seçenekler:
+  --url=<URL>              Canlı Discovery Directory uç noktası
+  --discovery-dir=<PATH>   Discovery JSON klasörü (varsayılan: ./discovery)
+  --src-dir=<PATH>         Üretilecek PHP kaynak klasörü (varsayılan: ./src)
+
+TXT;
+    exit(0);
+}
+
+$discoveryDir = isset($options['discovery-dir']) && is_string($options['discovery-dir'])
+    ? $options['discovery-dir']
+    : dirname(__DIR__) . DIRECTORY_SEPARATOR . 'discovery';
+
+$srcDir = isset($options['src-dir']) && is_string($options['src-dir'])
+    ? $options['src-dir']
+    : dirname(__DIR__) . DIRECTORY_SEPARATOR . 'src';
+
+$generator = new DiscoveryGenerator();
+
+try {
+    if (isset($options['url']) && is_string($options['url']) && $options['url'] !== '') {
+        echo "Canlı Discovery sunucusundan şemalar indiriliyor: {$options['url']}\n";
+        $stats = $generator->generateFromUrl($options['url'], $discoveryDir, $srcDir);
+    } else {
+        echo "Yerel Discovery şemalarından kod üretiliyor: {$discoveryDir}\n";
+        $stats = $generator->generateFromDirectory($discoveryDir, $srcDir);
+    }
+
+    echo sprintf(
+        "✓ Başarıyla tamamlandı: %d bulut servisi için toplam %d PHP sınıf dosyası üretildi.\n",
+        $stats['services'],
+        $stats['files']
+    );
+    exit(0);
+} catch (Throwable $e) {
+    fwrite(STDERR, "HATA: " . $e->getMessage() . "\n");
+    exit(1);
+}

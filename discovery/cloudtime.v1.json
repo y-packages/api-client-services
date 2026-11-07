@@ -1,0 +1,159 @@
+{
+    "kind": "discovery#restDescription",
+    "discoveryVersion": "v1",
+    "id": "cloudtime:v1",
+    "name": "cloudtime",
+    "canonicalName": "CloudTime",
+    "version": "v1",
+    "title": "YakNet Cloud Time & Cron Utilities API",
+    "description": "IANA zaman dilimi dönüştürücü, yaz saati (DST) bilgisi ve Cron sonraki çalışma zamanı hesaplayıcı.",
+    "ownerDomain": "yakhub.com.tr",
+    "ownerName": "YakNet",
+    "protocol": "rest",
+    "rootUrl": "https://developer-console.yakhub.com.tr/",
+    "servicePath": "api/cloud/time/",
+    "auth": {
+        "apiKey": {
+            "header": "X-API-Key",
+            "prefix": "yk_live_"
+        },
+        "oauth2Client": {
+            "clientIdHeader": "X-Client-ID",
+            "clientSecretHeader": "X-Client-Secret"
+        }
+    },
+    "schemas": {
+        "TimeConvertRequest": {
+            "id": "TimeConvertRequest",
+            "type": "object",
+            "properties": {
+                "datetime": {
+                    "type": "string"
+                },
+                "from_timezone": {
+                    "type": "string"
+                },
+                "to_timezone": {
+                    "type": "string"
+                },
+                "locale": {
+                    "type": "string"
+                }
+            }
+        },
+        "TimeConvertResponse": {
+            "id": "TimeConvertResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "source_iso": {
+                    "type": "string"
+                },
+                "source_timezone": {
+                    "type": "string"
+                },
+                "target_iso": {
+                    "type": "string"
+                },
+                "target_timezone": {
+                    "type": "string"
+                },
+                "target_formatted": {
+                    "type": "string"
+                },
+                "unix_timestamp": {
+                    "type": "integer"
+                },
+                "utc_offset": {
+                    "type": "string"
+                },
+                "is_dst": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "CronPreviewRequest": {
+            "id": "CronPreviewRequest",
+            "type": "object",
+            "properties": {
+                "expression": {
+                    "type": "string"
+                },
+                "timezone": {
+                    "type": "string"
+                },
+                "count": {
+                    "type": "integer"
+                },
+                "from_datetime": {
+                    "type": "string"
+                }
+            }
+        },
+        "CronPreviewResponse": {
+            "id": "CronPreviewResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "expression": {
+                    "type": "string"
+                },
+                "valid": {
+                    "type": "boolean"
+                },
+                "timezone": {
+                    "type": "string"
+                },
+                "next_runs": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "previous_run": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "resources": {
+        "timezones": {
+            "methods": {
+                "convert": {
+                    "id": "cloudtime.timezones.convert",
+                    "path": "convert",
+                    "httpMethod": "POST",
+                    "description": "Tarih/saat bilgisini kaynak zaman diliminden hedef zaman dilimine dönüştürür.",
+                    "parameters": [],
+                    "request": {
+                        "$ref": "TimeConvertRequest"
+                    },
+                    "response": {
+                        "$ref": "TimeConvertResponse"
+                    }
+                }
+            }
+        },
+        "cron": {
+            "methods": {
+                "preview": {
+                    "id": "cloudtime.cron.preview",
+                    "path": "cron-preview",
+                    "httpMethod": "POST",
+                    "description": "Cron ifadesini doğrular ve gelecekteki çalışma zamanlarını hesaplar.",
+                    "parameters": [],
+                    "request": {
+                        "$ref": "CronPreviewRequest"
+                    },
+                    "response": {
+                        "$ref": "CronPreviewResponse"
+                    }
+                }
+            }
+        }
+    }
+}

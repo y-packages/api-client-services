@@ -1,0 +1,196 @@
+{
+    "kind": "discovery#restDescription",
+    "discoveryVersion": "v1",
+    "id": "cloudkv:v1",
+    "name": "cloudkv",
+    "canonicalName": "CloudKv",
+    "version": "v1",
+    "title": "YakNet Cloud KV & Remote Config API",
+    "description": "Uygulamalar için düşük gecikmeli anahtar-değer ve özellik bayrağı servisi.",
+    "ownerDomain": "yakhub.com.tr",
+    "ownerName": "YakNet",
+    "protocol": "rest",
+    "rootUrl": "https://developer-console.yakhub.com.tr/",
+    "servicePath": "api/cloud/kv",
+    "auth": {
+        "apiKey": {
+            "header": "X-API-Key",
+            "prefix": "yk_live_"
+        },
+        "oauth2Client": {
+            "clientIdHeader": "X-Client-ID",
+            "clientSecretHeader": "X-Client-Secret"
+        }
+    },
+    "schemas": {
+        "KvEntry": {
+            "id": "KvEntry",
+            "type": "object",
+            "properties": {
+                "key": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "any"
+                },
+                "is_public": {
+                    "type": "boolean"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "KvEntriesListResponse": {
+            "id": "KvEntriesListResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "project": {
+                    "type": "string"
+                },
+                "count": {
+                    "type": "integer"
+                },
+                "entries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "KvEntry"
+                    }
+                }
+            }
+        },
+        "KvEntryResponse": {
+            "id": "KvEntryResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "key": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "any"
+                },
+                "is_public": {
+                    "type": "boolean"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "PutKvEntryRequest": {
+            "id": "PutKvEntryRequest",
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "any"
+                },
+                "is_public": {
+                    "type": "boolean"
+                },
+                "description": {
+                    "type": "string"
+                }
+            }
+        },
+        "DeleteKvEntryResponse": {
+            "id": "DeleteKvEntryResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "deleted": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "resources": {
+        "entries": {
+            "methods": {
+                "listEntries": {
+                    "id": "cloudkv.entries.listEntries",
+                    "path": "",
+                    "httpMethod": "GET",
+                    "description": "Projedeki tüm Cloud KV anahtarlarını listeler.",
+                    "parameters": [],
+                    "response": {
+                        "$ref": "KvEntriesListResponse"
+                    }
+                },
+                "get": {
+                    "id": "cloudkv.entries.get",
+                    "path": "/{key}",
+                    "httpMethod": "GET",
+                    "description": "Tek bir Cloud KV anahtarının değerini getirir.",
+                    "parameters": {
+                        "key": {
+                            "type": "string",
+                            "location": "path",
+                            "required": true
+                        }
+                    },
+                    "response": {
+                        "$ref": "KvEntryResponse"
+                    }
+                },
+                "put": {
+                    "id": "cloudkv.entries.put",
+                    "path": "/{key}",
+                    "httpMethod": "PUT",
+                    "description": "Cloud KV anahtarını oluşturur veya günceller.",
+                    "parameters": {
+                        "key": {
+                            "type": "string",
+                            "location": "path",
+                            "required": true
+                        }
+                    },
+                    "request": {
+                        "$ref": "PutKvEntryRequest"
+                    },
+                    "response": {
+                        "$ref": "KvEntryResponse"
+                    }
+                },
+                "delete": {
+                    "id": "cloudkv.entries.delete",
+                    "path": "/{key}",
+                    "httpMethod": "DELETE",
+                    "description": "Cloud KV anahtarını siler.",
+                    "parameters": {
+                        "key": {
+                            "type": "string",
+                            "location": "path",
+                            "required": true
+                        }
+                    },
+                    "response": {
+                        "$ref": "DeleteKvEntryResponse"
+                    }
+                }
+            }
+        }
+    }
+}

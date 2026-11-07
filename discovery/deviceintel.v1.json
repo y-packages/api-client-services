@@ -1,0 +1,109 @@
+{
+    "kind": "discovery#restDescription",
+    "discoveryVersion": "v1",
+    "id": "deviceintel:v1",
+    "name": "deviceintel",
+    "canonicalName": "DeviceIntel",
+    "version": "v1",
+    "title": "YakNet Device & User-Agent Intelligence API",
+    "description": "User-Agent ve Accept-Language başlıklarından işletim sistemi, tarayıcı, cihaz türü ve bot tespiti.",
+    "ownerDomain": "yakhub.com.tr",
+    "ownerName": "YakNet",
+    "protocol": "rest",
+    "rootUrl": "https://developer-console.yakhub.com.tr/",
+    "servicePath": "api/cloud/device-intel/",
+    "auth": {
+        "apiKey": {
+            "header": "X-API-Key",
+            "prefix": "yk_live_"
+        },
+        "oauth2Client": {
+            "clientIdHeader": "X-Client-ID",
+            "clientSecretHeader": "X-Client-Secret"
+        }
+    },
+    "schemas": {
+        "DeviceParseRequest": {
+            "id": "DeviceParseRequest",
+            "type": "object",
+            "properties": {
+                "user_agent": {
+                    "type": "string"
+                },
+                "accept_language": {
+                    "type": "string"
+                }
+            }
+        },
+        "DeviceParseResponse": {
+            "id": "DeviceParseResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "user_agent": {
+                    "type": "string"
+                },
+                "device_type": {
+                    "type": "string"
+                },
+                "device_name": {
+                    "type": "string"
+                },
+                "os_name": {
+                    "type": "string"
+                },
+                "os_version": {
+                    "type": "string"
+                },
+                "browser_name": {
+                    "type": "string"
+                },
+                "browser_version": {
+                    "type": "string"
+                },
+                "is_mobile": {
+                    "type": "boolean"
+                },
+                "is_tablet": {
+                    "type": "boolean"
+                },
+                "is_desktop": {
+                    "type": "boolean"
+                },
+                "is_bot": {
+                    "type": "boolean"
+                },
+                "robot_name": {
+                    "type": "string"
+                },
+                "languages": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    },
+    "resources": {
+        "userAgent": {
+            "methods": {
+                "parse": {
+                    "id": "deviceintel.userAgent.parse",
+                    "path": "parse",
+                    "httpMethod": "POST",
+                    "description": "User-Agent dizgesini ayrıştırarak cihaz, işletim sistemi, tarayıcı ve bot bilgilerini döndürür.",
+                    "parameters": [],
+                    "request": {
+                        "$ref": "DeviceParseRequest"
+                    },
+                    "response": {
+                        "$ref": "DeviceParseResponse"
+                    }
+                }
+            }
+        }
+    }
+}

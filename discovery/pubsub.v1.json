@@ -1,0 +1,445 @@
+{
+    "kind": "discovery#restDescription",
+    "discoveryVersion": "v1",
+    "id": "pubsub:v1",
+    "name": "pubsub",
+    "canonicalName": "PubSub",
+    "version": "v1",
+    "title": "YakNet Cloud Pub/Sub API",
+    "description": "Asenkron konu yayıncılığı, Pull/Push mesaj kuyrukları ve onaylama (ACK) servisi.",
+    "ownerDomain": "yakhub.com.tr",
+    "ownerName": "YakNet",
+    "protocol": "rest",
+    "rootUrl": "https://developer-console.yakhub.com.tr/",
+    "servicePath": "api/cloud/pubsub/",
+    "auth": {
+        "apiKey": {
+            "header": "X-API-Key",
+            "prefix": "yk_live_"
+        },
+        "oauth2Client": {
+            "clientIdHeader": "X-Client-ID",
+            "clientSecretHeader": "X-Client-Secret"
+        }
+    },
+    "schemas": {
+        "Topic": {
+            "id": "Topic",
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "resource_name": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "retention_hours": {
+                    "type": "integer"
+                },
+                "subscriptions_count": {
+                    "type": "integer"
+                },
+                "messages_published_count": {
+                    "type": "integer"
+                },
+                "created_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "TopicsListResponse": {
+            "id": "TopicsListResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "project": {
+                    "type": "string"
+                },
+                "topics": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "Topic"
+                    }
+                }
+            }
+        },
+        "CreateTopicRequest": {
+            "id": "CreateTopicRequest",
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "retention_hours": {
+                    "type": "integer"
+                },
+                "create_default_sub": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "TopicResponse": {
+            "id": "TopicResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "topic": {
+                    "$ref": "Topic"
+                }
+            }
+        },
+        "PublishMessageRequest": {
+            "id": "PublishMessageRequest",
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "any"
+                },
+                "attributes": {
+                    "type": "object"
+                }
+            }
+        },
+        "PublishMessageResponse": {
+            "id": "PublishMessageResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "topic": {
+                    "type": "string"
+                },
+                "message_id": {
+                    "type": "string"
+                },
+                "delivery_status": {
+                    "type": "string"
+                },
+                "published_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "Subscription": {
+            "id": "Subscription",
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "resource_name": {
+                    "type": "string"
+                },
+                "topic": {
+                    "type": "string"
+                },
+                "delivery_type": {
+                    "type": "string"
+                },
+                "push_endpoint": {
+                    "type": "string"
+                },
+                "ack_deadline_seconds": {
+                    "type": "integer"
+                },
+                "is_active": {
+                    "type": "boolean"
+                },
+                "created_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "SubscriptionsListResponse": {
+            "id": "SubscriptionsListResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "project": {
+                    "type": "string"
+                },
+                "subscriptions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "Subscription"
+                    }
+                }
+            }
+        },
+        "CreateSubscriptionRequest": {
+            "id": "CreateSubscriptionRequest",
+            "type": "object",
+            "properties": {
+                "topic": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "delivery_type": {
+                    "type": "string"
+                },
+                "push_endpoint": {
+                    "type": "string"
+                },
+                "ack_deadline_seconds": {
+                    "type": "integer"
+                }
+            }
+        },
+        "SubscriptionResponse": {
+            "id": "SubscriptionResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "subscription": {
+                    "$ref": "Subscription"
+                }
+            }
+        },
+        "PullRequest": {
+            "id": "PullRequest",
+            "type": "object",
+            "properties": {
+                "max_messages": {
+                    "type": "integer"
+                }
+            }
+        },
+        "ReceivedMessage": {
+            "id": "ReceivedMessage",
+            "type": "object",
+            "properties": {
+                "ack_id": {
+                    "type": "string"
+                },
+                "message_id": {
+                    "type": "string"
+                },
+                "data": {
+                    "type": "string"
+                },
+                "attributes": {
+                    "type": "object"
+                },
+                "published_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "PullResponse": {
+            "id": "PullResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "subscription": {
+                    "type": "string"
+                },
+                "received_messages": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "ReceivedMessage"
+                    }
+                }
+            }
+        },
+        "AcknowledgeRequest": {
+            "id": "AcknowledgeRequest",
+            "type": "object",
+            "properties": {
+                "ack_ids": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "AcknowledgeResponse": {
+            "id": "AcknowledgeResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "acknowledged_count": {
+                    "type": "integer"
+                }
+            }
+        },
+        "DeletePubSubResponse": {
+            "id": "DeletePubSubResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "deleted": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "resources": {
+        "topics": {
+            "methods": {
+                "listTopics": {
+                    "id": "pubsub.topics.listTopics",
+                    "path": "topics",
+                    "httpMethod": "GET",
+                    "description": "Projedeki tüm Pub/Sub konularını listeler.",
+                    "parameters": [],
+                    "response": {
+                        "$ref": "TopicsListResponse"
+                    }
+                },
+                "create": {
+                    "id": "pubsub.topics.create",
+                    "path": "topics",
+                    "httpMethod": "POST",
+                    "description": "Yeni bir Pub/Sub konusu oluşturur.",
+                    "parameters": [],
+                    "request": {
+                        "$ref": "CreateTopicRequest"
+                    },
+                    "response": {
+                        "$ref": "TopicResponse"
+                    }
+                },
+                "publish": {
+                    "id": "pubsub.topics.publish",
+                    "path": "topics/{topicName}/publish",
+                    "httpMethod": "POST",
+                    "description": "Konuya mesaj yayınlar.",
+                    "parameters": {
+                        "topicName": {
+                            "type": "string",
+                            "location": "path",
+                            "required": true
+                        }
+                    },
+                    "request": {
+                        "$ref": "PublishMessageRequest"
+                    },
+                    "response": {
+                        "$ref": "PublishMessageResponse"
+                    }
+                },
+                "delete": {
+                    "id": "pubsub.topics.delete",
+                    "path": "topics/{topicName}",
+                    "httpMethod": "DELETE",
+                    "description": "Konuyu siler.",
+                    "parameters": {
+                        "topicName": {
+                            "type": "string",
+                            "location": "path",
+                            "required": true
+                        }
+                    },
+                    "response": {
+                        "$ref": "DeletePubSubResponse"
+                    }
+                }
+            }
+        },
+        "subscriptions": {
+            "methods": {
+                "listSubscriptions": {
+                    "id": "pubsub.subscriptions.listSubscriptions",
+                    "path": "subscriptions",
+                    "httpMethod": "GET",
+                    "description": "Projedeki abonelikleri listeler.",
+                    "parameters": [],
+                    "response": {
+                        "$ref": "SubscriptionsListResponse"
+                    }
+                },
+                "create": {
+                    "id": "pubsub.subscriptions.create",
+                    "path": "subscriptions",
+                    "httpMethod": "POST",
+                    "description": "Konuya bağlı yeni bir Pull veya Push aboneliği oluşturur.",
+                    "parameters": [],
+                    "request": {
+                        "$ref": "CreateSubscriptionRequest"
+                    },
+                    "response": {
+                        "$ref": "SubscriptionResponse"
+                    }
+                },
+                "pull": {
+                    "id": "pubsub.subscriptions.pull",
+                    "path": "subscriptions/{subName}/pull",
+                    "httpMethod": "POST",
+                    "description": "Abonelik kuyruğundan onaylanmamış mesajları çeker.",
+                    "parameters": {
+                        "subName": {
+                            "type": "string",
+                            "location": "path",
+                            "required": true
+                        }
+                    },
+                    "request": {
+                        "$ref": "PullRequest"
+                    },
+                    "response": {
+                        "$ref": "PullResponse"
+                    }
+                },
+                "acknowledge": {
+                    "id": "pubsub.subscriptions.acknowledge",
+                    "path": "subscriptions/{subName}/ack",
+                    "httpMethod": "POST",
+                    "description": "İşlenen mesajları onaylar (ACK).",
+                    "parameters": {
+                        "subName": {
+                            "type": "string",
+                            "location": "path",
+                            "required": true
+                        }
+                    },
+                    "request": {
+                        "$ref": "AcknowledgeRequest"
+                    },
+                    "response": {
+                        "$ref": "AcknowledgeResponse"
+                    }
+                },
+                "delete": {
+                    "id": "pubsub.subscriptions.delete",
+                    "path": "subscriptions/{subName}",
+                    "httpMethod": "DELETE",
+                    "description": "Aboneliği siler.",
+                    "parameters": {
+                        "subName": {
+                            "type": "string",
+                            "location": "path",
+                            "required": true
+                        }
+                    },
+                    "response": {
+                        "$ref": "DeletePubSubResponse"
+                    }
+                }
+            }
+        }
+    }
+}

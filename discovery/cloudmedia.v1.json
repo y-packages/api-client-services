@@ -1,0 +1,205 @@
+{
+    "kind": "discovery#restDescription",
+    "discoveryVersion": "v1",
+    "id": "cloudmedia:v1",
+    "name": "cloudmedia",
+    "canonicalName": "CloudMedia",
+    "version": "v1",
+    "title": "YakNet Cloud Media (QR, Avatar & Badge) API",
+    "description": "Özelleştirilebilir vektörel SVG QR kodları, deterministik Identicon/Initials avatarlar ve durum rozetleri.",
+    "ownerDomain": "yakhub.com.tr",
+    "ownerName": "YakNet",
+    "protocol": "rest",
+    "rootUrl": "https://developer-console.yakhub.com.tr/",
+    "servicePath": "api/cloud/media/",
+    "auth": {
+        "apiKey": {
+            "header": "X-API-Key",
+            "prefix": "yk_live_"
+        },
+        "oauth2Client": {
+            "clientIdHeader": "X-Client-ID",
+            "clientSecretHeader": "X-Client-Secret"
+        }
+    },
+    "schemas": {
+        "QrGenerateRequest": {
+            "id": "QrGenerateRequest",
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                },
+                "size": {
+                    "type": "integer"
+                },
+                "margin": {
+                    "type": "integer"
+                },
+                "foreground_hex": {
+                    "type": "string"
+                },
+                "background_hex": {
+                    "type": "string"
+                }
+            }
+        },
+        "QrGenerateResponse": {
+            "id": "QrGenerateResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "size": {
+                    "type": "integer"
+                },
+                "margin": {
+                    "type": "integer"
+                },
+                "mime_type": {
+                    "type": "string"
+                },
+                "svg": {
+                    "type": "string"
+                },
+                "data_uri": {
+                    "type": "string"
+                }
+            }
+        },
+        "AvatarResponse": {
+            "id": "AvatarResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "seed": {
+                    "type": "string"
+                },
+                "style": {
+                    "type": "string"
+                },
+                "size": {
+                    "type": "integer"
+                },
+                "primary_color": {
+                    "type": "string"
+                },
+                "svg": {
+                    "type": "string"
+                },
+                "data_uri": {
+                    "type": "string"
+                }
+            }
+        },
+        "BadgeResponse": {
+            "id": "BadgeResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "label": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "color_hex": {
+                    "type": "string"
+                },
+                "width": {
+                    "type": "integer"
+                },
+                "svg": {
+                    "type": "string"
+                },
+                "data_uri": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "resources": {
+        "qr": {
+            "methods": {
+                "generate": {
+                    "id": "cloudmedia.qr.generate",
+                    "path": "qr",
+                    "httpMethod": "POST",
+                    "description": "Özel renk ve boyutta vektörel SVG QR kodu üretir.",
+                    "parameters": [],
+                    "request": {
+                        "$ref": "QrGenerateRequest"
+                    },
+                    "response": {
+                        "$ref": "QrGenerateResponse"
+                    }
+                }
+            }
+        },
+        "avatars": {
+            "methods": {
+                "generate": {
+                    "id": "cloudmedia.avatars.generate",
+                    "path": "avatar",
+                    "httpMethod": "GET",
+                    "description": "Kullanıcı adı veya e-postadan deterministik SVG avatar (identicon veya initials) üretir.",
+                    "parameters": {
+                        "seed": {
+                            "type": "string",
+                            "location": "query",
+                            "required": false
+                        },
+                        "style": {
+                            "type": "string",
+                            "location": "query",
+                            "required": false
+                        },
+                        "size": {
+                            "type": "integer",
+                            "location": "query",
+                            "required": false
+                        }
+                    },
+                    "response": {
+                        "$ref": "AvatarResponse"
+                    }
+                }
+            }
+        },
+        "badges": {
+            "methods": {
+                "generate": {
+                    "id": "cloudmedia.badges.generate",
+                    "path": "badge",
+                    "httpMethod": "GET",
+                    "description": "Shields tarzı düz (flat) vektörel SVG durum rozeti üretir.",
+                    "parameters": {
+                        "label": {
+                            "type": "string",
+                            "location": "query",
+                            "required": false
+                        },
+                        "message": {
+                            "type": "string",
+                            "location": "query",
+                            "required": false
+                        },
+                        "color": {
+                            "type": "string",
+                            "location": "query",
+                            "required": false
+                        }
+                    },
+                    "response": {
+                        "$ref": "BadgeResponse"
+                    }
+                }
+            }
+        }
+    }
+}

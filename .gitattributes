@@ -1,0 +1,10 @@
+# Git attributes for clean Composer distribution (export-ignore development files)
+/.github export-ignore
+/.phpunit.cache export-ignore
+/bin export-ignore
+/discovery export-ignore
+/generator export-ignore
+/tests export-ignore
+/.gitignore export-ignore
+/phpstan.neon export-ignore
+/phpunit.xml export-ignore

@@ -1,0 +1,293 @@
+{
+    "kind": "discovery#restDescription",
+    "discoveryVersion": "v1",
+    "id": "cloudkms:v1",
+    "name": "cloudkms",
+    "canonicalName": "CloudKms",
+    "version": "v1",
+    "title": "YakNet Cloud KMS (Cryptography & Signing) API",
+    "description": "Proje izoleli XChaCha20-Poly1305 AEAD zarf şifreleme, HMAC-SHA256/512 imzalama ve CSPRNG rastgele veri üretimi.",
+    "ownerDomain": "yakhub.com.tr",
+    "ownerName": "YakNet",
+    "protocol": "rest",
+    "rootUrl": "https://developer-console.yakhub.com.tr/",
+    "servicePath": "api/cloud/kms/",
+    "auth": {
+        "apiKey": {
+            "header": "X-API-Key",
+            "prefix": "yk_live_"
+        },
+        "oauth2Client": {
+            "clientIdHeader": "X-Client-ID",
+            "clientSecretHeader": "X-Client-Secret"
+        }
+    },
+    "schemas": {
+        "EncryptRequest": {
+            "id": "EncryptRequest",
+            "type": "object",
+            "properties": {
+                "plaintext": {
+                    "type": "string"
+                },
+                "encoding": {
+                    "type": "string"
+                },
+                "aad": {
+                    "type": "string"
+                }
+            }
+        },
+        "EncryptResponse": {
+            "id": "EncryptResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "project": {
+                    "type": "string"
+                },
+                "key_name": {
+                    "type": "string"
+                },
+                "algorithm": {
+                    "type": "string"
+                },
+                "ciphertext": {
+                    "type": "string"
+                },
+                "plaintext_sha256": {
+                    "type": "string"
+                }
+            }
+        },
+        "DecryptRequest": {
+            "id": "DecryptRequest",
+            "type": "object",
+            "properties": {
+                "ciphertext": {
+                    "type": "string"
+                },
+                "aad": {
+                    "type": "string"
+                }
+            }
+        },
+        "DecryptResponse": {
+            "id": "DecryptResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "key_name": {
+                    "type": "string"
+                },
+                "plaintext": {
+                    "type": "string"
+                },
+                "plaintext_base64": {
+                    "type": "string"
+                },
+                "plaintext_sha256": {
+                    "type": "string"
+                }
+            }
+        },
+        "MacSignRequest": {
+            "id": "MacSignRequest",
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "string"
+                },
+                "algorithm": {
+                    "type": "string"
+                }
+            }
+        },
+        "MacSignResponse": {
+            "id": "MacSignResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "key_name": {
+                    "type": "string"
+                },
+                "algorithm": {
+                    "type": "string"
+                },
+                "signature": {
+                    "type": "string"
+                },
+                "hex_digest": {
+                    "type": "string"
+                }
+            }
+        },
+        "MacVerifyRequest": {
+            "id": "MacVerifyRequest",
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "string"
+                },
+                "signature": {
+                    "type": "string"
+                },
+                "algorithm": {
+                    "type": "string"
+                }
+            }
+        },
+        "MacVerifyResponse": {
+            "id": "MacVerifyResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "key_name": {
+                    "type": "string"
+                },
+                "algorithm": {
+                    "type": "string"
+                },
+                "valid": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "RandomBytesResponse": {
+            "id": "RandomBytesResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "bytes": {
+                    "type": "integer"
+                },
+                "entropy_bits": {
+                    "type": "integer"
+                },
+                "format": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "resources": {
+        "cryptoKeys": {
+            "methods": {
+                "encrypt": {
+                    "id": "cloudkms.cryptoKeys.encrypt",
+                    "path": "keys/{keyName}/encrypt",
+                    "httpMethod": "POST",
+                    "description": "Veriyi projeye özel türetilmiş XChaCha20-Poly1305 AEAD anahtarıyla şifreler.",
+                    "parameters": {
+                        "keyName": {
+                            "type": "string",
+                            "location": "path",
+                            "required": true
+                        }
+                    },
+                    "request": {
+                        "$ref": "EncryptRequest"
+                    },
+                    "response": {
+                        "$ref": "EncryptResponse"
+                    }
+                },
+                "decrypt": {
+                    "id": "cloudkms.cryptoKeys.decrypt",
+                    "path": "keys/{keyName}/decrypt",
+                    "httpMethod": "POST",
+                    "description": "Şifreli ykms:v1 zarfını doğrular ve düz metne çözer.",
+                    "parameters": {
+                        "keyName": {
+                            "type": "string",
+                            "location": "path",
+                            "required": true
+                        }
+                    },
+                    "request": {
+                        "$ref": "DecryptRequest"
+                    },
+                    "response": {
+                        "$ref": "DecryptResponse"
+                    }
+                },
+                "macSign": {
+                    "id": "cloudkms.cryptoKeys.macSign",
+                    "path": "keys/{keyName}/mac-sign",
+                    "httpMethod": "POST",
+                    "description": "Veri için projeye özel HMAC-SHA256 veya HMAC-SHA512 imzası üretir.",
+                    "parameters": {
+                        "keyName": {
+                            "type": "string",
+                            "location": "path",
+                            "required": true
+                        }
+                    },
+                    "request": {
+                        "$ref": "MacSignRequest"
+                    },
+                    "response": {
+                        "$ref": "MacSignResponse"
+                    }
+                },
+                "macVerify": {
+                    "id": "cloudkms.cryptoKeys.macVerify",
+                    "path": "keys/{keyName}/mac-verify",
+                    "httpMethod": "POST",
+                    "description": "HMAC imzasını sabit zamanlı (constant-time) olarak doğrular.",
+                    "parameters": {
+                        "keyName": {
+                            "type": "string",
+                            "location": "path",
+                            "required": true
+                        }
+                    },
+                    "request": {
+                        "$ref": "MacVerifyRequest"
+                    },
+                    "response": {
+                        "$ref": "MacVerifyResponse"
+                    }
+                }
+            }
+        },
+        "random": {
+            "methods": {
+                "generate": {
+                    "id": "cloudkms.random.generate",
+                    "path": "random",
+                    "httpMethod": "GET",
+                    "description": "Kriptografik güvenli rastgele bayt, token veya UUID üretir.",
+                    "parameters": {
+                        "bytes": {
+                            "type": "integer",
+                            "location": "query",
+                            "required": false
+                        },
+                        "format": {
+                            "type": "string",
+                            "location": "query",
+                            "required": false
+                        }
+                    },
+                    "response": {
+                        "$ref": "RandomBytesResponse"
+                    }
+                }
+            }
+        }
+    }
+}

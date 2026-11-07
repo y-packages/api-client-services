@@ -1,0 +1,410 @@
+{
+    "kind": "discovery#restDescription",
+    "discoveryVersion": "v1",
+    "id": "smartlinks:v1",
+    "name": "smartlinks",
+    "canonicalName": "SmartLinks",
+    "version": "v1",
+    "title": "YakNet SmartLinks & Dynamic QR API",
+    "description": "Akıllı kısa bağlantılar, dinamik QR kod üretimi ve tıklama analitiği servisi.",
+    "ownerDomain": "yakhub.com.tr",
+    "ownerName": "YakNet",
+    "protocol": "rest",
+    "rootUrl": "https://developer-console.yakhub.com.tr/",
+    "servicePath": "api/cloud/links",
+    "auth": {
+        "apiKey": {
+            "header": "X-API-Key",
+            "prefix": "yk_live_"
+        },
+        "oauth2Client": {
+            "clientIdHeader": "X-Client-ID",
+            "clientSecretHeader": "X-Client-Secret"
+        }
+    },
+    "schemas": {
+        "SmartLink": {
+            "id": "SmartLink",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "slug": {
+                    "type": "string"
+                },
+                "short_url": {
+                    "type": "string"
+                },
+                "destination_url": {
+                    "type": "string"
+                },
+                "clicks_count": {
+                    "type": "integer"
+                },
+                "is_active": {
+                    "type": "boolean"
+                },
+                "is_usable": {
+                    "type": "boolean"
+                },
+                "expires_at": {
+                    "type": "string"
+                },
+                "max_clicks": {
+                    "type": "integer"
+                },
+                "qr_svg_url": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "SmartLinksListResponse": {
+            "id": "SmartLinksListResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "project_id": {
+                    "type": "integer"
+                },
+                "project_name": {
+                    "type": "string"
+                },
+                "count": {
+                    "type": "integer"
+                },
+                "links": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "SmartLink"
+                    }
+                }
+            }
+        },
+        "CreateSmartLinkRequest": {
+            "id": "CreateSmartLinkRequest",
+            "type": "object",
+            "properties": {
+                "destination_url": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "slug": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "expires_at": {
+                    "type": "string"
+                },
+                "max_clicks": {
+                    "type": "integer"
+                },
+                "utm_source": {
+                    "type": "string"
+                },
+                "utm_medium": {
+                    "type": "string"
+                },
+                "utm_campaign": {
+                    "type": "string"
+                }
+            }
+        },
+        "UpdateSmartLinkRequest": {
+            "id": "UpdateSmartLinkRequest",
+            "type": "object",
+            "properties": {
+                "destination_url": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "is_active": {
+                    "type": "boolean"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "expires_at": {
+                    "type": "string"
+                },
+                "max_clicks": {
+                    "type": "integer"
+                },
+                "utm_source": {
+                    "type": "string"
+                },
+                "utm_medium": {
+                    "type": "string"
+                },
+                "utm_campaign": {
+                    "type": "string"
+                }
+            }
+        },
+        "SmartLinkResponse": {
+            "id": "SmartLinkResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "link": {
+                    "$ref": "SmartLink"
+                }
+            }
+        },
+        "DeleteSmartLinkResponse": {
+            "id": "DeleteSmartLinkResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "QrCodeResponse": {
+            "id": "QrCodeResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "slug": {
+                    "type": "string"
+                },
+                "short_url": {
+                    "type": "string"
+                },
+                "data_uri": {
+                    "type": "string"
+                }
+            }
+        },
+        "ChartSeries": {
+            "id": "ChartSeries",
+            "type": "object",
+            "properties": {
+                "labels": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            }
+        },
+        "ReferrerStat": {
+            "id": "ReferrerStat",
+            "type": "object",
+            "properties": {
+                "referer": {
+                    "type": "string"
+                },
+                "count": {
+                    "type": "integer"
+                }
+            }
+        },
+        "LinkAnalytics": {
+            "id": "LinkAnalytics",
+            "type": "object",
+            "properties": {
+                "total_clicks": {
+                    "type": "integer"
+                },
+                "is_active": {
+                    "type": "boolean"
+                },
+                "is_usable": {
+                    "type": "boolean"
+                },
+                "timeline": {
+                    "$ref": "ChartSeries"
+                },
+                "devices": {
+                    "$ref": "ChartSeries"
+                },
+                "browsers": {
+                    "$ref": "ChartSeries"
+                },
+                "referrers": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "ReferrerStat"
+                    }
+                }
+            }
+        },
+        "LinkAnalyticsResponse": {
+            "id": "LinkAnalyticsResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "slug": {
+                    "type": "string"
+                },
+                "analytics": {
+                    "$ref": "LinkAnalytics"
+                }
+            }
+        }
+    },
+    "resources": {
+        "links": {
+            "methods": {
+                "listLinks": {
+                    "id": "smartlinks.links.listLinks",
+                    "path": "",
+                    "httpMethod": "GET",
+                    "description": "Projedeki tüm kısa bağlantıları listeler.",
+                    "parameters": [],
+                    "response": {
+                        "$ref": "SmartLinksListResponse"
+                    }
+                },
+                "create": {
+                    "id": "smartlinks.links.create",
+                    "path": "",
+                    "httpMethod": "POST",
+                    "description": "Yeni bir SmartLink oluşturur.",
+                    "parameters": [],
+                    "request": {
+                        "$ref": "CreateSmartLinkRequest"
+                    },
+                    "response": {
+                        "$ref": "SmartLinkResponse"
+                    }
+                },
+                "get": {
+                    "id": "smartlinks.links.get",
+                    "path": "/{slug}",
+                    "httpMethod": "GET",
+                    "description": "Kısa bağlantı detaylarını getirir.",
+                    "parameters": {
+                        "slug": {
+                            "type": "string",
+                            "location": "path",
+                            "required": true
+                        }
+                    },
+                    "response": {
+                        "$ref": "SmartLinkResponse"
+                    }
+                },
+                "update": {
+                    "id": "smartlinks.links.update",
+                    "path": "/{slug}",
+                    "httpMethod": "PATCH",
+                    "description": "Kısa bağlantıyı günceller.",
+                    "parameters": {
+                        "slug": {
+                            "type": "string",
+                            "location": "path",
+                            "required": true
+                        }
+                    },
+                    "request": {
+                        "$ref": "UpdateSmartLinkRequest"
+                    },
+                    "response": {
+                        "$ref": "SmartLinkResponse"
+                    }
+                },
+                "delete": {
+                    "id": "smartlinks.links.delete",
+                    "path": "/{slug}",
+                    "httpMethod": "DELETE",
+                    "description": "Kısa bağlantıyı siler.",
+                    "parameters": {
+                        "slug": {
+                            "type": "string",
+                            "location": "path",
+                            "required": true
+                        }
+                    },
+                    "response": {
+                        "$ref": "DeleteSmartLinkResponse"
+                    }
+                }
+            }
+        },
+        "qrcodes": {
+            "methods": {
+                "generate": {
+                    "id": "smartlinks.qrcodes.generate",
+                    "path": "/{slug}/qr",
+                    "httpMethod": "GET",
+                    "description": "Kısa bağlantı için Data URI formatında QR kod üretir.",
+                    "parameters": {
+                        "slug": {
+                            "type": "string",
+                            "location": "path",
+                            "required": true
+                        },
+                        "size": {
+                            "type": "integer",
+                            "location": "query",
+                            "required": false
+                        },
+                        "format": {
+                            "type": "string",
+                            "location": "query",
+                            "required": false,
+                            "default": "json"
+                        }
+                    },
+                    "response": {
+                        "$ref": "QrCodeResponse"
+                    }
+                }
+            }
+        },
+        "analytics": {
+            "methods": {
+                "get": {
+                    "id": "smartlinks.analytics.get",
+                    "path": "/{slug}/analytics",
+                    "httpMethod": "GET",
+                    "description": "Kısa bağlantının tıklama, cihaz ve tarayıcı analitiğini getirir.",
+                    "parameters": {
+                        "slug": {
+                            "type": "string",
+                            "location": "path",
+                            "required": true
+                        }
+                    },
+                    "response": {
+                        "$ref": "LinkAnalyticsResponse"
+                    }
+                }
+            }
+        }
+    }
+}

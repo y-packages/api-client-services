@@ -1,0 +1,260 @@
+{
+    "kind": "discovery#restDescription",
+    "discoveryVersion": "v1",
+    "id": "textutils:v1",
+    "name": "textutils",
+    "canonicalName": "TextUtils",
+    "version": "v1",
+    "title": "YakNet Cloud Text, Markdown & Link Unfurl API",
+    "description": "Türkçe uyumlu metin/okuma süresi analizi, güvenli CommonMark HTML dönüştürücü, slug üretici ve OpenGraph önizleme.",
+    "ownerDomain": "yakhub.com.tr",
+    "ownerName": "YakNet",
+    "protocol": "rest",
+    "rootUrl": "https://developer-console.yakhub.com.tr/",
+    "servicePath": "api/cloud/text/",
+    "auth": {
+        "apiKey": {
+            "header": "X-API-Key",
+            "prefix": "yk_live_"
+        },
+        "oauth2Client": {
+            "clientIdHeader": "X-Client-ID",
+            "clientSecretHeader": "X-Client-Secret"
+        }
+    },
+    "schemas": {
+        "KeywordStat": {
+            "id": "KeywordStat",
+            "type": "object",
+            "properties": {
+                "word": {
+                    "type": "string"
+                },
+                "count": {
+                    "type": "integer"
+                }
+            }
+        },
+        "TextAnalyzeRequest": {
+            "id": "TextAnalyzeRequest",
+            "type": "object",
+            "properties": {
+                "text": {
+                    "type": "string"
+                },
+                "wpm": {
+                    "type": "integer"
+                }
+            }
+        },
+        "TextAnalyzeResponse": {
+            "id": "TextAnalyzeResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "char_count": {
+                    "type": "integer"
+                },
+                "char_count_no_spaces": {
+                    "type": "integer"
+                },
+                "word_count": {
+                    "type": "integer"
+                },
+                "sentence_count": {
+                    "type": "integer"
+                },
+                "paragraph_count": {
+                    "type": "integer"
+                },
+                "reading_time_seconds": {
+                    "type": "integer"
+                },
+                "reading_time_minutes": {
+                    "type": "number"
+                },
+                "lexical_diversity": {
+                    "type": "number"
+                },
+                "language_hint": {
+                    "type": "string"
+                },
+                "top_keywords": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "KeywordStat"
+                    }
+                }
+            }
+        },
+        "SlugifyRequest": {
+            "id": "SlugifyRequest",
+            "type": "object",
+            "properties": {
+                "text": {
+                    "type": "string"
+                },
+                "separator": {
+                    "type": "string"
+                }
+            }
+        },
+        "SlugifyResponse": {
+            "id": "SlugifyResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "original": {
+                    "type": "string"
+                },
+                "slug": {
+                    "type": "string"
+                },
+                "length": {
+                    "type": "integer"
+                }
+            }
+        },
+        "MarkdownRequest": {
+            "id": "MarkdownRequest",
+            "type": "object",
+            "properties": {
+                "markdown": {
+                    "type": "string"
+                },
+                "allow_unsafe_links": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "MarkdownResponse": {
+            "id": "MarkdownResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "html": {
+                    "type": "string"
+                },
+                "plain_text_excerpt": {
+                    "type": "string"
+                },
+                "word_count": {
+                    "type": "integer"
+                }
+            }
+        },
+        "UnfurlRequest": {
+            "id": "UnfurlRequest",
+            "type": "object",
+            "properties": {
+                "url": {
+                    "type": "string"
+                }
+            }
+        },
+        "UnfurlResponse": {
+            "id": "UnfurlResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "url": {
+                    "type": "string"
+                },
+                "status_code": {
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "site_name": {
+                    "type": "string"
+                },
+                "og_type": {
+                    "type": "string"
+                },
+                "image_url": {
+                    "type": "string"
+                },
+                "canonical_url": {
+                    "type": "string"
+                },
+                "favicon_url": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "resources": {
+        "text": {
+            "methods": {
+                "analyze": {
+                    "id": "textutils.text.analyze",
+                    "path": "analyze",
+                    "httpMethod": "POST",
+                    "description": "Metnin kelime, cümle, okuma süresi ve anahtar kelime istatistiklerini çıkarır.",
+                    "parameters": [],
+                    "request": {
+                        "$ref": "TextAnalyzeRequest"
+                    },
+                    "response": {
+                        "$ref": "TextAnalyzeResponse"
+                    }
+                },
+                "slugify": {
+                    "id": "textutils.text.slugify",
+                    "path": "slugify",
+                    "httpMethod": "POST",
+                    "description": "Türkçe karakterleri koruyarak temiz URL dizgesi (slug) üretir.",
+                    "parameters": [],
+                    "request": {
+                        "$ref": "SlugifyRequest"
+                    },
+                    "response": {
+                        "$ref": "SlugifyResponse"
+                    }
+                },
+                "renderMarkdown": {
+                    "id": "textutils.text.renderMarkdown",
+                    "path": "markdown",
+                    "httpMethod": "POST",
+                    "description": "Markdown metnini XSS korumalı temiz HTML çıktısına dönüştürür.",
+                    "parameters": [],
+                    "request": {
+                        "$ref": "MarkdownRequest"
+                    },
+                    "response": {
+                        "$ref": "MarkdownResponse"
+                    }
+                }
+            }
+        },
+        "web": {
+            "methods": {
+                "unfurl": {
+                    "id": "textutils.web.unfurl",
+                    "path": "unfurl",
+                    "httpMethod": "POST",
+                    "description": "Hedef URL'nin OpenGraph, Twitter Card, başlık ve ikon meta verilerini çözümler.",
+                    "parameters": [],
+                    "request": {
+                        "$ref": "UnfurlRequest"
+                    },
+                    "response": {
+                        "$ref": "UnfurlResponse"
+                    }
+                }
+            }
+        }
+    }
+}

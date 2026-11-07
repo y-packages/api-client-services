@@ -1,0 +1,227 @@
+{
+    "kind": "discovery#restDescription",
+    "discoveryVersion": "v1",
+    "id": "cloudresourcemanager:v1",
+    "name": "cloudresourcemanager",
+    "canonicalName": "ResourceManager",
+    "version": "v1",
+    "title": "YakNet Cloud Resource Manager & Service Usage API",
+    "description": "Proje meta verileri, kota kullanımı ve bulut API etkinleştirme servisi.",
+    "ownerDomain": "yakhub.com.tr",
+    "ownerName": "YakNet",
+    "protocol": "rest",
+    "rootUrl": "https://developer-console.yakhub.com.tr/",
+    "servicePath": "api/cloud/",
+    "auth": {
+        "apiKey": {
+            "header": "X-API-Key",
+            "prefix": "yk_live_"
+        },
+        "oauth2Client": {
+            "clientIdHeader": "X-Client-ID",
+            "clientSecretHeader": "X-Client-Secret"
+        }
+    },
+    "schemas": {
+        "ProjectUsage": {
+            "id": "ProjectUsage",
+            "type": "object",
+            "properties": {
+                "buckets_count": {
+                    "type": "integer"
+                },
+                "storage_bytes": {
+                    "type": "integer"
+                },
+                "datastore_documents_count": {
+                    "type": "integer"
+                },
+                "kv_entries_count": {
+                    "type": "integer"
+                },
+                "secrets_count": {
+                    "type": "integer"
+                },
+                "pubsub_topics_count": {
+                    "type": "integer"
+                },
+                "scheduled_jobs_count": {
+                    "type": "integer"
+                },
+                "uptime_checks_count": {
+                    "type": "integer"
+                },
+                "smart_links_count": {
+                    "type": "integer"
+                },
+                "webhooks_count": {
+                    "type": "integer"
+                }
+            }
+        },
+        "ProjectInfo": {
+            "id": "ProjectInfo",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "project_number": {
+                    "type": "string"
+                },
+                "slug": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "region": {
+                    "type": "string"
+                },
+                "enabled_apis": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "usage": {
+                    "$ref": "ProjectUsage"
+                },
+                "created_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "ProjectResponse": {
+            "id": "ProjectResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "project": {
+                    "$ref": "ProjectInfo"
+                }
+            }
+        },
+        "CloudServiceItem": {
+            "id": "CloudServiceItem",
+            "type": "object",
+            "properties": {
+                "service": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "api_host": {
+                    "type": "string"
+                },
+                "category": {
+                    "type": "string"
+                },
+                "enabled": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "ServicesListResponse": {
+            "id": "ServicesListResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "project": {
+                    "type": "string"
+                },
+                "services": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "CloudServiceItem"
+                    }
+                }
+            }
+        },
+        "ToggleServiceResponse": {
+            "id": "ToggleServiceResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "service": {
+                    "type": "string"
+                },
+                "enabled": {
+                    "type": "boolean"
+                }
+            }
+        }
+    },
+    "resources": {
+        "projects": {
+            "methods": {
+                "get": {
+                    "id": "cloudresourcemanager.projects.get",
+                    "path": "project",
+                    "httpMethod": "GET",
+                    "description": "Aktif bulut projesinin bilgilerini ve kaynak kullanım özetini döndürür.",
+                    "parameters": [],
+                    "response": {
+                        "$ref": "ProjectResponse"
+                    }
+                }
+            }
+        },
+        "services": {
+            "methods": {
+                "listServices": {
+                    "id": "cloudresourcemanager.services.listServices",
+                    "path": "services",
+                    "httpMethod": "GET",
+                    "description": "Projedeki bulut API servislerini ve etkin durumlarını listeler.",
+                    "parameters": [],
+                    "response": {
+                        "$ref": "ServicesListResponse"
+                    }
+                },
+                "enable": {
+                    "id": "cloudresourcemanager.services.enable",
+                    "path": "services/{serviceName}/enable",
+                    "httpMethod": "POST",
+                    "description": "Belirtilen bulut API servisini projede etkinleştirir.",
+                    "parameters": {
+                        "serviceName": {
+                            "type": "string",
+                            "location": "path",
+                            "required": true
+                        }
+                    },
+                    "response": {
+                        "$ref": "ToggleServiceResponse"
+                    }
+                },
+                "disable": {
+                    "id": "cloudresourcemanager.services.disable",
+                    "path": "services/{serviceName}/disable",
+                    "httpMethod": "POST",
+                    "description": "Belirtilen bulut API servisini projede devre dışı bırakır.",
+                    "parameters": {
+                        "serviceName": {
+                            "type": "string",
+                            "location": "path",
+                            "required": true
+                        }
+                    },
+                    "response": {
+                        "$ref": "ToggleServiceResponse"
+                    }
+                }
+            }
+        }
+    }
+}

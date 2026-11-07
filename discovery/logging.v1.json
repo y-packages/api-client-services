@@ -1,0 +1,162 @@
+{
+    "kind": "discovery#restDescription",
+    "discoveryVersion": "v1",
+    "id": "logging:v1",
+    "name": "logging",
+    "canonicalName": "Logging",
+    "version": "v1",
+    "title": "YakNet Cloud Logging API",
+    "description": "Merkezi uygulama ve denetim günlüklerini okuma ve yazma servisi.",
+    "ownerDomain": "yakhub.com.tr",
+    "ownerName": "YakNet",
+    "protocol": "rest",
+    "rootUrl": "https://developer-console.yakhub.com.tr/",
+    "servicePath": "api/cloud/logging/",
+    "auth": {
+        "apiKey": {
+            "header": "X-API-Key",
+            "prefix": "yk_live_"
+        },
+        "oauth2Client": {
+            "clientIdHeader": "X-Client-ID",
+            "clientSecretHeader": "X-Client-Secret"
+        }
+    },
+    "schemas": {
+        "LogEntry": {
+            "id": "LogEntry",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "action": {
+                    "type": "string"
+                },
+                "severity": {
+                    "type": "string"
+                },
+                "summary": {
+                    "type": "string"
+                },
+                "resource_type": {
+                    "type": "string"
+                },
+                "resource_id": {
+                    "type": "string"
+                },
+                "details": {
+                    "type": "object"
+                },
+                "ip_address": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "LogEntriesListResponse": {
+            "id": "LogEntriesListResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "project": {
+                    "type": "string"
+                },
+                "count": {
+                    "type": "integer"
+                },
+                "entries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "LogEntry"
+                    }
+                }
+            }
+        },
+        "WriteLogEntryRequest": {
+            "id": "WriteLogEntryRequest",
+            "type": "object",
+            "properties": {
+                "action": {
+                    "type": "string"
+                },
+                "summary": {
+                    "type": "string"
+                },
+                "severity": {
+                    "type": "string"
+                },
+                "resource_type": {
+                    "type": "string"
+                },
+                "resource_id": {
+                    "type": "string"
+                },
+                "details": {
+                    "type": "object"
+                }
+            }
+        },
+        "WriteLogEntryResponse": {
+            "id": "WriteLogEntryResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "entry": {
+                    "$ref": "LogEntry"
+                }
+            }
+        }
+    },
+    "resources": {
+        "entries": {
+            "methods": {
+                "listEntries": {
+                    "id": "logging.entries.listEntries",
+                    "path": "entries",
+                    "httpMethod": "GET",
+                    "description": "Projedeki denetim ve uygulama günlüklerini listeler.",
+                    "parameters": {
+                        "category": {
+                            "type": "string",
+                            "location": "query",
+                            "required": false
+                        },
+                        "q": {
+                            "type": "string",
+                            "location": "query",
+                            "required": false
+                        },
+                        "limit": {
+                            "type": "integer",
+                            "location": "query",
+                            "required": false
+                        }
+                    },
+                    "response": {
+                        "$ref": "LogEntriesListResponse"
+                    }
+                },
+                "write": {
+                    "id": "logging.entries.write",
+                    "path": "entries",
+                    "httpMethod": "POST",
+                    "description": "Dış uygulamalardan bulut günlük gezginine yapılandırılmış kayıt yazar.",
+                    "parameters": [],
+                    "request": {
+                        "$ref": "WriteLogEntryRequest"
+                    },
+                    "response": {
+                        "$ref": "WriteLogEntryResponse"
+                    }
+                }
+            }
+        }
+    }
+}

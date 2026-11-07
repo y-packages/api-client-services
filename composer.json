@@ -1,0 +1,63 @@
+{
+    "name": "yaknet/api-client-services",
+    "description": "Official PHP API Client & Cloud Services SDK for YakNet Developer Console (Cloud DNS, Storage, Datastore, Secret Manager, Pub/Sub, Cloud KV, SmartLinks, Scheduler, Monitoring, Logging, Webhooks).",
+    "homepage": "https://developer-console.yakhub.com.tr",
+    "type": "library",
+    "license": "MIT",
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "keywords": [
+        "yaknet",
+        "yakhub",
+        "cloud",
+        "dns",
+        "clouddns",
+        "api-client",
+        "api-client-services",
+        "storage",
+        "datastore",
+        "pubsub",
+        "secret-manager",
+        "kv",
+        "smartlinks",
+        "sdk"
+    ],
+    "authors": [
+        {
+            "name": "YakNet Bilişim",
+            "email": "info@yakhub.com.tr"
+        }
+    ],
+    "require": {
+        "php": "^8.2",
+        "ext-curl": "*",
+        "ext-json": "*"
+    },
+    "suggest": {
+        "yaknet/y-auth": "OAuth 2.0 / SSO kullanıcı kimlik doğrulaması ve giriş butonu entegrasyonu için",
+        "yaknet/yacaptcha": "Altcha tabanlı PoW bot koruması ve Cloud Armor WAF bileşenleri için"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.5 || ^11.0 || ^12.0",
+        "phpstan/phpstan": "^2.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "YakNet\\Api\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "YakNet\\Api\\Generator\\": "generator/",
+            "YakNet\\Api\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "generate": "php bin/generate-services",
+        "test": "vendor/bin/phpunit",
+        "analyze": "vendor/bin/phpstan analyse"
+    },
+    "config": {
+        "sort-packages": true
+    }
+}

@@ -1,0 +1,167 @@
+{
+    "kind": "discovery#restDescription",
+    "discoveryVersion": "v1",
+    "id": "dlp:v1",
+    "name": "dlp",
+    "canonicalName": "Dlp",
+    "version": "v1",
+    "title": "YakNet Cloud DLP (Sensitive Data Protection) API",
+    "description": "TC Kimlik No, TR IBAN, kredi kartı (Luhn), telefon ve e-posta tespiti ile KVKK veri maskeleme servisi.",
+    "ownerDomain": "yakhub.com.tr",
+    "ownerName": "YakNet",
+    "protocol": "rest",
+    "rootUrl": "https://developer-console.yakhub.com.tr/",
+    "servicePath": "api/cloud/dlp/",
+    "auth": {
+        "apiKey": {
+            "header": "X-API-Key",
+            "prefix": "yk_live_"
+        },
+        "oauth2Client": {
+            "clientIdHeader": "X-Client-ID",
+            "clientSecretHeader": "X-Client-Secret"
+        }
+    },
+    "schemas": {
+        "DlpFinding": {
+            "id": "DlpFinding",
+            "type": "object",
+            "properties": {
+                "info_type": {
+                    "type": "string"
+                },
+                "likelihood": {
+                    "type": "string"
+                },
+                "quote_masked": {
+                    "type": "string"
+                },
+                "offset": {
+                    "type": "integer"
+                },
+                "length": {
+                    "type": "integer"
+                }
+            }
+        },
+        "InspectContentRequest": {
+            "id": "InspectContentRequest",
+            "type": "object",
+            "properties": {
+                "text": {
+                    "type": "string"
+                },
+                "info_types": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "InspectContentResponse": {
+            "id": "InspectContentResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "has_sensitive_data": {
+                    "type": "boolean"
+                },
+                "risk_level": {
+                    "type": "string"
+                },
+                "findings_count": {
+                    "type": "integer"
+                },
+                "summary": {
+                    "type": "object"
+                },
+                "findings": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "DlpFinding"
+                    }
+                }
+            }
+        },
+        "DeidentifyContentRequest": {
+            "id": "DeidentifyContentRequest",
+            "type": "object",
+            "properties": {
+                "text": {
+                    "type": "string"
+                },
+                "strategy": {
+                    "type": "string"
+                },
+                "mask_char": {
+                    "type": "string"
+                },
+                "info_types": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "DeidentifyContentResponse": {
+            "id": "DeidentifyContentResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "strategy": {
+                    "type": "string"
+                },
+                "original_length": {
+                    "type": "integer"
+                },
+                "redacted_count": {
+                    "type": "integer"
+                },
+                "summary": {
+                    "type": "object"
+                },
+                "transformed_text": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "resources": {
+        "content": {
+            "methods": {
+                "inspect": {
+                    "id": "dlp.content.inspect",
+                    "path": "inspect",
+                    "httpMethod": "POST",
+                    "description": "Metin içindeki kişisel ve finansal verileri matematiksel sağlama (checksum) ile tespit eder.",
+                    "parameters": [],
+                    "request": {
+                        "$ref": "InspectContentRequest"
+                    },
+                    "response": {
+                        "$ref": "InspectContentResponse"
+                    }
+                },
+                "deidentify": {
+                    "id": "dlp.content.deidentify",
+                    "path": "deidentify",
+                    "httpMethod": "POST",
+                    "description": "Metindeki hassas verileri maskeler, gizler veya özetler.",
+                    "parameters": [],
+                    "request": {
+                        "$ref": "DeidentifyContentRequest"
+                    },
+                    "response": {
+                        "$ref": "DeidentifyContentResponse"
+                    }
+                }
+            }
+        }
+    }
+}

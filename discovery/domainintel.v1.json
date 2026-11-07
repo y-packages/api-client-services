@@ -1,0 +1,257 @@
+{
+    "kind": "discovery#restDescription",
+    "discoveryVersion": "v1",
+    "id": "domainintel:v1",
+    "name": "domainintel",
+    "canonicalName": "DomainIntel",
+    "version": "v1",
+    "title": "YakNet Domain, Email & SSL Intelligence API",
+    "description": "Geçici e-posta ve MX doğrulaması, DNS kayıt sorgulama ve X.509 SSL sertifika denetimi.",
+    "ownerDomain": "yakhub.com.tr",
+    "ownerName": "YakNet",
+    "protocol": "rest",
+    "rootUrl": "https://developer-console.yakhub.com.tr/",
+    "servicePath": "api/cloud/domain-intel/",
+    "auth": {
+        "apiKey": {
+            "header": "X-API-Key",
+            "prefix": "yk_live_"
+        },
+        "oauth2Client": {
+            "clientIdHeader": "X-Client-ID",
+            "clientSecretHeader": "X-Client-Secret"
+        }
+    },
+    "schemas": {
+        "EmailValidateRequest": {
+            "id": "EmailValidateRequest",
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "check_mx": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "EmailValidateResponse": {
+            "id": "EmailValidateResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "normalized_email": {
+                    "type": "string"
+                },
+                "syntax_valid": {
+                    "type": "boolean"
+                },
+                "domain": {
+                    "type": "string"
+                },
+                "is_disposable": {
+                    "type": "boolean"
+                },
+                "is_role_account": {
+                    "type": "boolean"
+                },
+                "is_free_provider": {
+                    "type": "boolean"
+                },
+                "mx_checked": {
+                    "type": "boolean"
+                },
+                "has_mx_records": {
+                    "type": "boolean"
+                },
+                "mx_hosts": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "deliverability_score": {
+                    "type": "integer"
+                },
+                "verdict": {
+                    "type": "string"
+                }
+            }
+        },
+        "DnsRecord": {
+            "id": "DnsRecord",
+            "type": "object",
+            "properties": {
+                "host": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "ttl": {
+                    "type": "integer"
+                },
+                "value": {
+                    "type": "string"
+                },
+                "priority": {
+                    "type": "integer"
+                }
+            }
+        },
+        "DnsLookupResponse": {
+            "id": "DnsLookupResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "domain": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "count": {
+                    "type": "integer"
+                },
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "DnsRecord"
+                    }
+                }
+            }
+        },
+        "SslInspectResponse": {
+            "id": "SslInspectResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "domain": {
+                    "type": "string"
+                },
+                "port": {
+                    "type": "integer"
+                },
+                "valid": {
+                    "type": "boolean"
+                },
+                "is_expired": {
+                    "type": "boolean"
+                },
+                "days_remaining": {
+                    "type": "integer"
+                },
+                "subject_cn": {
+                    "type": "string"
+                },
+                "issuer_org": {
+                    "type": "string"
+                },
+                "issuer_cn": {
+                    "type": "string"
+                },
+                "serial_number": {
+                    "type": "string"
+                },
+                "signature_algorithm": {
+                    "type": "string"
+                },
+                "san_domains": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "valid_from": {
+                    "type": "string"
+                },
+                "valid_to": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "resources": {
+        "email": {
+            "methods": {
+                "validate": {
+                    "id": "domainintel.email.validate",
+                    "path": "email-validate",
+                    "httpMethod": "POST",
+                    "description": "E-posta adresini sözdizimi, geçici alan adı (disposable), rol hesabı ve MX kayıtlarına göre doğrular.",
+                    "parameters": [],
+                    "request": {
+                        "$ref": "EmailValidateRequest"
+                    },
+                    "response": {
+                        "$ref": "EmailValidateResponse"
+                    }
+                }
+            }
+        },
+        "dns": {
+            "methods": {
+                "lookup": {
+                    "id": "domainintel.dns.lookup",
+                    "path": "dns",
+                    "httpMethod": "GET",
+                    "description": "Alan adının A, AAAA, MX, TXT, NS ve CNAME kayıtlarını sorgular.",
+                    "parameters": {
+                        "domain": {
+                            "type": "string",
+                            "location": "query",
+                            "required": true
+                        },
+                        "type": {
+                            "type": "string",
+                            "location": "query",
+                            "required": false
+                        }
+                    },
+                    "response": {
+                        "$ref": "DnsLookupResponse"
+                    }
+                }
+            }
+        },
+        "ssl": {
+            "methods": {
+                "inspect": {
+                    "id": "domainintel.ssl.inspect",
+                    "path": "ssl",
+                    "httpMethod": "GET",
+                    "description": "Alan adının X.509 TLS/SSL sertifikasını ve kalan geçerlilik gününü denetler.",
+                    "parameters": {
+                        "domain": {
+                            "type": "string",
+                            "location": "query",
+                            "required": true
+                        },
+                        "port": {
+                            "type": "integer",
+                            "location": "query",
+                            "required": false
+                        },
+                        "timeout": {
+                            "type": "integer",
+                            "location": "query",
+                            "required": false
+                        }
+                    },
+                    "response": {
+                        "$ref": "SslInspectResponse"
+                    }
+                }
+            }
+        }
+    }
+}

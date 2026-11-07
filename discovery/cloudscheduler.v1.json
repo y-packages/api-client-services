@@ -1,0 +1,300 @@
+{
+    "kind": "discovery#restDescription",
+    "discoveryVersion": "v1",
+    "id": "cloudscheduler:v1",
+    "name": "cloudscheduler",
+    "canonicalName": "CloudScheduler",
+    "version": "v1",
+    "title": "YakNet Cloud Scheduler API",
+    "description": "Cron ifadeleriyle zamanlanmış HTTP görevleri ve anlık tetikleme servisi.",
+    "ownerDomain": "yakhub.com.tr",
+    "ownerName": "YakNet",
+    "protocol": "rest",
+    "rootUrl": "https://developer-console.yakhub.com.tr/",
+    "servicePath": "api/cloud/scheduler/",
+    "auth": {
+        "apiKey": {
+            "header": "X-API-Key",
+            "prefix": "yk_live_"
+        },
+        "oauth2Client": {
+            "clientIdHeader": "X-Client-ID",
+            "clientSecretHeader": "X-Client-Secret"
+        }
+    },
+    "schemas": {
+        "JobRun": {
+            "id": "JobRun",
+            "type": "object",
+            "properties": {
+                "status": {
+                    "type": "string"
+                },
+                "status_code": {
+                    "type": "integer"
+                },
+                "duration_ms": {
+                    "type": "integer"
+                },
+                "triggered_by": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "ScheduledJob": {
+            "id": "ScheduledJob",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "cron_expression": {
+                    "type": "string"
+                },
+                "timezone": {
+                    "type": "string"
+                },
+                "http_method": {
+                    "type": "string"
+                },
+                "target_url": {
+                    "type": "string"
+                },
+                "is_active": {
+                    "type": "boolean"
+                },
+                "last_run_status": {
+                    "type": "string"
+                },
+                "last_status_code": {
+                    "type": "integer"
+                },
+                "last_duration_ms": {
+                    "type": "integer"
+                },
+                "last_run_at": {
+                    "type": "string"
+                },
+                "recent_runs": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "JobRun"
+                    }
+                }
+            }
+        },
+        "ScheduledJobsListResponse": {
+            "id": "ScheduledJobsListResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "project": {
+                    "type": "string"
+                },
+                "jobs": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "ScheduledJob"
+                    }
+                }
+            }
+        },
+        "CreateScheduledJobRequest": {
+            "id": "CreateScheduledJobRequest",
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "cron_expression": {
+                    "type": "string"
+                },
+                "timezone": {
+                    "type": "string"
+                },
+                "http_method": {
+                    "type": "string"
+                },
+                "target_url": {
+                    "type": "string"
+                },
+                "headers": {
+                    "type": "object"
+                },
+                "payload": {
+                    "type": "string"
+                }
+            }
+        },
+        "ScheduledJobResponse": {
+            "id": "ScheduledJobResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "job": {
+                    "$ref": "ScheduledJob"
+                }
+            }
+        },
+        "RunJobResponse": {
+            "id": "RunJobResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "job_id": {
+                    "type": "integer"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "status_code": {
+                    "type": "integer"
+                },
+                "duration_ms": {
+                    "type": "integer"
+                },
+                "error": {
+                    "type": "string"
+                }
+            }
+        },
+        "ToggleJobResponse": {
+            "id": "ToggleJobResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "job_id": {
+                    "type": "integer"
+                },
+                "is_active": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "DeleteJobResponse": {
+            "id": "DeleteJobResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "deleted": {
+                    "type": "integer"
+                }
+            }
+        }
+    },
+    "resources": {
+        "jobs": {
+            "methods": {
+                "listJobs": {
+                    "id": "cloudscheduler.jobs.listJobs",
+                    "path": "jobs",
+                    "httpMethod": "GET",
+                    "description": "Zamanlanmış HTTP görevlerini listeler.",
+                    "parameters": [],
+                    "response": {
+                        "$ref": "ScheduledJobsListResponse"
+                    }
+                },
+                "create": {
+                    "id": "cloudscheduler.jobs.create",
+                    "path": "jobs",
+                    "httpMethod": "POST",
+                    "description": "Yeni bir zamanlanmış görev oluşturur.",
+                    "parameters": [],
+                    "request": {
+                        "$ref": "CreateScheduledJobRequest"
+                    },
+                    "response": {
+                        "$ref": "ScheduledJobResponse"
+                    }
+                },
+                "get": {
+                    "id": "cloudscheduler.jobs.get",
+                    "path": "jobs/{jobId}",
+                    "httpMethod": "GET",
+                    "description": "Görev detaylarını ve son çalışma geçmişini getirir.",
+                    "parameters": {
+                        "jobId": {
+                            "type": "integer",
+                            "location": "path",
+                            "required": true
+                        }
+                    },
+                    "response": {
+                        "$ref": "ScheduledJobResponse"
+                    }
+                },
+                "run": {
+                    "id": "cloudscheduler.jobs.run",
+                    "path": "jobs/{jobId}/run",
+                    "httpMethod": "POST",
+                    "description": "Zamanlanmış görevi hemen çalıştırır.",
+                    "parameters": {
+                        "jobId": {
+                            "type": "integer",
+                            "location": "path",
+                            "required": true
+                        }
+                    },
+                    "response": {
+                        "$ref": "RunJobResponse"
+                    }
+                },
+                "toggle": {
+                    "id": "cloudscheduler.jobs.toggle",
+                    "path": "jobs/{jobId}/toggle",
+                    "httpMethod": "POST",
+                    "description": "Görevi duraklatır veya etkinleştirir.",
+                    "parameters": {
+                        "jobId": {
+                            "type": "integer",
+                            "location": "path",
+                            "required": true
+                        }
+                    },
+                    "response": {
+                        "$ref": "ToggleJobResponse"
+                    }
+                },
+                "delete": {
+                    "id": "cloudscheduler.jobs.delete",
+                    "path": "jobs/{jobId}",
+                    "httpMethod": "DELETE",
+                    "description": "Zamanlanmış görevi siler.",
+                    "parameters": {
+                        "jobId": {
+                            "type": "integer",
+                            "location": "path",
+                            "required": true
+                        }
+                    },
+                    "response": {
+                        "$ref": "DeleteJobResponse"
+                    }
+                }
+            }
+        }
+    }
+}

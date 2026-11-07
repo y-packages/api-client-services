@@ -1,0 +1,314 @@
+{
+    "kind": "discovery#restDescription",
+    "discoveryVersion": "v1",
+    "id": "cloudwebhooks:v1",
+    "name": "cloudwebhooks",
+    "canonicalName": "CloudWebhooks",
+    "version": "v1",
+    "title": "YakNet Cloud Webhooks & Eventarc API",
+    "description": "HMAC-SHA256 imzalı olay abonelikleri, özel olay tetikleme ve teslimat günlükleri servisi.",
+    "ownerDomain": "yakhub.com.tr",
+    "ownerName": "YakNet",
+    "protocol": "rest",
+    "rootUrl": "https://developer-console.yakhub.com.tr/",
+    "servicePath": "api/cloud/webhooks",
+    "auth": {
+        "apiKey": {
+            "header": "X-API-Key",
+            "prefix": "yk_live_"
+        },
+        "oauth2Client": {
+            "clientIdHeader": "X-Client-ID",
+            "clientSecretHeader": "X-Client-Secret"
+        }
+    },
+    "schemas": {
+        "WebhookEndpoint": {
+            "id": "WebhookEndpoint",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string"
+                },
+                "events": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "signing_secret": {
+                    "type": "string"
+                },
+                "is_active": {
+                    "type": "boolean"
+                },
+                "deliveries_count": {
+                    "type": "integer"
+                },
+                "created_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "WebhooksListResponse": {
+            "id": "WebhooksListResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "project": {
+                    "type": "string"
+                },
+                "webhooks": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "WebhookEndpoint"
+                    }
+                }
+            }
+        },
+        "CreateWebhookRequest": {
+            "id": "CreateWebhookRequest",
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string"
+                },
+                "events": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "description": {
+                    "type": "string"
+                }
+            }
+        },
+        "CreateWebhookResponse": {
+            "id": "CreateWebhookResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "webhook": {
+                    "$ref": "WebhookEndpoint"
+                }
+            }
+        },
+        "PingWebhookResponse": {
+            "id": "PingWebhookResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "response_status": {
+                    "type": "integer"
+                },
+                "duration_ms": {
+                    "type": "integer"
+                },
+                "error_message": {
+                    "type": "string"
+                }
+            }
+        },
+        "DispatchEventRequest": {
+            "id": "DispatchEventRequest",
+            "type": "object",
+            "properties": {
+                "event": {
+                    "type": "string"
+                },
+                "payload": {
+                    "type": "object"
+                }
+            }
+        },
+        "DispatchEventResponse": {
+            "id": "DispatchEventResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "event": {
+                    "type": "string"
+                },
+                "dispatched": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "WebhookDelivery": {
+            "id": "WebhookDelivery",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "event": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "response_status": {
+                    "type": "integer"
+                },
+                "duration_ms": {
+                    "type": "integer"
+                },
+                "error_message": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "DeliveriesListResponse": {
+            "id": "DeliveriesListResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "webhook_id": {
+                    "type": "integer"
+                },
+                "deliveries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "WebhookDelivery"
+                    }
+                }
+            }
+        },
+        "DeleteWebhookResponse": {
+            "id": "DeleteWebhookResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "deleted": {
+                    "type": "integer"
+                }
+            }
+        }
+    },
+    "resources": {
+        "endpoints": {
+            "methods": {
+                "listEndpoints": {
+                    "id": "cloudwebhooks.endpoints.listEndpoints",
+                    "path": "",
+                    "httpMethod": "GET",
+                    "description": "Projedeki tüm Webhook uç noktalarını listeler.",
+                    "parameters": [],
+                    "response": {
+                        "$ref": "WebhooksListResponse"
+                    }
+                },
+                "create": {
+                    "id": "cloudwebhooks.endpoints.create",
+                    "path": "",
+                    "httpMethod": "POST",
+                    "description": "Yeni bir Webhook uç noktası oluşturur.",
+                    "parameters": [],
+                    "request": {
+                        "$ref": "CreateWebhookRequest"
+                    },
+                    "response": {
+                        "$ref": "CreateWebhookResponse"
+                    }
+                },
+                "ping": {
+                    "id": "cloudwebhooks.endpoints.ping",
+                    "path": "/{webhookId}/ping",
+                    "httpMethod": "POST",
+                    "description": "Webhook uç noktasına anlık test pingi gönderir.",
+                    "parameters": {
+                        "webhookId": {
+                            "type": "integer",
+                            "location": "path",
+                            "required": true
+                        }
+                    },
+                    "response": {
+                        "$ref": "PingWebhookResponse"
+                    }
+                },
+                "delete": {
+                    "id": "cloudwebhooks.endpoints.delete",
+                    "path": "/{webhookId}",
+                    "httpMethod": "DELETE",
+                    "description": "Webhook uç noktasını siler.",
+                    "parameters": {
+                        "webhookId": {
+                            "type": "integer",
+                            "location": "path",
+                            "required": true
+                        }
+                    },
+                    "response": {
+                        "$ref": "DeleteWebhookResponse"
+                    }
+                }
+            }
+        },
+        "events": {
+            "methods": {
+                "dispatch": {
+                    "id": "cloudwebhooks.events.dispatch",
+                    "path": "/dispatch",
+                    "httpMethod": "POST",
+                    "description": "Abone olan tüm Webhook uç noktalarına özel olay tetikler.",
+                    "parameters": [],
+                    "request": {
+                        "$ref": "DispatchEventRequest"
+                    },
+                    "response": {
+                        "$ref": "DispatchEventResponse"
+                    }
+                }
+            }
+        },
+        "deliveries": {
+            "methods": {
+                "listDeliveries": {
+                    "id": "cloudwebhooks.deliveries.listDeliveries",
+                    "path": "/{webhookId}/deliveries",
+                    "httpMethod": "GET",
+                    "description": "Webhook teslimat günlüklerini listeler.",
+                    "parameters": {
+                        "webhookId": {
+                            "type": "integer",
+                            "location": "path",
+                            "required": true
+                        }
+                    },
+                    "response": {
+                        "$ref": "DeliveriesListResponse"
+                    }
+                }
+            }
+        }
+    }
+}

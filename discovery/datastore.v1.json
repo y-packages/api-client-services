@@ -1,0 +1,278 @@
+{
+    "kind": "discovery#restDescription",
+    "discoveryVersion": "v1",
+    "id": "datastore:v1",
+    "name": "datastore",
+    "canonicalName": "Datastore",
+    "version": "v1",
+    "title": "YakNet Cloud Datastore API",
+    "description": "Koleksiyon ve JSON belge tabanlı NoSQL veritabanı servisi.",
+    "ownerDomain": "yakhub.com.tr",
+    "ownerName": "YakNet",
+    "protocol": "rest",
+    "rootUrl": "https://developer-console.yakhub.com.tr/",
+    "servicePath": "api/cloud/datastore",
+    "auth": {
+        "apiKey": {
+            "header": "X-API-Key",
+            "prefix": "yk_live_"
+        },
+        "oauth2Client": {
+            "clientIdHeader": "X-Client-ID",
+            "clientSecretHeader": "X-Client-Secret"
+        }
+    },
+    "schemas": {
+        "CollectionInfo": {
+            "id": "CollectionInfo",
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "documents_count": {
+                    "type": "integer"
+                },
+                "last_updated": {
+                    "type": "string"
+                }
+            }
+        },
+        "CollectionsListResponse": {
+            "id": "CollectionsListResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "project": {
+                    "type": "string"
+                },
+                "collections": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "CollectionInfo"
+                    }
+                }
+            }
+        },
+        "Document": {
+            "id": "Document",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "collection": {
+                    "type": "string"
+                },
+                "data": {
+                    "type": "object"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "DocumentsListResponse": {
+            "id": "DocumentsListResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "project": {
+                    "type": "string"
+                },
+                "collection": {
+                    "type": "string"
+                },
+                "count": {
+                    "type": "integer"
+                },
+                "documents": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "Document"
+                    }
+                }
+            }
+        },
+        "UpsertDocumentRequest": {
+            "id": "UpsertDocumentRequest",
+            "type": "object",
+            "properties": {
+                "document_id": {
+                    "type": "string"
+                },
+                "data": {
+                    "type": "object"
+                }
+            }
+        },
+        "DocumentResponse": {
+            "id": "DocumentResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "collection": {
+                    "type": "string"
+                },
+                "data": {
+                    "type": "object"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "DeleteDocumentResponse": {
+            "id": "DeleteDocumentResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "deleted": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "resources": {
+        "collections": {
+            "methods": {
+                "listCollections": {
+                    "id": "datastore.collections.listCollections",
+                    "path": "",
+                    "httpMethod": "GET",
+                    "description": "Projedeki tüm NoSQL koleksiyonlarını listeler.",
+                    "parameters": [],
+                    "response": {
+                        "$ref": "CollectionsListResponse"
+                    }
+                }
+            }
+        },
+        "documents": {
+            "methods": {
+                "listDocuments": {
+                    "id": "datastore.documents.listDocuments",
+                    "path": "/{collection}",
+                    "httpMethod": "GET",
+                    "description": "Koleksiyon içindeki belgeleri listeler.",
+                    "parameters": {
+                        "collection": {
+                            "type": "string",
+                            "location": "path",
+                            "required": true
+                        },
+                        "limit": {
+                            "type": "integer",
+                            "location": "query",
+                            "required": false
+                        },
+                        "q": {
+                            "type": "string",
+                            "location": "query",
+                            "required": false
+                        }
+                    },
+                    "response": {
+                        "$ref": "DocumentsListResponse"
+                    }
+                },
+                "create": {
+                    "id": "datastore.documents.create",
+                    "path": "/{collection}",
+                    "httpMethod": "POST",
+                    "description": "Koleksiyonda yeni bir JSON belgesi oluşturur.",
+                    "parameters": {
+                        "collection": {
+                            "type": "string",
+                            "location": "path",
+                            "required": true
+                        }
+                    },
+                    "request": {
+                        "$ref": "UpsertDocumentRequest"
+                    },
+                    "response": {
+                        "$ref": "DocumentResponse"
+                    }
+                },
+                "get": {
+                    "id": "datastore.documents.get",
+                    "path": "/{collection}/{documentId}",
+                    "httpMethod": "GET",
+                    "description": "Tek bir JSON belgesini getirir.",
+                    "parameters": {
+                        "collection": {
+                            "type": "string",
+                            "location": "path",
+                            "required": true
+                        },
+                        "documentId": {
+                            "type": "string",
+                            "location": "path",
+                            "required": true
+                        }
+                    },
+                    "response": {
+                        "$ref": "DocumentResponse"
+                    }
+                },
+                "upsert": {
+                    "id": "datastore.documents.upsert",
+                    "path": "/{collection}/{documentId}",
+                    "httpMethod": "PUT",
+                    "description": "Belirtilen kimlikteki JSON belgesini oluşturur veya günceller.",
+                    "parameters": {
+                        "collection": {
+                            "type": "string",
+                            "location": "path",
+                            "required": true
+                        },
+                        "documentId": {
+                            "type": "string",
+                            "location": "path",
+                            "required": true
+                        }
+                    },
+                    "request": {
+                        "$ref": "UpsertDocumentRequest"
+                    },
+                    "response": {
+                        "$ref": "DocumentResponse"
+                    }
+                },
+                "delete": {
+                    "id": "datastore.documents.delete",
+                    "path": "/{collection}/{documentId}",
+                    "httpMethod": "DELETE",
+                    "description": "Belirtilen JSON belgesini siler.",
+                    "parameters": {
+                        "collection": {
+                            "type": "string",
+                            "location": "path",
+                            "required": true
+                        },
+                        "documentId": {
+                            "type": "string",
+                            "location": "path",
+                            "required": true
+                        }
+                    },
+                    "response": {
+                        "$ref": "DeleteDocumentResponse"
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,219 @@
+{
+    "kind": "discovery#restDescription",
+    "discoveryVersion": "v1",
+    "id": "totp:v1",
+    "name": "totp",
+    "canonicalName": "Totp",
+    "version": "v1",
+    "title": "YakNet Cloud Authenticator (TOTP / 2FA) API",
+    "description": "RFC 6238 iki aşamalı doğrulama kaydı, SVG QR üretimi, kurtarma kodları ve TOTP doğrulama servisi.",
+    "ownerDomain": "yakhub.com.tr",
+    "ownerName": "YakNet",
+    "protocol": "rest",
+    "rootUrl": "https://developer-console.yakhub.com.tr/",
+    "servicePath": "api/cloud/totp/",
+    "auth": {
+        "apiKey": {
+            "header": "X-API-Key",
+            "prefix": "yk_live_"
+        },
+        "oauth2Client": {
+            "clientIdHeader": "X-Client-ID",
+            "clientSecretHeader": "X-Client-Secret"
+        }
+    },
+    "schemas": {
+        "TotpEnrollRequest": {
+            "id": "TotpEnrollRequest",
+            "type": "object",
+            "properties": {
+                "account_name": {
+                    "type": "string"
+                },
+                "issuer": {
+                    "type": "string"
+                },
+                "digits": {
+                    "type": "integer"
+                },
+                "period": {
+                    "type": "integer"
+                },
+                "qr_size": {
+                    "type": "integer"
+                }
+            }
+        },
+        "TotpEnrollResponse": {
+            "id": "TotpEnrollResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "secret": {
+                    "type": "string"
+                },
+                "issuer": {
+                    "type": "string"
+                },
+                "account_name": {
+                    "type": "string"
+                },
+                "digits": {
+                    "type": "integer"
+                },
+                "period": {
+                    "type": "integer"
+                },
+                "otpauth_uri": {
+                    "type": "string"
+                },
+                "qr_svg": {
+                    "type": "string"
+                },
+                "qr_data_uri": {
+                    "type": "string"
+                },
+                "recovery_codes": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "TotpVerifyRequest": {
+            "id": "TotpVerifyRequest",
+            "type": "object",
+            "properties": {
+                "secret": {
+                    "type": "string"
+                },
+                "code": {
+                    "type": "string"
+                },
+                "window": {
+                    "type": "integer"
+                },
+                "digits": {
+                    "type": "integer"
+                },
+                "period": {
+                    "type": "integer"
+                },
+                "timestamp": {
+                    "type": "integer"
+                }
+            }
+        },
+        "TotpVerifyResponse": {
+            "id": "TotpVerifyResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "valid": {
+                    "type": "boolean"
+                },
+                "matched_offset": {
+                    "type": "integer"
+                },
+                "time_step": {
+                    "type": "integer"
+                },
+                "remaining_seconds": {
+                    "type": "integer"
+                }
+            }
+        },
+        "TotpCodeRequest": {
+            "id": "TotpCodeRequest",
+            "type": "object",
+            "properties": {
+                "secret": {
+                    "type": "string"
+                },
+                "digits": {
+                    "type": "integer"
+                },
+                "period": {
+                    "type": "integer"
+                },
+                "timestamp": {
+                    "type": "integer"
+                }
+            }
+        },
+        "TotpCodeResponse": {
+            "id": "TotpCodeResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "code": {
+                    "type": "string"
+                },
+                "digits": {
+                    "type": "integer"
+                },
+                "period": {
+                    "type": "integer"
+                },
+                "remaining_seconds": {
+                    "type": "integer"
+                },
+                "expires_at": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "resources": {
+        "authenticator": {
+            "methods": {
+                "enroll": {
+                    "id": "totp.authenticator.enroll",
+                    "path": "enroll",
+                    "httpMethod": "POST",
+                    "description": "Yeni bir Base32 2FA anahtarı, otpauth URI, QR kodu ve kurtarma kodları üretir.",
+                    "parameters": [],
+                    "request": {
+                        "$ref": "TotpEnrollRequest"
+                    },
+                    "response": {
+                        "$ref": "TotpEnrollResponse"
+                    }
+                },
+                "verify": {
+                    "id": "totp.authenticator.verify",
+                    "path": "verify",
+                    "httpMethod": "POST",
+                    "description": "Kullanıcının girdiği TOTP kodunu zaman penceresi toleransıyla doğrular.",
+                    "parameters": [],
+                    "request": {
+                        "$ref": "TotpVerifyRequest"
+                    },
+                    "response": {
+                        "$ref": "TotpVerifyResponse"
+                    }
+                },
+                "generateCode": {
+                    "id": "totp.authenticator.generateCode",
+                    "path": "code",
+                    "httpMethod": "POST",
+                    "description": "Verilen Base32 anahtarı için geçerli TOTP kodunu hesaplar.",
+                    "parameters": [],
+                    "request": {
+                        "$ref": "TotpCodeRequest"
+                    },
+                    "response": {
+                        "$ref": "TotpCodeResponse"
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,263 @@
+{
+    "kind": "discovery#restDescription",
+    "discoveryVersion": "v1",
+    "id": "monitoring:v1",
+    "name": "monitoring",
+    "canonicalName": "Monitoring",
+    "version": "v1",
+    "title": "YakNet Cloud Monitoring API",
+    "description": "HTTP/HTTPS çalışma süresi (uptime) izleyicileri ve gecikme telemetrisi servisi.",
+    "ownerDomain": "yakhub.com.tr",
+    "ownerName": "YakNet",
+    "protocol": "rest",
+    "rootUrl": "https://developer-console.yakhub.com.tr/",
+    "servicePath": "api/cloud/monitoring/",
+    "auth": {
+        "apiKey": {
+            "header": "X-API-Key",
+            "prefix": "yk_live_"
+        },
+        "oauth2Client": {
+            "clientIdHeader": "X-Client-ID",
+            "clientSecretHeader": "X-Client-Secret"
+        }
+    },
+    "schemas": {
+        "UptimeRun": {
+            "id": "UptimeRun",
+            "type": "object",
+            "properties": {
+                "is_up": {
+                    "type": "boolean"
+                },
+                "status_code": {
+                    "type": "integer"
+                },
+                "latency_ms": {
+                    "type": "integer"
+                },
+                "error_message": {
+                    "type": "string"
+                },
+                "checked_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "UptimeCheck": {
+            "id": "UptimeCheck",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "target_url": {
+                    "type": "string"
+                },
+                "http_method": {
+                    "type": "string"
+                },
+                "expected_status": {
+                    "type": "integer"
+                },
+                "state": {
+                    "type": "string"
+                },
+                "uptime_percentage": {
+                    "type": "number"
+                },
+                "avg_latency_ms": {
+                    "type": "number"
+                },
+                "last_checked_at": {
+                    "type": "string"
+                },
+                "recent_runs": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "UptimeRun"
+                    }
+                }
+            }
+        },
+        "UptimeChecksListResponse": {
+            "id": "UptimeChecksListResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "project": {
+                    "type": "string"
+                },
+                "checks": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "UptimeCheck"
+                    }
+                }
+            }
+        },
+        "CreateUptimeCheckRequest": {
+            "id": "CreateUptimeCheckRequest",
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "target_url": {
+                    "type": "string"
+                },
+                "http_method": {
+                    "type": "string"
+                },
+                "expected_status": {
+                    "type": "integer"
+                },
+                "expected_keyword": {
+                    "type": "string"
+                },
+                "timeout_seconds": {
+                    "type": "integer"
+                },
+                "check_interval_minutes": {
+                    "type": "integer"
+                },
+                "probe_immediately": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "UptimeCheckResponse": {
+            "id": "UptimeCheckResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "check": {
+                    "$ref": "UptimeCheck"
+                }
+            }
+        },
+        "ProbeCheckResponse": {
+            "id": "ProbeCheckResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "check_id": {
+                    "type": "integer"
+                },
+                "is_up": {
+                    "type": "boolean"
+                },
+                "status_code": {
+                    "type": "integer"
+                },
+                "latency_ms": {
+                    "type": "integer"
+                },
+                "error": {
+                    "type": "string"
+                },
+                "uptime_percentage": {
+                    "type": "number"
+                }
+            }
+        },
+        "DeleteCheckResponse": {
+            "id": "DeleteCheckResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "deleted": {
+                    "type": "integer"
+                }
+            }
+        }
+    },
+    "resources": {
+        "uptimeChecks": {
+            "methods": {
+                "listUptimeChecks": {
+                    "id": "monitoring.uptimeChecks.listUptimeChecks",
+                    "path": "checks",
+                    "httpMethod": "GET",
+                    "description": "Projedeki tüm uptime izleyicilerini ve SLA durumlarını listeler.",
+                    "parameters": [],
+                    "response": {
+                        "$ref": "UptimeChecksListResponse"
+                    }
+                },
+                "create": {
+                    "id": "monitoring.uptimeChecks.create",
+                    "path": "checks",
+                    "httpMethod": "POST",
+                    "description": "Yeni bir HTTP/HTTPS uptime izleyicisi oluşturur.",
+                    "parameters": [],
+                    "request": {
+                        "$ref": "CreateUptimeCheckRequest"
+                    },
+                    "response": {
+                        "$ref": "UptimeCheckResponse"
+                    }
+                },
+                "get": {
+                    "id": "monitoring.uptimeChecks.get",
+                    "path": "checks/{checkId}",
+                    "httpMethod": "GET",
+                    "description": "İzleyici detayını ve son yoklama kayıtlarını getirir.",
+                    "parameters": {
+                        "checkId": {
+                            "type": "integer",
+                            "location": "path",
+                            "required": true
+                        }
+                    },
+                    "response": {
+                        "$ref": "UptimeCheckResponse"
+                    }
+                },
+                "probe": {
+                    "id": "monitoring.uptimeChecks.probe",
+                    "path": "checks/{checkId}/probe",
+                    "httpMethod": "POST",
+                    "description": "Belirtilen izleyici için anlık canlı HTTP yoklaması çalıştırır.",
+                    "parameters": {
+                        "checkId": {
+                            "type": "integer",
+                            "location": "path",
+                            "required": true
+                        }
+                    },
+                    "response": {
+                        "$ref": "ProbeCheckResponse"
+                    }
+                },
+                "delete": {
+                    "id": "monitoring.uptimeChecks.delete",
+                    "path": "checks/{checkId}",
+                    "httpMethod": "DELETE",
+                    "description": "Uptime izleyicisini siler.",
+                    "parameters": {
+                        "checkId": {
+                            "type": "integer",
+                            "location": "path",
+                            "required": true
+                        }
+                    },
+                    "response": {
+                        "$ref": "DeleteCheckResponse"
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,386 @@
+{
+    "kind": "discovery#restDescription",
+    "discoveryVersion": "v1",
+    "id": "storage:v1",
+    "name": "storage",
+    "canonicalName": "Storage",
+    "version": "v1",
+    "title": "YakNet Cloud Storage API",
+    "description": "Kova (bucket) ve nesne (object) tabanlı bulut dosya depolama servisi.",
+    "ownerDomain": "yakhub.com.tr",
+    "ownerName": "YakNet",
+    "protocol": "rest",
+    "rootUrl": "https://developer-console.yakhub.com.tr/",
+    "servicePath": "api/cloud/storage/",
+    "auth": {
+        "apiKey": {
+            "header": "X-API-Key",
+            "prefix": "yk_live_"
+        },
+        "oauth2Client": {
+            "clientIdHeader": "X-Client-ID",
+            "clientSecretHeader": "X-Client-Secret"
+        }
+    },
+    "schemas": {
+        "Bucket": {
+            "id": "Bucket",
+            "type": "object",
+            "description": "Cloud Storage kovası (bucket) meta verisi.",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "uri": {
+                    "type": "string"
+                },
+                "location": {
+                    "type": "string"
+                },
+                "storage_class": {
+                    "type": "string"
+                },
+                "is_public": {
+                    "type": "boolean"
+                },
+                "objects_count": {
+                    "type": "integer"
+                },
+                "created_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "BucketsListResponse": {
+            "id": "BucketsListResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "project": {
+                    "type": "string"
+                },
+                "buckets": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "Bucket"
+                    }
+                }
+            }
+        },
+        "CreateBucketRequest": {
+            "id": "CreateBucketRequest",
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "location": {
+                    "type": "string"
+                },
+                "storage_class": {
+                    "type": "string"
+                },
+                "is_public": {
+                    "type": "boolean"
+                },
+                "versioning_enabled": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "BucketResponse": {
+            "id": "BucketResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "bucket": {
+                    "$ref": "Bucket"
+                }
+            }
+        },
+        "StorageObject": {
+            "id": "StorageObject",
+            "type": "object",
+            "description": "Cloud Storage nesnesi (object) meta verisi.",
+            "properties": {
+                "key": {
+                    "type": "string"
+                },
+                "mime_type": {
+                    "type": "string"
+                },
+                "size_bytes": {
+                    "type": "integer"
+                },
+                "checksum_sha256": {
+                    "type": "string"
+                },
+                "public_url": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "ObjectsListResponse": {
+            "id": "ObjectsListResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "bucket": {
+                    "type": "string"
+                },
+                "objects": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "StorageObject"
+                    }
+                }
+            }
+        },
+        "PutObjectRequest": {
+            "id": "PutObjectRequest",
+            "type": "object",
+            "properties": {
+                "key": {
+                    "type": "string"
+                },
+                "content": {
+                    "type": "string"
+                },
+                "encoding": {
+                    "type": "string"
+                },
+                "mime_type": {
+                    "type": "string"
+                }
+            }
+        },
+        "PutObjectResponse": {
+            "id": "PutObjectResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "bucket": {
+                    "type": "string"
+                },
+                "key": {
+                    "type": "string"
+                },
+                "size_bytes": {
+                    "type": "integer"
+                },
+                "checksum_sha256": {
+                    "type": "string"
+                }
+            }
+        },
+        "GetObjectResponse": {
+            "id": "GetObjectResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "bucket": {
+                    "type": "string"
+                },
+                "key": {
+                    "type": "string"
+                },
+                "mime_type": {
+                    "type": "string"
+                },
+                "size_bytes": {
+                    "type": "integer"
+                },
+                "checksum_sha256": {
+                    "type": "string"
+                },
+                "content": {
+                    "type": "string"
+                },
+                "content_base64": {
+                    "type": "string"
+                },
+                "public_url": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "DeleteStorageResponse": {
+            "id": "DeleteStorageResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "bucket": {
+                    "type": "string"
+                },
+                "deleted": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "resources": {
+        "buckets": {
+            "methods": {
+                "listBuckets": {
+                    "id": "storage.buckets.listBuckets",
+                    "path": "buckets",
+                    "httpMethod": "GET",
+                    "description": "Projedeki tüm Cloud Storage kovalarını listeler.",
+                    "parameters": [],
+                    "response": {
+                        "$ref": "BucketsListResponse"
+                    }
+                },
+                "insert": {
+                    "id": "storage.buckets.insert",
+                    "path": "buckets",
+                    "httpMethod": "POST",
+                    "description": "Yeni bir Cloud Storage kovası oluşturur.",
+                    "parameters": [],
+                    "request": {
+                        "$ref": "CreateBucketRequest"
+                    },
+                    "response": {
+                        "$ref": "BucketResponse"
+                    }
+                },
+                "get": {
+                    "id": "storage.buckets.get",
+                    "path": "buckets/{bucketName}",
+                    "httpMethod": "GET",
+                    "description": "Belirtilen kovanın ayrıntılarını döndürür.",
+                    "parameters": {
+                        "bucketName": {
+                            "type": "string",
+                            "location": "path",
+                            "required": true
+                        }
+                    },
+                    "response": {
+                        "$ref": "BucketResponse"
+                    }
+                },
+                "delete": {
+                    "id": "storage.buckets.delete",
+                    "path": "buckets/{bucketName}",
+                    "httpMethod": "DELETE",
+                    "description": "Kovayı ve içindeki nesneleri siler.",
+                    "parameters": {
+                        "bucketName": {
+                            "type": "string",
+                            "location": "path",
+                            "required": true
+                        }
+                    },
+                    "response": {
+                        "$ref": "DeleteStorageResponse"
+                    }
+                }
+            }
+        },
+        "objects": {
+            "methods": {
+                "listObjects": {
+                    "id": "storage.objects.listObjects",
+                    "path": "buckets/{bucketName}/objects",
+                    "httpMethod": "GET",
+                    "description": "Kova içindeki nesneleri listeler.",
+                    "parameters": {
+                        "bucketName": {
+                            "type": "string",
+                            "location": "path",
+                            "required": true
+                        },
+                        "prefix": {
+                            "type": "string",
+                            "location": "query",
+                            "required": false
+                        }
+                    },
+                    "response": {
+                        "$ref": "ObjectsListResponse"
+                    }
+                },
+                "insert": {
+                    "id": "storage.objects.insert",
+                    "path": "buckets/{bucketName}/objects",
+                    "httpMethod": "POST",
+                    "description": "Kovaya yeni nesne yükler veya günceller.",
+                    "parameters": {
+                        "bucketName": {
+                            "type": "string",
+                            "location": "path",
+                            "required": true
+                        }
+                    },
+                    "request": {
+                        "$ref": "PutObjectRequest"
+                    },
+                    "response": {
+                        "$ref": "PutObjectResponse"
+                    }
+                },
+                "get": {
+                    "id": "storage.objects.get",
+                    "path": "buckets/{bucketName}/objects/{+objectKey}",
+                    "httpMethod": "GET",
+                    "description": "Nesne meta verisini ve içeriğini getirir.",
+                    "parameters": {
+                        "bucketName": {
+                            "type": "string",
+                            "location": "path",
+                            "required": true
+                        },
+                        "objectKey": {
+                            "type": "string",
+                            "location": "path",
+                            "required": true
+                        }
+                    },
+                    "response": {
+                        "$ref": "GetObjectResponse"
+                    }
+                },
+                "delete": {
+                    "id": "storage.objects.delete",
+                    "path": "buckets/{bucketName}/objects/{+objectKey}",
+                    "httpMethod": "DELETE",
+                    "description": "Kovadaki bir nesneyi siler.",
+                    "parameters": {
+                        "bucketName": {
+                            "type": "string",
+                            "location": "path",
+                            "required": true
+                        },
+                        "objectKey": {
+                            "type": "string",
+                            "location": "path",
+                            "required": true
+                        }
+                    },
+                    "response": {
+                        "$ref": "DeleteStorageResponse"
+                    }
+                }
+            }
+        }
+    }
+}

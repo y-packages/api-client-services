@@ -1,0 +1,405 @@
+{
+    "kind": "discovery#restDescription",
+    "discoveryVersion": "v1",
+    "id": "clouddns:v1",
+    "name": "clouddns",
+    "canonicalName": "CloudDns",
+    "version": "v1",
+    "title": "YakNet Cloud DNS API",
+    "description": "Yönetilen DNS bölgeleri, A/AAAA/CNAME/MX/TXT kayıt setleri, BIND dışa aktarma ve çoklu çözümleyici DNS yayılma denetimi.",
+    "ownerDomain": "yakhub.com.tr",
+    "ownerName": "YakNet",
+    "protocol": "rest",
+    "rootUrl": "https://developer-console.yakhub.com.tr/",
+    "servicePath": "api/cloud/dns/",
+    "auth": {
+        "apiKey": {
+            "header": "X-API-Key",
+            "prefix": "yk_live_"
+        },
+        "oauth2Client": {
+            "clientIdHeader": "X-Client-ID",
+            "clientSecretHeader": "X-Client-Secret"
+        }
+    },
+    "schemas": {
+        "DnsZone": {
+            "id": "DnsZone",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "dns_name": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "visibility": {
+                    "type": "string"
+                },
+                "dnssec_enabled": {
+                    "type": "boolean"
+                },
+                "name_servers": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "records_count": {
+                    "type": "integer"
+                },
+                "created_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "ZonesListResponse": {
+            "id": "ZonesListResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "project": {
+                    "type": "string"
+                },
+                "zones": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "DnsZone"
+                    }
+                }
+            }
+        },
+        "CreateZoneRequest": {
+            "id": "CreateZoneRequest",
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "dns_name": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "visibility": {
+                    "type": "string"
+                },
+                "dnssec_enabled": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "ZoneResponse": {
+            "id": "ZoneResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "zone": {
+                    "$ref": "DnsZone"
+                }
+            }
+        },
+        "DnsRecord": {
+            "id": "DnsRecord",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "ttl": {
+                    "type": "integer"
+                },
+                "rrdatas": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "RecordsListResponse": {
+            "id": "RecordsListResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "zone": {
+                    "type": "string"
+                },
+                "count": {
+                    "type": "integer"
+                },
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "DnsRecord"
+                    }
+                }
+            }
+        },
+        "CreateRecordRequest": {
+            "id": "CreateRecordRequest",
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "ttl": {
+                    "type": "integer"
+                },
+                "rrdatas": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "RecordResponse": {
+            "id": "RecordResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "record": {
+                    "$ref": "DnsRecord"
+                }
+            }
+        },
+        "DeleteDnsResponse": {
+            "id": "DeleteDnsResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "deleted": {
+                    "type": "string"
+                }
+            }
+        },
+        "ExportZoneResponse": {
+            "id": "ExportZoneResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "zone": {
+                    "type": "string"
+                },
+                "bind_file": {
+                    "type": "string"
+                }
+            }
+        },
+        "CheckPropagationRequest": {
+            "id": "CheckPropagationRequest",
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                }
+            }
+        },
+        "CheckPropagationResponse": {
+            "id": "CheckPropagationResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "query": {
+                    "type": "object"
+                },
+                "resolvers": {
+                    "type": "object"
+                }
+            }
+        }
+    },
+    "resources": {
+        "zones": {
+            "methods": {
+                "listZones": {
+                    "id": "clouddns.zones.listZones",
+                    "path": "zones",
+                    "httpMethod": "GET",
+                    "description": "Projedeki tüm yönetilen DNS bölgelerini listeler.",
+                    "parameters": [],
+                    "response": {
+                        "$ref": "ZonesListResponse"
+                    }
+                },
+                "insert": {
+                    "id": "clouddns.zones.insert",
+                    "path": "zones",
+                    "httpMethod": "POST",
+                    "description": "Yeni bir yönetilen DNS bölgesi oluşturur ve başlangıç SOA/NS kayıtlarını atar.",
+                    "parameters": [],
+                    "request": {
+                        "$ref": "CreateZoneRequest"
+                    },
+                    "response": {
+                        "$ref": "ZoneResponse"
+                    }
+                },
+                "get": {
+                    "id": "clouddns.zones.get",
+                    "path": "zones/{zoneId}",
+                    "httpMethod": "GET",
+                    "description": "Yönetilen DNS bölgesinin ayrıntılarını getirir.",
+                    "parameters": {
+                        "zoneId": {
+                            "type": "string",
+                            "location": "path",
+                            "required": true
+                        }
+                    },
+                    "response": {
+                        "$ref": "ZoneResponse"
+                    }
+                },
+                "delete": {
+                    "id": "clouddns.zones.delete",
+                    "path": "zones/{zoneId}",
+                    "httpMethod": "DELETE",
+                    "description": "Yönetilen DNS bölgesini ve tüm kayıtlarını siler.",
+                    "parameters": {
+                        "zoneId": {
+                            "type": "string",
+                            "location": "path",
+                            "required": true
+                        }
+                    },
+                    "response": {
+                        "$ref": "DeleteDnsResponse"
+                    }
+                },
+                "exportBind": {
+                    "id": "clouddns.zones.exportBind",
+                    "path": "zones/{zoneId}/export",
+                    "httpMethod": "GET",
+                    "description": "Bölge kayıtlarını RFC 1035 BIND zone dosyası biçiminde dışa aktarır.",
+                    "parameters": {
+                        "zoneId": {
+                            "type": "string",
+                            "location": "path",
+                            "required": true
+                        }
+                    },
+                    "response": {
+                        "$ref": "ExportZoneResponse"
+                    }
+                }
+            }
+        },
+        "records": {
+            "methods": {
+                "listRecords": {
+                    "id": "clouddns.records.listRecords",
+                    "path": "zones/{zoneId}/records",
+                    "httpMethod": "GET",
+                    "description": "DNS bölgesindeki kayıt setlerini listeler.",
+                    "parameters": {
+                        "zoneId": {
+                            "type": "string",
+                            "location": "path",
+                            "required": true
+                        },
+                        "type": {
+                            "type": "string",
+                            "location": "query",
+                            "required": false
+                        }
+                    },
+                    "response": {
+                        "$ref": "RecordsListResponse"
+                    }
+                },
+                "insert": {
+                    "id": "clouddns.records.insert",
+                    "path": "zones/{zoneId}/records",
+                    "httpMethod": "POST",
+                    "description": "Bölgeye yeni bir DNS kaynak kayıt seti ekler.",
+                    "parameters": {
+                        "zoneId": {
+                            "type": "string",
+                            "location": "path",
+                            "required": true
+                        }
+                    },
+                    "request": {
+                        "$ref": "CreateRecordRequest"
+                    },
+                    "response": {
+                        "$ref": "RecordResponse"
+                    }
+                },
+                "delete": {
+                    "id": "clouddns.records.delete",
+                    "path": "zones/{zoneId}/records/{recordId}",
+                    "httpMethod": "DELETE",
+                    "description": "Bölgedeki bir DNS kaydını siler.",
+                    "parameters": {
+                        "zoneId": {
+                            "type": "string",
+                            "location": "path",
+                            "required": true
+                        },
+                        "recordId": {
+                            "type": "string",
+                            "location": "path",
+                            "required": true
+                        }
+                    },
+                    "response": {
+                        "$ref": "DeleteDnsResponse"
+                    }
+                }
+            }
+        },
+        "propagation": {
+            "methods": {
+                "check": {
+                    "id": "clouddns.propagation.check",
+                    "path": "check-propagation",
+                    "httpMethod": "POST",
+                    "description": "Google, Cloudflare ve yerel DNS çözümleyicilerinde global yayılmayı test eder.",
+                    "parameters": [],
+                    "request": {
+                        "$ref": "CheckPropagationRequest"
+                    },
+                    "response": {
+                        "$ref": "CheckPropagationResponse"
+                    }
+                }
+            }
+        }
+    }
+}
