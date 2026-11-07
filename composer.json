@@ -28,6 +28,11 @@
             "email": "info@yakhub.com.tr"
         }
     ],
+    "support": {
+        "issues": "https://github.com/y-packages/api-client-services/issues",
+        "source": "https://github.com/y-packages/api-client-services",
+        "docs": "https://docs.yakhub.com.tr"
+    },
     "require": {
         "php": "^8.2",
         "ext-curl": "*",

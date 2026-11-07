@@ -1,5 +1,9 @@
 # YakNet API Client Services (`yaknet/api-client-services`)
 
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/yaknet/api-client-services.svg?style=flat-square)](https://packagist.org/packages/yaknet/api-client-services)
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
+[![PHP Version Require](https://img.shields.io/packagist/php-v/yaknet/api-client-services.svg?style=flat-square)](https://packagist.org/packages/yaknet/api-client-services)
+
 **YakNet Developer Console** (`https://developer-console.yakhub.com.tr`) üzerindeki tüm bulut servisleri için **Discovery JSON** şemalarından otomatik derlenen resmi, modüler ve yüksek performanslı PHP SDK kütüphanesi.
 
 > **Not:** OAuth 2.0 / SSO kullanıcı girişi için `yaknet/y-auth`, Altcha PoW bot koruması ve WAF bileşenleri için `yaknet/yacaptcha` paketleri bağımsız olarak kullanılmaya devam eder. Bu paket tüm **YakNet Bulut / Konsol REST API** servislerini tek çatı altında sunar.
