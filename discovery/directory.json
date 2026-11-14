@@ -289,6 +289,18 @@
             "discoveryRestUrl": "https://developer-console.yakhub.com.tr/api/discovery/v1/apis/authenticator/v1/rest",
             "documentationLink": "https://developer-console.yakhub.com.tr/console/apis",
             "preferred": true
+        },
+        {
+            "kind": "discovery#directoryItem",
+            "id": "yaktube:v1",
+            "name": "yaktube",
+            "version": "v1",
+            "className": "YakTube",
+            "title": "YakNet Cloud YakTube Video Platform API",
+            "description": "YakTube video platformu API servisi: Video arama, detaylar, oynatma listeleri, kanallar, kategoriler ve kullanıcı bulut arama geçmişi.",
+            "discoveryRestUrl": "https://developer-console.yakhub.com.tr/api/discovery/v1/apis/yaktube/v1/rest",
+            "documentationLink": "https://developer-console.yakhub.com.tr/console/apis",
+            "preferred": true
         }
     ]
 }

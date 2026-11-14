@@ -516,6 +516,71 @@ final class ApiClientServicesTest extends TestCase
         $this->assertSame(42, $prompt->getPrompt()?->getMatchingNumber());
     }
 
+    public function testYakTubeVideoPlatformService(): void
+    {
+        $mock = (new MockTransport())
+            ->queueJson([
+                'total' => 1,
+                'data' => [
+                    [
+                        'id' => 101,
+                        'uuid' => 'uuid-101',
+                        'name' => 'YakNet Tanıtım',
+                        'description' => 'YakTube video platformu',
+                    ],
+                ],
+            ])
+            ->queueJson([
+                'id' => 101,
+                'uuid' => 'uuid-101',
+                'name' => 'YakNet Tanıtım',
+                'description' => 'YakTube video platformu',
+            ])
+            ->queueJson([
+                'categories' => ['1' => 'Müzik', '2' => 'Eğitim'],
+            ])
+            ->queueJson([
+                'instance' => ['name' => 'YakTube'],
+                'serverVersion' => '6.0.0',
+            ])
+            ->queueJson([
+                'success' => true,
+                'saved' => true,
+                'query' => 'Erişilebilirlik',
+                'history' => ['Erişilebilirlik'],
+                'synced_at' => '2026-11-14T12:00:00Z',
+            ]);
+
+        $client = new Client(['api_key' => 'yk_live_test_key'], $mock);
+        $yaktube = new \YakNet\Api\YakTube($client);
+
+        // 1. Videos
+        $videos = $yaktube->videos->listResource(['count' => 10]);
+        $this->assertSame(1, $videos->getTotal());
+        $this->assertSame('YakNet Tanıtım', $videos->getData()[0]?->getName());
+
+        $video = $yaktube->videos->get('101');
+        $this->assertSame(101, $video->getId());
+        $this->assertSame('uuid-101', $video->getUuid());
+
+        // 2. Categories
+        $cats = $yaktube->categories->listResource();
+        $this->assertIsArray($cats->getCategories());
+
+        // 3. Instance
+        $config = $yaktube->instance->config();
+        $this->assertSame('6.0.0', $config->getServerVersion());
+
+        // 4. Search History
+        $histRes = $yaktube->searchHistory->add(new \YakNet\Api\YakTube\SearchHistoryAddRequest([
+            'query' => 'Erişilebilirlik',
+            'device_name' => 'SDK Test',
+        ]));
+        $this->assertTrue($histRes->getSuccess());
+        $this->assertTrue($histRes->getSaved());
+        $this->assertSame('Erişilebilirlik', $histRes->getQuery());
+    }
+
     public function testDiscoveryGeneratorRegeneratesCleanlyFromLocalSpecs(): void
     {
         $discoveryDir = dirname(__DIR__).DIRECTORY_SEPARATOR.'discovery';
@@ -524,8 +589,8 @@ final class ApiClientServicesTest extends TestCase
         $generator = new DiscoveryGenerator();
         $stats = $generator->generateFromDirectory($discoveryDir, $tempOut);
 
-        $this->assertSame(24, $stats['services']);
-        $this->assertGreaterThan(220, $stats['files']);
+        $this->assertSame(25, $stats['services']);
+        $this->assertGreaterThan(270, $stats['files']);
         $this->assertFileExists($tempOut.DIRECTORY_SEPARATOR.'Storage.php');
         $this->assertFileExists($tempOut.DIRECTORY_SEPARATOR.'CloudDns.php');
         $this->assertFileExists($tempOut.DIRECTORY_SEPARATOR.'CloudKms.php');
@@ -534,6 +599,8 @@ final class ApiClientServicesTest extends TestCase
         $this->assertFileExists($tempOut.DIRECTORY_SEPARATOR.'Yakopedia.php');
         $this->assertFileExists($tempOut.DIRECTORY_SEPARATOR.'CloudArmor.php');
         $this->assertFileExists($tempOut.DIRECTORY_SEPARATOR.'Authenticator.php');
+        $this->assertFileExists($tempOut.DIRECTORY_SEPARATOR.'YakTube.php');
+        $this->assertFileExists($tempOut.DIRECTORY_SEPARATOR.'YakTube'.DIRECTORY_SEPARATOR.'Resource'.DIRECTORY_SEPARATOR.'Videos.php');
         $this->assertFileExists($tempOut.DIRECTORY_SEPARATOR.'Storage'.DIRECTORY_SEPARATOR.'Resource'.DIRECTORY_SEPARATOR.'Objects.php');
 
         // Cleanup temporary directory

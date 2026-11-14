@@ -1,0 +1,1303 @@
+{
+    "kind": "discovery#restDescription",
+    "discoveryVersion": "v1",
+    "id": "yaktube:v1",
+    "name": "yaktube",
+    "canonicalName": "YakTube",
+    "version": "v1",
+    "title": "YakNet Cloud YakTube Video Platform API",
+    "description": "YakTube video platformu API servisi: Video arama, detaylar, oynatma listeleri, kanallar, kategoriler ve kullanıcı bulut arama geçmişi.",
+    "ownerDomain": "yakhub.com.tr",
+    "ownerName": "YakNet",
+    "protocol": "rest",
+    "rootUrl": "https://developer-console.yakhub.com.tr/",
+    "servicePath": "api/cloud/yaktube/",
+    "auth": {
+        "apiKey": {
+            "header": "X-API-Key",
+            "prefix": "yk_live_"
+        },
+        "oauth2Client": {
+            "clientIdHeader": "X-Client-ID",
+            "clientSecretHeader": "X-Client-Secret"
+        }
+    },
+    "schemas": {
+        "VideoChannel": {
+            "id": "VideoChannel",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "displayName": {
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string"
+                },
+                "host": {
+                    "type": "string"
+                },
+                "avatars": {
+                    "type": "array",
+                    "items": {
+                        "type": "object"
+                    }
+                }
+            }
+        },
+        "VideoAccount": {
+            "id": "VideoAccount",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "displayName": {
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string"
+                },
+                "host": {
+                    "type": "string"
+                },
+                "avatars": {
+                    "type": "array",
+                    "items": {
+                        "type": "object"
+                    }
+                }
+            }
+        },
+        "VideoFile": {
+            "id": "VideoFile",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "width": {
+                    "type": "integer"
+                },
+                "height": {
+                    "type": "integer"
+                },
+                "size": {
+                    "type": "integer"
+                },
+                "fps": {
+                    "type": "integer"
+                },
+                "torrentUrl": {
+                    "type": "string"
+                },
+                "torrentDownloadUrl": {
+                    "type": "string"
+                },
+                "fileUrl": {
+                    "type": "string"
+                },
+                "fileDownloadUrl": {
+                    "type": "string"
+                },
+                "hasAudio": {
+                    "type": "boolean"
+                },
+                "hasVideo": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "VideoStreamingPlaylist": {
+            "id": "VideoStreamingPlaylist",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "type": {
+                    "type": "integer"
+                },
+                "playlistUrl": {
+                    "type": "string"
+                },
+                "segmentsSha256Url": {
+                    "type": "string"
+                },
+                "files": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "VideoFile"
+                    }
+                }
+            }
+        },
+        "Video": {
+            "id": "Video",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "uuid": {
+                    "type": "string"
+                },
+                "shortUUID": {
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "truncatedDescription": {
+                    "type": "string"
+                },
+                "duration": {
+                    "type": "integer"
+                },
+                "views": {
+                    "type": "integer"
+                },
+                "likes": {
+                    "type": "integer"
+                },
+                "dislikes": {
+                    "type": "integer"
+                },
+                "thumbnailPath": {
+                    "type": "string"
+                },
+                "previewPath": {
+                    "type": "string"
+                },
+                "embedPath": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "publishedAt": {
+                    "type": "string"
+                },
+                "isLive": {
+                    "type": "boolean"
+                },
+                "account": {
+                    "$ref": "VideoAccount"
+                },
+                "channel": {
+                    "$ref": "VideoChannel"
+                },
+                "streamingPlaylists": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "VideoStreamingPlaylist"
+                    }
+                },
+                "files": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "VideoFile"
+                    }
+                }
+            }
+        },
+        "VideoListResponse": {
+            "id": "VideoListResponse",
+            "type": "object",
+            "properties": {
+                "total": {
+                    "type": "integer"
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "Video"
+                    }
+                }
+            }
+        },
+        "VideoDescriptionResponse": {
+            "id": "VideoDescriptionResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                }
+            }
+        },
+        "VideoCommentThread": {
+            "id": "VideoCommentThread",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "text": {
+                    "type": "string"
+                },
+                "inReplyToCommentId": {
+                    "type": "integer"
+                },
+                "videoId": {
+                    "type": "integer"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "totalReplies": {
+                    "type": "integer"
+                },
+                "account": {
+                    "$ref": "VideoAccount"
+                }
+            }
+        },
+        "VideoCommentListResponse": {
+            "id": "VideoCommentListResponse",
+            "type": "object",
+            "properties": {
+                "total": {
+                    "type": "integer"
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "VideoCommentThread"
+                    }
+                }
+            }
+        },
+        "VideoRateRequest": {
+            "id": "VideoRateRequest",
+            "type": "object",
+            "properties": {
+                "rating": {
+                    "type": "string"
+                }
+            }
+        },
+        "VideoRateResponse": {
+            "id": "VideoRateResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "rating": {
+                    "type": "string"
+                }
+            }
+        },
+        "VideoCaptionItem": {
+            "id": "VideoCaptionItem",
+            "type": "object",
+            "properties": {
+                "language": {
+                    "type": "string"
+                },
+                "label": {
+                    "type": "string"
+                },
+                "fileUrl": {
+                    "type": "string"
+                }
+            }
+        },
+        "VideoCaptionsResponse": {
+            "id": "VideoCaptionsResponse",
+            "type": "object",
+            "properties": {
+                "total": {
+                    "type": "integer"
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "VideoCaptionItem"
+                    }
+                }
+            }
+        },
+        "Channel": {
+            "id": "Channel",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "displayName": {
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "support": {
+                    "type": "string"
+                },
+                "isLocal": {
+                    "type": "boolean"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "ownerAccount": {
+                    "$ref": "VideoAccount"
+                },
+                "banners": {
+                    "type": "array",
+                    "items": {
+                        "type": "object"
+                    }
+                },
+                "avatars": {
+                    "type": "array",
+                    "items": {
+                        "type": "object"
+                    }
+                }
+            }
+        },
+        "ChannelListResponse": {
+            "id": "ChannelListResponse",
+            "type": "object",
+            "properties": {
+                "total": {
+                    "type": "integer"
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "Channel"
+                    }
+                }
+            }
+        },
+        "ChannelFollowerItem": {
+            "id": "ChannelFollowerItem",
+            "type": "object",
+            "properties": {
+                "actorUri": {
+                    "type": "string"
+                },
+                "host": {
+                    "type": "string"
+                },
+                "followingUrl": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "ChannelFollowersResponse": {
+            "id": "ChannelFollowersResponse",
+            "type": "object",
+            "properties": {
+                "total": {
+                    "type": "integer"
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "ChannelFollowerItem"
+                    }
+                }
+            }
+        },
+        "Playlist": {
+            "id": "Playlist",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "uuid": {
+                    "type": "string"
+                },
+                "shortUUID": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "privacy": {
+                    "type": "integer"
+                },
+                "type": {
+                    "type": "integer"
+                },
+                "isLocal": {
+                    "type": "boolean"
+                },
+                "videosLength": {
+                    "type": "integer"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "videoChannel": {
+                    "$ref": "VideoChannel"
+                },
+                "ownerAccount": {
+                    "$ref": "VideoAccount"
+                }
+            }
+        },
+        "PlaylistListResponse": {
+            "id": "PlaylistListResponse",
+            "type": "object",
+            "properties": {
+                "total": {
+                    "type": "integer"
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "Playlist"
+                    }
+                }
+            }
+        },
+        "PlaylistElement": {
+            "id": "PlaylistElement",
+            "type": "object",
+            "properties": {
+                "position": {
+                    "type": "integer"
+                },
+                "startTimestamp": {
+                    "type": "integer"
+                },
+                "stopTimestamp": {
+                    "type": "integer"
+                },
+                "video": {
+                    "$ref": "Video"
+                }
+            }
+        },
+        "PlaylistElementListResponse": {
+            "id": "PlaylistElementListResponse",
+            "type": "object",
+            "properties": {
+                "total": {
+                    "type": "integer"
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "PlaylistElement"
+                    }
+                }
+            }
+        },
+        "CategoryListResponse": {
+            "id": "CategoryListResponse",
+            "type": "object",
+            "properties": {
+                "categories": {
+                    "type": "object"
+                }
+            }
+        },
+        "LicenceListResponse": {
+            "id": "LicenceListResponse",
+            "type": "object",
+            "properties": {
+                "licences": {
+                    "type": "object"
+                }
+            }
+        },
+        "LanguageListResponse": {
+            "id": "LanguageListResponse",
+            "type": "object",
+            "properties": {
+                "languages": {
+                    "type": "object"
+                }
+            }
+        },
+        "InstanceConfigResponse": {
+            "id": "InstanceConfigResponse",
+            "type": "object",
+            "properties": {
+                "instance": {
+                    "type": "object"
+                },
+                "serverVersion": {
+                    "type": "string"
+                },
+                "defaultClientRoute": {
+                    "type": "string"
+                },
+                "serverCountry": {
+                    "type": "string"
+                }
+            }
+        },
+        "InstanceStatsResponse": {
+            "id": "InstanceStatsResponse",
+            "type": "object",
+            "properties": {
+                "totalUsers": {
+                    "type": "integer"
+                },
+                "totalVideos": {
+                    "type": "integer"
+                },
+                "totalLocalVideos": {
+                    "type": "integer"
+                },
+                "totalLocalVideoViews": {
+                    "type": "integer"
+                },
+                "totalVideoComments": {
+                    "type": "integer"
+                },
+                "totalLocalVideoChannels": {
+                    "type": "integer"
+                }
+            }
+        },
+        "InstanceAboutResponse": {
+            "id": "InstanceAboutResponse",
+            "type": "object",
+            "properties": {
+                "instance": {
+                    "type": "object"
+                },
+                "serverConfig": {
+                    "type": "object"
+                }
+            }
+        },
+        "SearchVideoResponse": {
+            "id": "SearchVideoResponse",
+            "type": "object",
+            "properties": {
+                "total": {
+                    "type": "integer"
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "Video"
+                    }
+                }
+            }
+        },
+        "SearchChannelResponse": {
+            "id": "SearchChannelResponse",
+            "type": "object",
+            "properties": {
+                "total": {
+                    "type": "integer"
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "Channel"
+                    }
+                }
+            }
+        },
+        "SearchPlaylistResponse": {
+            "id": "SearchPlaylistResponse",
+            "type": "object",
+            "properties": {
+                "total": {
+                    "type": "integer"
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "Playlist"
+                    }
+                }
+            }
+        },
+        "SearchHistoryItem": {
+            "id": "SearchHistoryItem",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "query": {
+                    "type": "string"
+                },
+                "device_name": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "SearchHistoryListResponse": {
+            "id": "SearchHistoryListResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "authenticated": {
+                    "type": "boolean"
+                },
+                "history": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "synced_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "SearchHistoryAddRequest": {
+            "id": "SearchHistoryAddRequest",
+            "type": "object",
+            "properties": {
+                "query": {
+                    "type": "string"
+                },
+                "device_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "SearchHistoryAddResponse": {
+            "id": "SearchHistoryAddResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "saved": {
+                    "type": "boolean"
+                },
+                "query": {
+                    "type": "string"
+                },
+                "history": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "synced_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "SearchHistoryClearResponse": {
+            "id": "SearchHistoryClearResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "cleared": {
+                    "type": "boolean"
+                },
+                "history": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "resources": {
+        "videos": {
+            "methods": {
+                "list": {
+                    "id": "yaktube.videos.list",
+                    "path": "videos",
+                    "httpMethod": "GET",
+                    "description": "YakTube üzerinde videoları listeler ve arar.",
+                    "parameters": {
+                        "count": {
+                            "type": "integer",
+                            "location": "query",
+                            "required": false
+                        },
+                        "start": {
+                            "type": "integer",
+                            "location": "query",
+                            "required": false
+                        },
+                        "sort": {
+                            "type": "string",
+                            "location": "query",
+                            "required": false
+                        },
+                        "categoryOneOf": {
+                            "type": "string",
+                            "location": "query",
+                            "required": false
+                        },
+                        "languageOneOf": {
+                            "type": "string",
+                            "location": "query",
+                            "required": false
+                        },
+                        "isLocal": {
+                            "type": "boolean",
+                            "location": "query",
+                            "required": false
+                        },
+                        "filter": {
+                            "type": "string",
+                            "location": "query",
+                            "required": false
+                        },
+                        "search": {
+                            "type": "string",
+                            "location": "query",
+                            "required": false
+                        }
+                    },
+                    "response": {
+                        "$ref": "VideoListResponse"
+                    }
+                },
+                "get": {
+                    "id": "yaktube.videos.get",
+                    "path": "videos/{id}",
+                    "httpMethod": "GET",
+                    "description": "Belirtilen videonun tüm meta verilerini, HLS ve doğrudan oynatma dosyalarını getirir.",
+                    "parameters": {
+                        "id": {
+                            "type": "string",
+                            "location": "path",
+                            "required": true
+                        }
+                    },
+                    "response": {
+                        "$ref": "Video"
+                    }
+                },
+                "description": {
+                    "id": "yaktube.videos.description",
+                    "path": "videos/{id}/description",
+                    "httpMethod": "GET",
+                    "description": "Videonun tam açıklama metnini getirir.",
+                    "parameters": {
+                        "id": {
+                            "type": "string",
+                            "location": "path",
+                            "required": true
+                        }
+                    },
+                    "response": {
+                        "$ref": "VideoDescriptionResponse"
+                    }
+                },
+                "comments": {
+                    "id": "yaktube.videos.comments",
+                    "path": "videos/{id}/comments",
+                    "httpMethod": "GET",
+                    "description": "Videonun yorum akışını ve yanıtlarını listeler.",
+                    "parameters": {
+                        "id": {
+                            "type": "string",
+                            "location": "path",
+                            "required": true
+                        },
+                        "count": {
+                            "type": "integer",
+                            "location": "query",
+                            "required": false
+                        },
+                        "start": {
+                            "type": "integer",
+                            "location": "query",
+                            "required": false
+                        },
+                        "sort": {
+                            "type": "string",
+                            "location": "query",
+                            "required": false
+                        }
+                    },
+                    "response": {
+                        "$ref": "VideoCommentListResponse"
+                    }
+                },
+                "rate": {
+                    "id": "yaktube.videos.rate",
+                    "path": "videos/{id}/rate",
+                    "httpMethod": "PUT",
+                    "description": "Videoyu beğen (like), beğenme (dislike) veya puanı kaldır (none).",
+                    "parameters": {
+                        "id": {
+                            "type": "string",
+                            "location": "path",
+                            "required": true
+                        }
+                    },
+                    "request": {
+                        "$ref": "VideoRateRequest"
+                    },
+                    "response": {
+                        "$ref": "VideoRateResponse"
+                    }
+                },
+                "captions": {
+                    "id": "yaktube.videos.captions",
+                    "path": "videos/{id}/captions",
+                    "httpMethod": "GET",
+                    "description": "Videonun mevcut altyazı ve transkript dosyalarını listeler.",
+                    "parameters": {
+                        "id": {
+                            "type": "string",
+                            "location": "path",
+                            "required": true
+                        }
+                    },
+                    "response": {
+                        "$ref": "VideoCaptionsResponse"
+                    }
+                }
+            }
+        },
+        "channels": {
+            "methods": {
+                "list": {
+                    "id": "yaktube.channels.list",
+                    "path": "channels",
+                    "httpMethod": "GET",
+                    "description": "Platformdaki video kanallarını listeler.",
+                    "parameters": {
+                        "count": {
+                            "type": "integer",
+                            "location": "query",
+                            "required": false
+                        },
+                        "start": {
+                            "type": "integer",
+                            "location": "query",
+                            "required": false
+                        },
+                        "sort": {
+                            "type": "string",
+                            "location": "query",
+                            "required": false
+                        }
+                    },
+                    "response": {
+                        "$ref": "ChannelListResponse"
+                    }
+                },
+                "get": {
+                    "id": "yaktube.channels.get",
+                    "path": "channels/{handle}",
+                    "httpMethod": "GET",
+                    "description": "Kanal bilgilerini, sahibini, banner ve avatar görsellerini getirir.",
+                    "parameters": {
+                        "handle": {
+                            "type": "string",
+                            "location": "path",
+                            "required": true
+                        }
+                    },
+                    "response": {
+                        "$ref": "Channel"
+                    }
+                },
+                "videos": {
+                    "id": "yaktube.channels.videos",
+                    "path": "channels/{handle}/videos",
+                    "httpMethod": "GET",
+                    "description": "Belirtilen kanala ait videoları listeler.",
+                    "parameters": {
+                        "handle": {
+                            "type": "string",
+                            "location": "path",
+                            "required": true
+                        },
+                        "count": {
+                            "type": "integer",
+                            "location": "query",
+                            "required": false
+                        },
+                        "start": {
+                            "type": "integer",
+                            "location": "query",
+                            "required": false
+                        },
+                        "sort": {
+                            "type": "string",
+                            "location": "query",
+                            "required": false
+                        }
+                    },
+                    "response": {
+                        "$ref": "VideoListResponse"
+                    }
+                },
+                "followers": {
+                    "id": "yaktube.channels.followers",
+                    "path": "channels/{handle}/followers",
+                    "httpMethod": "GET",
+                    "description": "Kanalın federe veya yerel takipçilerini listeler.",
+                    "parameters": {
+                        "handle": {
+                            "type": "string",
+                            "location": "path",
+                            "required": true
+                        },
+                        "count": {
+                            "type": "integer",
+                            "location": "query",
+                            "required": false
+                        },
+                        "start": {
+                            "type": "integer",
+                            "location": "query",
+                            "required": false
+                        }
+                    },
+                    "response": {
+                        "$ref": "ChannelFollowersResponse"
+                    }
+                }
+            }
+        },
+        "playlists": {
+            "methods": {
+                "list": {
+                    "id": "yaktube.playlists.list",
+                    "path": "playlists",
+                    "httpMethod": "GET",
+                    "description": "Platformdaki oynatma listelerini listeler.",
+                    "parameters": {
+                        "count": {
+                            "type": "integer",
+                            "location": "query",
+                            "required": false
+                        },
+                        "start": {
+                            "type": "integer",
+                            "location": "query",
+                            "required": false
+                        },
+                        "sort": {
+                            "type": "string",
+                            "location": "query",
+                            "required": false
+                        }
+                    },
+                    "response": {
+                        "$ref": "PlaylistListResponse"
+                    }
+                },
+                "get": {
+                    "id": "yaktube.playlists.get",
+                    "path": "playlists/{id}",
+                    "httpMethod": "GET",
+                    "description": "Oynatma listesi ayrıntılarını getirir.",
+                    "parameters": {
+                        "id": {
+                            "type": "string",
+                            "location": "path",
+                            "required": true
+                        }
+                    },
+                    "response": {
+                        "$ref": "Playlist"
+                    }
+                },
+                "videos": {
+                    "id": "yaktube.playlists.videos",
+                    "path": "playlists/{id}/videos",
+                    "httpMethod": "GET",
+                    "description": "Oynatma listesindeki videoları ve sıralarını getirir.",
+                    "parameters": {
+                        "id": {
+                            "type": "string",
+                            "location": "path",
+                            "required": true
+                        },
+                        "count": {
+                            "type": "integer",
+                            "location": "query",
+                            "required": false
+                        },
+                        "start": {
+                            "type": "integer",
+                            "location": "query",
+                            "required": false
+                        }
+                    },
+                    "response": {
+                        "$ref": "PlaylistElementListResponse"
+                    }
+                }
+            }
+        },
+        "search": {
+            "methods": {
+                "videos": {
+                    "id": "yaktube.search.videos",
+                    "path": "search/videos",
+                    "httpMethod": "GET",
+                    "description": "Arama terimi, etiket veya kategoriye göre videoları arar.",
+                    "parameters": {
+                        "search": {
+                            "type": "string",
+                            "location": "query",
+                            "required": true
+                        },
+                        "count": {
+                            "type": "integer",
+                            "location": "query",
+                            "required": false
+                        },
+                        "start": {
+                            "type": "integer",
+                            "location": "query",
+                            "required": false
+                        },
+                        "sort": {
+                            "type": "string",
+                            "location": "query",
+                            "required": false
+                        },
+                        "categoryOneOf": {
+                            "type": "string",
+                            "location": "query",
+                            "required": false
+                        },
+                        "languageOneOf": {
+                            "type": "string",
+                            "location": "query",
+                            "required": false
+                        }
+                    },
+                    "response": {
+                        "$ref": "SearchVideoResponse"
+                    }
+                },
+                "channels": {
+                    "id": "yaktube.search.channels",
+                    "path": "search/channels",
+                    "httpMethod": "GET",
+                    "description": "Arama terimine göre kanalları arar.",
+                    "parameters": {
+                        "search": {
+                            "type": "string",
+                            "location": "query",
+                            "required": true
+                        },
+                        "count": {
+                            "type": "integer",
+                            "location": "query",
+                            "required": false
+                        },
+                        "start": {
+                            "type": "integer",
+                            "location": "query",
+                            "required": false
+                        }
+                    },
+                    "response": {
+                        "$ref": "SearchChannelResponse"
+                    }
+                },
+                "playlists": {
+                    "id": "yaktube.search.playlists",
+                    "path": "search/playlists",
+                    "httpMethod": "GET",
+                    "description": "Arama terimine göre oynatma listelerini arar.",
+                    "parameters": {
+                        "search": {
+                            "type": "string",
+                            "location": "query",
+                            "required": true
+                        },
+                        "count": {
+                            "type": "integer",
+                            "location": "query",
+                            "required": false
+                        },
+                        "start": {
+                            "type": "integer",
+                            "location": "query",
+                            "required": false
+                        }
+                    },
+                    "response": {
+                        "$ref": "SearchPlaylistResponse"
+                    }
+                }
+            }
+        },
+        "categories": {
+            "methods": {
+                "list": {
+                    "id": "yaktube.categories.list",
+                    "path": "categories",
+                    "httpMethod": "GET",
+                    "description": "Platformdaki geçerli video kategorilerini listeler.",
+                    "parameters": [],
+                    "response": {
+                        "$ref": "CategoryListResponse"
+                    }
+                },
+                "licences": {
+                    "id": "yaktube.categories.licences",
+                    "path": "categories/licences",
+                    "httpMethod": "GET",
+                    "description": "Platformdaki video lisanslarını listeler.",
+                    "parameters": [],
+                    "response": {
+                        "$ref": "LicenceListResponse"
+                    }
+                },
+                "languages": {
+                    "id": "yaktube.categories.languages",
+                    "path": "categories/languages",
+                    "httpMethod": "GET",
+                    "description": "Platformdaki video dillerini listeler.",
+                    "parameters": [],
+                    "response": {
+                        "$ref": "LanguageListResponse"
+                    }
+                }
+            }
+        },
+        "instance": {
+            "methods": {
+                "config": {
+                    "id": "yaktube.instance.config",
+                    "path": "instance/config",
+                    "httpMethod": "GET",
+                    "description": "YakTube sunucu yapılandırması, sürümü ve genel özelliklerini getirir.",
+                    "parameters": [],
+                    "response": {
+                        "$ref": "InstanceConfigResponse"
+                    }
+                },
+                "stats": {
+                    "id": "yaktube.instance.stats",
+                    "path": "instance/stats",
+                    "httpMethod": "GET",
+                    "description": "Platform video sayıları, toplam kullanıcılar ve federasyon istatistiklerini getirir.",
+                    "parameters": [],
+                    "response": {
+                        "$ref": "InstanceStatsResponse"
+                    }
+                },
+                "about": {
+                    "id": "yaktube.instance.about",
+                    "path": "instance/about",
+                    "httpMethod": "GET",
+                    "description": "YakTube sunucu hakkında, topluluk kuralları ve donanım bilgilerini getirir.",
+                    "parameters": [],
+                    "response": {
+                        "$ref": "InstanceAboutResponse"
+                    }
+                }
+            }
+        },
+        "searchHistory": {
+            "methods": {
+                "list": {
+                    "id": "yaktube.searchHistory.list",
+                    "path": "search-history",
+                    "httpMethod": "GET",
+                    "description": "Kullanıcının YakTube bulut arama geçmişini getirir.",
+                    "parameters": [],
+                    "response": {
+                        "$ref": "SearchHistoryListResponse"
+                    }
+                },
+                "add": {
+                    "id": "yaktube.searchHistory.add",
+                    "path": "search-history",
+                    "httpMethod": "POST",
+                    "description": "Kullanıcının bulut arama geçmişine yeni bir sorgu kaydeder.",
+                    "parameters": [],
+                    "request": {
+                        "$ref": "SearchHistoryAddRequest"
+                    },
+                    "response": {
+                        "$ref": "SearchHistoryAddResponse"
+                    }
+                },
+                "clear": {
+                    "id": "yaktube.searchHistory.clear",
+                    "path": "search-history",
+                    "httpMethod": "DELETE",
+                    "description": "Kullanıcının arama geçmişini temizler veya belirtilen sorguyu siler.",
+                    "parameters": {
+                        "query": {
+                            "type": "string",
+                            "location": "query",
+                            "required": false
+                        }
+                    },
+                    "response": {
+                        "$ref": "SearchHistoryClearResponse"
+                    }
+                }
+            }
+        }
+    }
+}

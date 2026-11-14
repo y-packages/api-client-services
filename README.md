@@ -38,6 +38,7 @@
 | `YakNet\Api\Yakopedia` | Yakopedia bilgi bankası Türkçe ansiklopedi arama, makale özeti ve rastgele madde | `$yakopedia->articles` |
 | `YakNet\Api\CloudArmor` | Proof-of-Work (PoW) bot koruması challenge üretimi, jeton doğrulama ve WAF | `$armor->challenges`, `$armor->waf` |
 | `YakNet\Api\Authenticator` | Mobil YakNet Authenticator gerçek zamanlı 2FA giriş onayı (Push Prompt) dağıtımı | `$auth->prompts` |
+| `YakNet\Api\YakTube` | YakTube video platformu: Arama, HLS/MP4 akışları, kanal, oynatma listesi ve bulut arama geçmişi | `$yaktube->videos`, `$yaktube->channels`, `$yaktube->playlists`, `$yaktube->search`, `$yaktube->categories`, `$yaktube->instance`, `$yaktube->searchHistory` |
 
 ---
 
@@ -181,6 +182,13 @@ $enroll = $totp->authenticator->enroll(new TotpEnrollRequest([
     'issuer' => 'YakDocs',
 ]));
 $qrDataUri = $enroll->getQrDataUri();
+
+// YakTube Video Platformu: Video Arama ve HLS Akışı Alma
+$yaktube = new \YakNet\Api\YakTube($client);
+$videos = $yaktube->search->videos(['search' => 'Yapay Zeka', 'count' => 5]);
+foreach ($videos->getData() as $video) {
+    echo $video->getName() . ' (Süre: ' . $video->getDuration() . " sn)\n";
+}
 ```
 
 ### 7. Gelen Webhook İmzalarını Doğrulama (`X-YakNet-Signature`)
