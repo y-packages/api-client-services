@@ -562,6 +562,8 @@ final class ApiClientServicesTest extends TestCase
         $video = $yaktube->videos->get('101');
         $this->assertSame(101, $video->getId());
         $this->assertSame('uuid-101', $video->getUuid());
+        $this->assertSame('https://yaktube.yakhub.com.tr/videos/embed/uuid-101?autoplay=1&muted=1', $video->getEmbedUrl(['autoplay' => 1, 'muted' => 1]));
+        $this->assertStringContainsString('<iframe title="YakNet Tanıtım" width="640" height="360"', $video->getEmbedHtml(640, 360));
 
         // 2. Categories
         $cats = $yaktube->categories->listResource();

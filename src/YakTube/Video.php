@@ -334,4 +334,48 @@ class Video extends Collection
     {
         return $this->files;
     }
+
+    /**
+     * Get the full embed URL for this video.
+     *
+     * @param array<string, mixed> $queryParams Optional embed query parameters (e.g. ['autoplay' => 1, 'muted' => 1, 'p2p' => 0, 'api' => 1])
+     * @param string $instanceUrl Base YakTube instance URL (default: 'https://yaktube.yakhub.com.tr')
+     */
+    public function getEmbedUrl(array $queryParams = [], string $instanceUrl = 'https://yaktube.yakhub.com.tr'): string
+    {
+        $path = $this->embedPath ?: ('/videos/embed/' . ($this->uuid ?: $this->shortUUID ?: (string) $this->id));
+        $url = rtrim($instanceUrl, '/') . '/' . ltrim($path, '/');
+
+        if (! empty($queryParams)) {
+            $url .= '?' . http_build_query($queryParams);
+        }
+
+        return $url;
+    }
+
+    /**
+     * Get the ready-to-use HTML <iframe> embed snippet.
+     *
+     * @param int|string $width Embed width in pixels or percentage (default: 560)
+     * @param int|string $height Embed height in pixels or percentage (default: 315)
+     * @param array<string, mixed> $queryParams Optional embed query parameters
+     * @param string $instanceUrl Base YakTube instance URL
+     */
+    public function getEmbedHtml(
+        int|string $width = 560,
+        int|string $height = 315,
+        array $queryParams = [],
+        string $instanceUrl = 'https://yaktube.yakhub.com.tr'
+    ): string {
+        $embedUrl = htmlspecialchars($this->getEmbedUrl($queryParams, $instanceUrl), ENT_QUOTES, 'UTF-8');
+        $title = htmlspecialchars((string) ($this->name ?? 'YakTube Video Player'), ENT_QUOTES, 'UTF-8');
+
+        return sprintf(
+            '<iframe title="%s" width="%s" height="%s" src="%s" frameborder="0" allowfullscreen sandbox="allow-same-origin allow-scripts allow-popups allow-forms"></iframe>',
+            $title,
+            (string) $width,
+            (string) $height,
+            $embedUrl
+        );
+    }
 }
