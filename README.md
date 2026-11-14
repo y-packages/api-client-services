@@ -39,6 +39,7 @@
 | `YakNet\Api\CloudArmor` | Proof-of-Work (PoW) bot koruması challenge üretimi, jeton doğrulama ve WAF | `$armor->challenges`, `$armor->waf` |
 | `YakNet\Api\Authenticator` | Mobil YakNet Authenticator gerçek zamanlı 2FA giriş onayı (Push Prompt) dağıtımı | `$auth->prompts` |
 | `YakNet\Api\YakTube` | YakTube video platformu: Arama, HLS/MP4 akışları, kanal, oynatma listesi ve bulut arama geçmişi | `$yaktube->videos`, `$yaktube->channels`, `$yaktube->playlists`, `$yaktube->search`, `$yaktube->categories`, `$yaktube->instance`, `$yaktube->searchHistory` |
+| `YakNet\Api\CloudFinance` | TCMB döviz kurları, para birimi dönüştürücü, TR/Uluslararası IBAN doğrulama, VKN ve KDV hesaplama | `$finance->rates`, `$finance->iban`, `$finance->tax`, `$finance->vkn` |
 
 ---
 
@@ -189,6 +190,16 @@ $videos = $yaktube->search->videos(['search' => 'Yapay Zeka', 'count' => 5]);
 foreach ($videos->getData() as $video) {
     echo $video->getName() . ' (Süre: ' . $video->getDuration() . " sn)\n";
 }
+
+// Cloud Finance: TCMB Döviz Kurları ve TR IBAN Doğrulama
+$finance = new \YakNet\Api\CloudFinance($client);
+$rates = $finance->rates->latest();
+echo "USD/TRY: " . $rates->getRates()['USD']['selling'] . "\n";
+
+$ibanCheck = $finance->iban->validate(new \YakNet\Api\CloudFinance\IbanValidateRequest([
+    'iban' => 'TR88 0006 2005 1112 2233 3444 55',
+]));
+echo "Banka: " . $ibanCheck->getBankName() . " - Geçerli: " . ($ibanCheck->getValid() ? 'EVET' : 'HAYIR') . "\n";
 ```
 
 ### 7. Gelen Webhook İmzalarını Doğrulama (`X-YakNet-Signature`)

@@ -1,0 +1,315 @@
+{
+    "kind": "discovery#restDescription",
+    "discoveryVersion": "v1",
+    "id": "cloudfinance:v1",
+    "name": "cloudfinance",
+    "canonicalName": "CloudFinance",
+    "version": "v1",
+    "title": "YakNet Cloud Finance & Currency API",
+    "description": "TCMB döviz kurları, çoklu para birimi dönüştürücü, TR/Uluslararası IBAN doğrulama ve banka tespiti, VKN ve KDV hesaplama servisi.",
+    "ownerDomain": "yakhub.com.tr",
+    "ownerName": "YakNet",
+    "protocol": "rest",
+    "rootUrl": "https://developer-console.yakhub.com.tr/",
+    "servicePath": "api/cloud/finance/",
+    "auth": {
+        "apiKey": {
+            "header": "X-API-Key",
+            "prefix": "yk_live_"
+        },
+        "oauth2Client": {
+            "clientIdHeader": "X-Client-ID",
+            "clientSecretHeader": "X-Client-Secret"
+        }
+    },
+    "schemas": {
+        "CurrencyRateItem": {
+            "id": "CurrencyRateItem",
+            "type": "object",
+            "properties": {
+                "buying": {
+                    "type": "number"
+                },
+                "selling": {
+                    "type": "number"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "ExchangeRatesResponse": {
+            "id": "ExchangeRatesResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "base": {
+                    "type": "string"
+                },
+                "date": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "rates": {
+                    "type": "object"
+                }
+            }
+        },
+        "CurrencyConvertResponse": {
+            "id": "CurrencyConvertResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "from": {
+                    "type": "string"
+                },
+                "to": {
+                    "type": "string"
+                },
+                "amount": {
+                    "type": "number"
+                },
+                "rate": {
+                    "type": "number"
+                },
+                "result": {
+                    "type": "number"
+                },
+                "calculated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "IbanValidateRequest": {
+            "id": "IbanValidateRequest",
+            "type": "object",
+            "properties": {
+                "iban": {
+                    "type": "string"
+                }
+            }
+        },
+        "IbanValidateResponse": {
+            "id": "IbanValidateResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "valid": {
+                    "type": "boolean"
+                },
+                "iban": {
+                    "type": "string"
+                },
+                "formatted": {
+                    "type": "string"
+                },
+                "country_code": {
+                    "type": "string"
+                },
+                "bank_code": {
+                    "type": "string"
+                },
+                "bank_name": {
+                    "type": "string"
+                },
+                "account_number": {
+                    "type": "string"
+                },
+                "error": {
+                    "type": "string"
+                }
+            }
+        },
+        "TaxWithholding": {
+            "id": "TaxWithholding",
+            "type": "object",
+            "properties": {
+                "ratio": {
+                    "type": "string"
+                },
+                "withheld_tax": {
+                    "type": "number"
+                },
+                "net_payable": {
+                    "type": "number"
+                }
+            }
+        },
+        "TaxCalculateRequest": {
+            "id": "TaxCalculateRequest",
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "number"
+                },
+                "rate": {
+                    "type": "number"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "withholding_ratio": {
+                    "type": "string"
+                }
+            }
+        },
+        "TaxCalculateResponse": {
+            "id": "TaxCalculateResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "tax_rate": {
+                    "type": "number"
+                },
+                "base_amount": {
+                    "type": "number"
+                },
+                "tax_amount": {
+                    "type": "number"
+                },
+                "total_amount": {
+                    "type": "number"
+                },
+                "withholding": {
+                    "$ref": "TaxWithholding"
+                }
+            }
+        },
+        "VknValidateRequest": {
+            "id": "VknValidateRequest",
+            "type": "object",
+            "properties": {
+                "vkn": {
+                    "type": "string"
+                }
+            }
+        },
+        "VknValidateResponse": {
+            "id": "VknValidateResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "valid": {
+                    "type": "boolean"
+                },
+                "vkn": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "error": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "resources": {
+        "rates": {
+            "methods": {
+                "latest": {
+                    "id": "cloudfinance.rates.latest",
+                    "path": "rates/latest",
+                    "httpMethod": "GET",
+                    "description": "TCMB ve serbest piyasa güncel döviz alış-satış kurlarını listeler.",
+                    "parameters": [],
+                    "response": {
+                        "$ref": "ExchangeRatesResponse"
+                    }
+                },
+                "convert": {
+                    "id": "cloudfinance.rates.convert",
+                    "path": "rates/convert",
+                    "httpMethod": "GET",
+                    "description": "İki para birimi arasında belirtilen tutarı anlık kur üzerinden dönüştürür.",
+                    "parameters": {
+                        "from": {
+                            "type": "string",
+                            "location": "query",
+                            "required": true
+                        },
+                        "to": {
+                            "type": "string",
+                            "location": "query",
+                            "required": true
+                        },
+                        "amount": {
+                            "type": "number",
+                            "location": "query",
+                            "required": false
+                        }
+                    },
+                    "response": {
+                        "$ref": "CurrencyConvertResponse"
+                    }
+                }
+            }
+        },
+        "iban": {
+            "methods": {
+                "validate": {
+                    "id": "cloudfinance.iban.validate",
+                    "path": "iban/validate",
+                    "httpMethod": "POST",
+                    "description": "TR veya uluslararası IBAN numarasını doğrular, biçimlendirir ve banka/şube bilgilerini tespit eder.",
+                    "parameters": [],
+                    "request": {
+                        "$ref": "IbanValidateRequest"
+                    },
+                    "response": {
+                        "$ref": "IbanValidateResponse"
+                    }
+                }
+            }
+        },
+        "tax": {
+            "methods": {
+                "calculate": {
+                    "id": "cloudfinance.tax.calculate",
+                    "path": "tax/calculate",
+                    "httpMethod": "POST",
+                    "description": "KDV (dahil/hariç), tevkifat ve stopaj tutarlarını hesaplar.",
+                    "parameters": [],
+                    "request": {
+                        "$ref": "TaxCalculateRequest"
+                    },
+                    "response": {
+                        "$ref": "TaxCalculateResponse"
+                    }
+                }
+            }
+        },
+        "vkn": {
+            "methods": {
+                "validate": {
+                    "id": "cloudfinance.vkn.validate",
+                    "path": "vkn/validate",
+                    "httpMethod": "POST",
+                    "description": "GİB algoritmasıyla 10 haneli Vergi Kimlik Numarasının (VKN) matematiksel geçerliliğini denetler.",
+                    "parameters": [],
+                    "request": {
+                        "$ref": "VknValidateRequest"
+                    },
+                    "response": {
+                        "$ref": "VknValidateResponse"
+                    }
+                }
+            }
+        }
+    }
+}

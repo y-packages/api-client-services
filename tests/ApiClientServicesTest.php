@@ -583,6 +583,89 @@ final class ApiClientServicesTest extends TestCase
         $this->assertSame('Erişilebilirlik', $histRes->getQuery());
     }
 
+    public function testCloudFinanceService(): void
+    {
+        $mock = (new MockTransport())
+            ->queueJson([
+                'success' => true,
+                'base' => 'TRY',
+                'date' => '2026-11-14',
+                'rates' => [
+                    'USD' => ['buying' => 35.45, 'selling' => 35.52, 'name' => 'ABD Doları'],
+                    'EUR' => ['buying' => 38.60, 'selling' => 38.68, 'name' => 'Euro'],
+                    'TRY' => ['buying' => 1.0, 'selling' => 1.0, 'name' => 'Türk Lirası'],
+                ],
+            ])
+            ->queueJson([
+                'success' => true,
+                'from' => 'USD',
+                'to' => 'TRY',
+                'amount' => 100.0,
+                'rate' => 35.52,
+                'result' => 3552.0,
+            ])
+            ->queueJson([
+                'success' => true,
+                'valid' => true,
+                'iban' => 'TR880006200511122233344455',
+                'formatted' => 'TR88 0006 2005 1112 2233 3444 55',
+                'country_code' => 'TR',
+                'bank_code' => '00062',
+                'bank_name' => 'Türkiye Garanti Bankası A.Ş.',
+            ])
+            ->queueJson([
+                'success' => true,
+                'type' => 'exclusive',
+                'tax_rate' => 20.0,
+                'base_amount' => 1000.0,
+                'tax_amount' => 200.0,
+                'total_amount' => 1200.0,
+            ])
+            ->queueJson([
+                'success' => true,
+                'valid' => true,
+                'vkn' => '1234567890',
+                'type' => 'corporate_tax_id',
+            ]);
+
+        $client = new Client(['api_key' => 'yk_live_test_key'], $mock);
+        $finance = new \YakNet\Api\CloudFinance($client);
+
+        // 1. Rates Latest
+        $rates = $finance->rates->latest();
+        $this->assertTrue($rates->getSuccess());
+        $this->assertSame('TRY', $rates->getBase());
+
+        // 2. Convert
+        $convert = $finance->rates->convert(['from' => 'USD', 'to' => 'TRY', 'amount' => 100]);
+        $this->assertTrue($convert->getSuccess());
+        $this->assertSame(3552.0, $convert->getResult());
+
+        // 3. IBAN Validate
+        $iban = $finance->iban->validate(new \YakNet\Api\CloudFinance\IbanValidateRequest([
+            'iban' => 'TR880006200511122233344455',
+        ]));
+        $this->assertTrue($iban->getSuccess());
+        $this->assertTrue($iban->getValid());
+        $this->assertSame('00062', $iban->getBankCode());
+
+        // 4. Tax Calculate
+        $tax = $finance->tax->calculate(new \YakNet\Api\CloudFinance\TaxCalculateRequest([
+            'amount' => 1000.0,
+            'rate' => 20.0,
+        ]));
+        $this->assertTrue($tax->getSuccess());
+        $this->assertSame(200.0, $tax->getTaxAmount());
+        $this->assertSame(1200.0, $tax->getTotalAmount());
+
+        // 5. VKN Validate
+        $vkn = $finance->vkn->validate(new \YakNet\Api\CloudFinance\VknValidateRequest([
+            'vkn' => '1234567890',
+        ]));
+        $this->assertTrue($vkn->getSuccess());
+        $this->assertTrue($vkn->getValid());
+    }
+
     public function testDiscoveryGeneratorRegeneratesCleanlyFromLocalSpecs(): void
     {
         $discoveryDir = dirname(__DIR__).DIRECTORY_SEPARATOR.'discovery';
@@ -591,8 +674,8 @@ final class ApiClientServicesTest extends TestCase
         $generator = new DiscoveryGenerator();
         $stats = $generator->generateFromDirectory($discoveryDir, $tempOut);
 
-        $this->assertSame(25, $stats['services']);
-        $this->assertGreaterThan(270, $stats['files']);
+        $this->assertSame(26, $stats['services']);
+        $this->assertGreaterThan(285, $stats['files']);
         $this->assertFileExists($tempOut.DIRECTORY_SEPARATOR.'Storage.php');
         $this->assertFileExists($tempOut.DIRECTORY_SEPARATOR.'CloudDns.php');
         $this->assertFileExists($tempOut.DIRECTORY_SEPARATOR.'CloudKms.php');
@@ -602,6 +685,8 @@ final class ApiClientServicesTest extends TestCase
         $this->assertFileExists($tempOut.DIRECTORY_SEPARATOR.'CloudArmor.php');
         $this->assertFileExists($tempOut.DIRECTORY_SEPARATOR.'Authenticator.php');
         $this->assertFileExists($tempOut.DIRECTORY_SEPARATOR.'YakTube.php');
+        $this->assertFileExists($tempOut.DIRECTORY_SEPARATOR.'CloudFinance.php');
+        $this->assertFileExists($tempOut.DIRECTORY_SEPARATOR.'CloudFinance'.DIRECTORY_SEPARATOR.'Resource'.DIRECTORY_SEPARATOR.'Rates.php');
         $this->assertFileExists($tempOut.DIRECTORY_SEPARATOR.'YakTube'.DIRECTORY_SEPARATOR.'Resource'.DIRECTORY_SEPARATOR.'Videos.php');
         $this->assertFileExists($tempOut.DIRECTORY_SEPARATOR.'Storage'.DIRECTORY_SEPARATOR.'Resource'.DIRECTORY_SEPARATOR.'Objects.php');
 

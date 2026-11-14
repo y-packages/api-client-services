@@ -301,6 +301,18 @@
             "discoveryRestUrl": "https://developer-console.yakhub.com.tr/api/discovery/v1/apis/yaktube/v1/rest",
             "documentationLink": "https://developer-console.yakhub.com.tr/console/apis",
             "preferred": true
+        },
+        {
+            "kind": "discovery#directoryItem",
+            "id": "cloudfinance:v1",
+            "name": "cloudfinance",
+            "version": "v1",
+            "className": "CloudFinance",
+            "title": "YakNet Cloud Finance & Currency API",
+            "description": "TCMB döviz kurları, çoklu para birimi dönüştürücü, TR/Uluslararası IBAN doğrulama ve banka tespiti, VKN ve KDV hesaplama servisi.",
+            "discoveryRestUrl": "https://developer-console.yakhub.com.tr/api/discovery/v1/apis/cloudfinance/v1/rest",
+            "documentationLink": "https://developer-console.yakhub.com.tr/console/apis",
+            "preferred": true
         }
     ]
 }
