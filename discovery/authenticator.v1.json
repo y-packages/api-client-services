@@ -1,0 +1,165 @@
+{
+    "kind": "discovery#restDescription",
+    "discoveryVersion": "v1",
+    "id": "authenticator:v1",
+    "name": "authenticator",
+    "canonicalName": "Authenticator",
+    "version": "v1",
+    "title": "YakNet Cloud Authenticator & Push Prompts API",
+    "description": "Kullanıcıların mobil YakNet Authenticator cihazlarına gerçek zamanlı 2FA giriş onay bildirimi gönderme ve durum doğrulama servisi.",
+    "ownerDomain": "yakhub.com.tr",
+    "ownerName": "YakNet",
+    "protocol": "rest",
+    "rootUrl": "https://developer-console.yakhub.com.tr/",
+    "servicePath": "api/cloud/authenticator/",
+    "auth": {
+        "apiKey": {
+            "header": "X-API-Key",
+            "prefix": "yk_live_"
+        },
+        "oauth2Client": {
+            "clientIdHeader": "X-Client-ID",
+            "clientSecretHeader": "X-Client-Secret"
+        }
+    },
+    "schemas": {
+        "DispatchPromptRequest": {
+            "id": "DispatchPromptRequest",
+            "type": "object",
+            "properties": {
+                "user_identifier": {
+                    "type": "string"
+                },
+                "device_name": {
+                    "type": "string"
+                },
+                "location": {
+                    "type": "string"
+                },
+                "ip_address": {
+                    "type": "string"
+                },
+                "ttl_seconds": {
+                    "type": "integer"
+                }
+            }
+        },
+        "PromptDetails": {
+            "id": "PromptDetails",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "matching_number": {
+                    "type": "integer"
+                },
+                "challenge_numbers": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "expires_at": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "DispatchPromptResponse": {
+            "id": "DispatchPromptResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "prompt": {
+                    "$ref": "PromptDetails"
+                }
+            }
+        },
+        "PromptStatusResponse": {
+            "id": "PromptStatusResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "prompt": {
+                    "type": "object"
+                }
+            }
+        },
+        "CancelPromptResponse": {
+            "id": "CancelPromptResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "cancelled": {
+                    "type": "boolean"
+                },
+                "prompt_id": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "resources": {
+        "prompts": {
+            "methods": {
+                "dispatch": {
+                    "id": "authenticator.prompts.dispatch",
+                    "path": "prompts",
+                    "httpMethod": "POST",
+                    "description": "Kullanıcının kayıtlı mobil YakNet Authenticator uygulamasına anlık 2FA push bildirimi gönderir.",
+                    "parameters": [],
+                    "request": {
+                        "$ref": "DispatchPromptRequest"
+                    },
+                    "response": {
+                        "$ref": "DispatchPromptResponse"
+                    }
+                },
+                "get": {
+                    "id": "authenticator.prompts.get",
+                    "path": "prompts/{promptId}",
+                    "httpMethod": "GET",
+                    "description": "Gönderilen giriş onay bildiriminin durumunu (pending, approved, denied, expired) sorgular.",
+                    "parameters": {
+                        "promptId": {
+                            "type": "string",
+                            "location": "path",
+                            "required": true
+                        }
+                    },
+                    "response": {
+                        "$ref": "PromptStatusResponse"
+                    }
+                },
+                "cancel": {
+                    "id": "authenticator.prompts.cancel",
+                    "path": "prompts/{promptId}",
+                    "httpMethod": "DELETE",
+                    "description": "Bekleyen bir giriş onay bildirimini iptal eder.",
+                    "parameters": {
+                        "promptId": {
+                            "type": "string",
+                            "location": "path",
+                            "required": true
+                        }
+                    },
+                    "response": {
+                        "$ref": "CancelPromptResponse"
+                    }
+                }
+            }
+        }
+    }
+}

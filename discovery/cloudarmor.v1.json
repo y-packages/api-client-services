@@ -1,0 +1,181 @@
+{
+    "kind": "discovery#restDescription",
+    "discoveryVersion": "v1",
+    "id": "cloudarmor:v1",
+    "name": "cloudarmor",
+    "canonicalName": "CloudArmor",
+    "version": "v1",
+    "title": "YakNet Cloud Armor & yaCAPTCHA API",
+    "description": "Proof-of-Work (PoW) bot koruması challenge üretimi, çözülen jeton doğrulaması ve WAF tehdit analizi servisi.",
+    "ownerDomain": "yakhub.com.tr",
+    "ownerName": "YakNet",
+    "protocol": "rest",
+    "rootUrl": "https://developer-console.yakhub.com.tr/",
+    "servicePath": "api/cloud/armor/",
+    "auth": {
+        "apiKey": {
+            "header": "X-API-Key",
+            "prefix": "yk_live_"
+        },
+        "oauth2Client": {
+            "clientIdHeader": "X-Client-ID",
+            "clientSecretHeader": "X-Client-Secret"
+        }
+    },
+    "schemas": {
+        "CreateChallengeRequest": {
+            "id": "CreateChallengeRequest",
+            "type": "object",
+            "properties": {
+                "max_number": {
+                    "type": "integer"
+                },
+                "expires_minutes": {
+                    "type": "integer"
+                }
+            }
+        },
+        "ArmorChallengeData": {
+            "id": "ArmorChallengeData",
+            "type": "object",
+            "properties": {
+                "algorithm": {
+                    "type": "string"
+                },
+                "challenge": {
+                    "type": "string"
+                },
+                "maxnumber": {
+                    "type": "integer"
+                },
+                "salt": {
+                    "type": "string"
+                },
+                "signature": {
+                    "type": "string"
+                },
+                "expires_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "CreateChallengeResponse": {
+            "id": "CreateChallengeResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "challenge": {
+                    "$ref": "ArmorChallengeData"
+                }
+            }
+        },
+        "VerifyChallengeRequest": {
+            "id": "VerifyChallengeRequest",
+            "type": "object",
+            "properties": {
+                "payload": {
+                    "type": "string"
+                }
+            }
+        },
+        "VerifyChallengeResponse": {
+            "id": "VerifyChallengeResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "verified": {
+                    "type": "boolean"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "WafInspectRequest": {
+            "id": "WafInspectRequest",
+            "type": "object",
+            "properties": {
+                "ip": {
+                    "type": "string"
+                },
+                "user_agent": {
+                    "type": "string"
+                },
+                "method": {
+                    "type": "string"
+                },
+                "uri": {
+                    "type": "string"
+                },
+                "params": {
+                    "type": "object"
+                }
+            }
+        },
+        "WafInspectResponse": {
+            "id": "WafInspectResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "inspection": {
+                    "type": "object"
+                }
+            }
+        }
+    },
+    "resources": {
+        "challenges": {
+            "methods": {
+                "create": {
+                    "id": "cloudarmor.challenges.create",
+                    "path": "challenges",
+                    "httpMethod": "POST",
+                    "description": "İstemci tarafında çözülmesi için yeni bir Proof-of-Work (PoW) bot koruma challenge görevi üretir.",
+                    "parameters": [],
+                    "request": {
+                        "$ref": "CreateChallengeRequest"
+                    },
+                    "response": {
+                        "$ref": "CreateChallengeResponse"
+                    }
+                },
+                "verify": {
+                    "id": "cloudarmor.challenges.verify",
+                    "path": "challenges/verify",
+                    "httpMethod": "POST",
+                    "description": "İstemcinin çözdüğü Proof-of-Work (yaCAPTCHA) jetonunu sunucu tarafında doğrular.",
+                    "parameters": [],
+                    "request": {
+                        "$ref": "VerifyChallengeRequest"
+                    },
+                    "response": {
+                        "$ref": "VerifyChallengeResponse"
+                    }
+                }
+            }
+        },
+        "waf": {
+            "methods": {
+                "inspect": {
+                    "id": "cloudarmor.waf.inspect",
+                    "path": "waf/inspect",
+                    "httpMethod": "POST",
+                    "description": "İstemci IP, User-Agent ve istek parametrelerini SQLi, XSS, LFI ve bot tehditlerine karşı denetler.",
+                    "parameters": [],
+                    "request": {
+                        "$ref": "WafInspectRequest"
+                    },
+                    "response": {
+                        "$ref": "WafInspectResponse"
+                    }
+                }
+            }
+        }
+    }
+}

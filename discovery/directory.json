@@ -253,6 +253,42 @@
             "discoveryRestUrl": "https://developer-console.yakhub.com.tr/api/discovery/v1/apis/clouddns/v1/rest",
             "documentationLink": "https://developer-console.yakhub.com.tr/console/apis",
             "preferred": true
+        },
+        {
+            "kind": "discovery#directoryItem",
+            "id": "yakopedia:v1",
+            "name": "yakopedia",
+            "version": "v1",
+            "className": "Yakopedia",
+            "title": "YakNet Cloud Knowledge & Yakopedia API",
+            "description": "Yakopedia bilgi bankası üzerinden Türkçe ansiklopedi maddesi arama, makale özeti, kapak görseli ve rastgele içerik servisi.",
+            "discoveryRestUrl": "https://developer-console.yakhub.com.tr/api/discovery/v1/apis/yakopedia/v1/rest",
+            "documentationLink": "https://developer-console.yakhub.com.tr/console/apis",
+            "preferred": true
+        },
+        {
+            "kind": "discovery#directoryItem",
+            "id": "cloudarmor:v1",
+            "name": "cloudarmor",
+            "version": "v1",
+            "className": "CloudArmor",
+            "title": "YakNet Cloud Armor & yaCAPTCHA API",
+            "description": "Proof-of-Work (PoW) bot koruması challenge üretimi, çözülen jeton doğrulaması ve WAF tehdit analizi servisi.",
+            "discoveryRestUrl": "https://developer-console.yakhub.com.tr/api/discovery/v1/apis/cloudarmor/v1/rest",
+            "documentationLink": "https://developer-console.yakhub.com.tr/console/apis",
+            "preferred": true
+        },
+        {
+            "kind": "discovery#directoryItem",
+            "id": "authenticator:v1",
+            "name": "authenticator",
+            "version": "v1",
+            "className": "Authenticator",
+            "title": "YakNet Cloud Authenticator & Push Prompts API",
+            "description": "Kullanıcıların mobil YakNet Authenticator cihazlarına gerçek zamanlı 2FA giriş onay bildirimi gönderme ve durum doğrulama servisi.",
+            "discoveryRestUrl": "https://developer-console.yakhub.com.tr/api/discovery/v1/apis/authenticator/v1/rest",
+            "documentationLink": "https://developer-console.yakhub.com.tr/console/apis",
+            "preferred": true
         }
     ]
 }

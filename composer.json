@@ -20,6 +20,11 @@
         "secret-manager",
         "kv",
         "smartlinks",
+        "yakopedia",
+        "cloudarmor",
+        "authenticator",
+        "captcha",
+        "pow",
         "sdk"
     ],
     "authors": [

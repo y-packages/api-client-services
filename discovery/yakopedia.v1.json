@@ -1,0 +1,207 @@
+{
+    "kind": "discovery#restDescription",
+    "discoveryVersion": "v1",
+    "id": "yakopedia:v1",
+    "name": "yakopedia",
+    "canonicalName": "Yakopedia",
+    "version": "v1",
+    "title": "YakNet Cloud Knowledge & Yakopedia API",
+    "description": "Yakopedia bilgi bankası üzerinden Türkçe ansiklopedi maddesi arama, makale özeti, kapak görseli ve rastgele içerik servisi.",
+    "ownerDomain": "yakhub.com.tr",
+    "ownerName": "YakNet",
+    "protocol": "rest",
+    "rootUrl": "https://developer-console.yakhub.com.tr/",
+    "servicePath": "api/cloud/yakopedia/",
+    "auth": {
+        "apiKey": {
+            "header": "X-API-Key",
+            "prefix": "yk_live_"
+        },
+        "oauth2Client": {
+            "clientIdHeader": "X-Client-ID",
+            "clientSecretHeader": "X-Client-Secret"
+        }
+    },
+    "schemas": {
+        "ArticleSearchItem": {
+            "id": "ArticleSearchItem",
+            "type": "object",
+            "properties": {
+                "title": {
+                    "type": "string"
+                },
+                "pageid": {
+                    "type": "integer"
+                },
+                "snippet": {
+                    "type": "string"
+                },
+                "wordcount": {
+                    "type": "integer"
+                },
+                "yakopedia_url": {
+                    "type": "string"
+                }
+            }
+        },
+        "ArticleSearchResponse": {
+            "id": "ArticleSearchResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "provider": {
+                    "type": "string"
+                },
+                "query": {
+                    "type": "string"
+                },
+                "count": {
+                    "type": "integer"
+                },
+                "results": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "ArticleSearchItem"
+                    }
+                }
+            }
+        },
+        "ArticleSummaryResponse": {
+            "id": "ArticleSummaryResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "provider": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "extract": {
+                    "type": "string"
+                },
+                "thumbnail_url": {
+                    "type": "string"
+                },
+                "original_image_url": {
+                    "type": "string"
+                },
+                "lang": {
+                    "type": "string"
+                },
+                "yakopedia_url": {
+                    "type": "string"
+                },
+                "license": {
+                    "type": "string"
+                }
+            }
+        },
+        "RandomArticleResponse": {
+            "id": "RandomArticleResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "provider": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "extract": {
+                    "type": "string"
+                },
+                "thumbnail_url": {
+                    "type": "string"
+                },
+                "yakopedia_url": {
+                    "type": "string"
+                },
+                "license": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "resources": {
+        "articles": {
+            "methods": {
+                "search": {
+                    "id": "yakopedia.articles.search",
+                    "path": "articles/search",
+                    "httpMethod": "GET",
+                    "description": "Yakopedia üzerinde anahtar kelimelere göre ansiklopedi maddelerini arar.",
+                    "parameters": {
+                        "query": {
+                            "type": "string",
+                            "location": "query",
+                            "required": true
+                        },
+                        "limit": {
+                            "type": "integer",
+                            "location": "query",
+                            "required": false
+                        },
+                        "lang": {
+                            "type": "string",
+                            "location": "query",
+                            "required": false
+                        }
+                    },
+                    "response": {
+                        "$ref": "ArticleSearchResponse"
+                    }
+                },
+                "summary": {
+                    "id": "yakopedia.articles.summary",
+                    "path": "articles/summary",
+                    "httpMethod": "GET",
+                    "description": "Belirtilen ansiklopedi maddesinin özet metnini, açıklamasını ve kapak görselini getirir.",
+                    "parameters": {
+                        "title": {
+                            "type": "string",
+                            "location": "query",
+                            "required": true
+                        },
+                        "lang": {
+                            "type": "string",
+                            "location": "query",
+                            "required": false
+                        }
+                    },
+                    "response": {
+                        "$ref": "ArticleSummaryResponse"
+                    }
+                },
+                "random": {
+                    "id": "yakopedia.articles.random",
+                    "path": "articles/random",
+                    "httpMethod": "GET",
+                    "description": "Günün veya rastgele seçilmiş bir öne çıkan bilgi maddesini getirir.",
+                    "parameters": {
+                        "lang": {
+                            "type": "string",
+                            "location": "query",
+                            "required": false
+                        }
+                    },
+                    "response": {
+                        "$ref": "RandomArticleResponse"
+                    }
+                }
+            }
+        }
+    }
+}

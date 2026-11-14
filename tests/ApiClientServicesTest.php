@@ -450,6 +450,72 @@ final class ApiClientServicesTest extends TestCase
         $this->assertTrue($prop->getSuccess());
     }
 
+    public function testNewServicesYakopediaCloudArmorAndAuthenticator(): void
+    {
+        $mock = (new MockTransport())
+            ->queueJson([
+                'success' => true,
+                'provider' => 'Yakopedia',
+                'query' => 'Galaksi',
+                'count' => 1,
+                'results' => [
+                    [
+                        'title' => 'Galaksi',
+                        'pageid' => 12345,
+                        'snippet' => 'Yıldız ve gaz kümesi',
+                        'wordcount' => 450,
+                        'yakopedia_url' => 'https://yakopedia.yakhub.com.tr/wiki/Galaksi',
+                    ],
+                ],
+            ])
+            ->queueJson([
+                'success' => true,
+                'challenge' => [
+                    'algorithm' => 'SHA-256',
+                    'challenge' => 'abc123pow',
+                    'maxnumber' => 25000,
+                    'salt' => 'random_salt',
+                    'signature' => 'sig_xyz',
+                    'expires_at' => '2026-11-14T12:00:00Z',
+                ],
+            ])
+            ->queueJson([
+                'success' => true,
+                'prompt' => [
+                    'id' => 'prompt-uuid-999',
+                    'status' => 'pending',
+                    'matching_number' => 42,
+                    'challenge_numbers' => [42, 19, 87],
+                    'expires_at' => '2026-11-14T12:03:00Z',
+                    'created_at' => '2026-11-14T12:00:00Z',
+                ],
+            ]);
+
+        $client = new Client(['api_key' => 'yk_live_test_key'], $mock);
+
+        // Yakopedia
+        $yakopedia = new \YakNet\Api\Yakopedia($client);
+        $search = $yakopedia->articles->search(['query' => 'Galaksi']);
+        $this->assertTrue($search->getSuccess());
+        $this->assertSame('Galaksi', $search->getResults()[0]?->getTitle());
+
+        // Cloud Armor
+        $armor = new \YakNet\Api\CloudArmor($client);
+        $chal = $armor->challenges->create(new \YakNet\Api\CloudArmor\CreateChallengeRequest(['max_number' => 25000]));
+        $this->assertTrue($chal->getSuccess());
+        $this->assertSame('SHA-256', $chal->getChallenge()?->getAlgorithm());
+
+        // Authenticator
+        $auth = new \YakNet\Api\Authenticator($client);
+        $prompt = $auth->prompts->dispatch(new \YakNet\Api\Authenticator\DispatchPromptRequest([
+            'user_identifier' => 'enes@yakhub.com.tr',
+            'device_name' => 'YakNet Test Client',
+        ]));
+        $this->assertTrue($prompt->getSuccess());
+        $this->assertSame('prompt-uuid-999', $prompt->getPrompt()?->getId());
+        $this->assertSame(42, $prompt->getPrompt()?->getMatchingNumber());
+    }
+
     public function testDiscoveryGeneratorRegeneratesCleanlyFromLocalSpecs(): void
     {
         $discoveryDir = dirname(__DIR__).DIRECTORY_SEPARATOR.'discovery';
@@ -458,13 +524,16 @@ final class ApiClientServicesTest extends TestCase
         $generator = new DiscoveryGenerator();
         $stats = $generator->generateFromDirectory($discoveryDir, $tempOut);
 
-        $this->assertSame(21, $stats['services']);
-        $this->assertGreaterThan(200, $stats['files']);
+        $this->assertSame(24, $stats['services']);
+        $this->assertGreaterThan(220, $stats['files']);
         $this->assertFileExists($tempOut.DIRECTORY_SEPARATOR.'Storage.php');
         $this->assertFileExists($tempOut.DIRECTORY_SEPARATOR.'CloudDns.php');
         $this->assertFileExists($tempOut.DIRECTORY_SEPARATOR.'CloudKms.php');
         $this->assertFileExists($tempOut.DIRECTORY_SEPARATOR.'Dlp.php');
         $this->assertFileExists($tempOut.DIRECTORY_SEPARATOR.'Totp.php');
+        $this->assertFileExists($tempOut.DIRECTORY_SEPARATOR.'Yakopedia.php');
+        $this->assertFileExists($tempOut.DIRECTORY_SEPARATOR.'CloudArmor.php');
+        $this->assertFileExists($tempOut.DIRECTORY_SEPARATOR.'Authenticator.php');
         $this->assertFileExists($tempOut.DIRECTORY_SEPARATOR.'Storage'.DIRECTORY_SEPARATOR.'Resource'.DIRECTORY_SEPARATOR.'Objects.php');
 
         // Cleanup temporary directory

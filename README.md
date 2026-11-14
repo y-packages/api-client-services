@@ -10,7 +10,7 @@
 
 ---
 
-## Desteklenen Bulut Servisleri (21 Servis, 215+ Üretilmiş Sınıf)
+## Desteklenen Bulut Servisleri (24 Servis, 240+ Üretilmiş Sınıf)
 
 | Servis Sınıfı | Açıklama | Kaynaklar (Resources) |
 | :--- | :--- | :--- |
@@ -35,6 +35,9 @@
 | `YakNet\Api\DeviceIntel` | User-Agent ve dil başlıklarından cihaz, işletim sistemi, tarayıcı ve bot tespiti | `$device->userAgent` |
 | `YakNet\Api\TextUtils` | Türkçe metin/okuma süresi analizi, güvenli Markdown HTML, slug ve Link Unfurl | `$text->text`, `$text->web` |
 | `YakNet\Api\CloudTime` | IANA zaman dilimi dönüştürücü, yaz saati (DST) ve Cron önizleme motoru | `$time->timezones`, `$time->cron` |
+| `YakNet\Api\Yakopedia` | Yakopedia bilgi bankası Türkçe ansiklopedi arama, makale özeti ve rastgele madde | `$yakopedia->articles` |
+| `YakNet\Api\CloudArmor` | Proof-of-Work (PoW) bot koruması challenge üretimi, jeton doğrulama ve WAF | `$armor->challenges`, `$armor->waf` |
+| `YakNet\Api\Authenticator` | Mobil YakNet Authenticator gerçek zamanlı 2FA giriş onayı (Push Prompt) dağıtımı | `$auth->prompts` |
 
 ---
 
