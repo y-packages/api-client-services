@@ -666,6 +666,60 @@ final class ApiClientServicesTest extends TestCase
         $this->assertTrue($vkn->getValid());
     }
 
+    public function testYakHubService(): void
+    {
+        $mock = (new MockTransport())
+            ->queueJson([
+                'version' => '1.22.0+dev-yakhub',
+            ])
+            ->queueJson([
+                'ok' => true,
+                'data' => [
+                    [
+                        'id' => 101,
+                        'name' => 'yaknet-core',
+                        'full_name' => 'yaknet/yaknet-core',
+                        'description' => 'YakNet Core Monorepo',
+                        'private' => false,
+                        'fork' => false,
+                        'stars_count' => 42,
+                        'html_url' => 'https://yakhub.com.tr/yaknet/yaknet-core',
+                    ],
+                ],
+            ])
+            ->queueJson([
+                'id' => 101,
+                'name' => 'yaknet-core',
+                'full_name' => 'yaknet/yaknet-core',
+                'private' => false,
+                'clone_url' => 'https://yakhub.com.tr/yaknet/yaknet-core.git',
+            ]);
+
+        $client = new Client(['api_key' => 'yk_live_test_key'], $mock);
+        $yakhub = new \YakNet\Api\YakHub($client);
+
+        // 1. Miscellaneous: getVersion
+        $ver = $yakhub->miscellaneous->getVersion();
+        $this->assertInstanceOf(\YakNet\Api\YakHub\ServerVersion::class, $ver);
+        $this->assertSame('1.22.0+dev-yakhub', $ver->getVersion());
+
+        // 2. Repository: repoSearch
+        $search = $yakhub->repository->repoSearch(['q' => 'yaknet']);
+        $this->assertInstanceOf(\YakNet\Api\YakHub\SearchResults::class, $search);
+        $this->assertTrue($search->getOk());
+        $this->assertCount(1, $search);
+        $repos = $search->getData();
+        $this->assertNotNull($repos);
+        $this->assertSame('yaknet-core', $repos[0]->getName());
+        $this->assertSame(42, $repos[0]->getStarsCount());
+
+        // 3. Repository: repoGet
+        $repo = $yakhub->repository->repoGet('yaknet', 'yaknet-core');
+        $this->assertInstanceOf(\YakNet\Api\YakHub\Repository::class, $repo);
+        $this->assertSame('yaknet-core', $repo->getName());
+        $this->assertSame('https://yakhub.com.tr/yaknet/yaknet-core.git', $repo->getCloneUrl());
+    }
+
     public function testDiscoveryGeneratorRegeneratesCleanlyFromLocalSpecs(): void
     {
         $discoveryDir = dirname(__DIR__).DIRECTORY_SEPARATOR.'discovery';
@@ -674,8 +728,8 @@ final class ApiClientServicesTest extends TestCase
         $generator = new DiscoveryGenerator();
         $stats = $generator->generateFromDirectory($discoveryDir, $tempOut);
 
-        $this->assertSame(26, $stats['services']);
-        $this->assertGreaterThan(285, $stats['files']);
+        $this->assertSame(27, $stats['services']);
+        $this->assertGreaterThan(500, $stats['files']);
         $this->assertFileExists($tempOut.DIRECTORY_SEPARATOR.'Storage.php');
         $this->assertFileExists($tempOut.DIRECTORY_SEPARATOR.'CloudDns.php');
         $this->assertFileExists($tempOut.DIRECTORY_SEPARATOR.'CloudKms.php');
@@ -686,6 +740,9 @@ final class ApiClientServicesTest extends TestCase
         $this->assertFileExists($tempOut.DIRECTORY_SEPARATOR.'Authenticator.php');
         $this->assertFileExists($tempOut.DIRECTORY_SEPARATOR.'YakTube.php');
         $this->assertFileExists($tempOut.DIRECTORY_SEPARATOR.'CloudFinance.php');
+        $this->assertFileExists($tempOut.DIRECTORY_SEPARATOR.'YakHub.php');
+        $this->assertFileExists($tempOut.DIRECTORY_SEPARATOR.'YakHub'.DIRECTORY_SEPARATOR.'Resource'.DIRECTORY_SEPARATOR.'Repository.php');
+        $this->assertFileExists($tempOut.DIRECTORY_SEPARATOR.'YakHub'.DIRECTORY_SEPARATOR.'Resource'.DIRECTORY_SEPARATOR.'Admin.php');
         $this->assertFileExists($tempOut.DIRECTORY_SEPARATOR.'CloudFinance'.DIRECTORY_SEPARATOR.'Resource'.DIRECTORY_SEPARATOR.'Rates.php');
         $this->assertFileExists($tempOut.DIRECTORY_SEPARATOR.'YakTube'.DIRECTORY_SEPARATOR.'Resource'.DIRECTORY_SEPARATOR.'Videos.php');
         $this->assertFileExists($tempOut.DIRECTORY_SEPARATOR.'Storage'.DIRECTORY_SEPARATOR.'Resource'.DIRECTORY_SEPARATOR.'Objects.php');

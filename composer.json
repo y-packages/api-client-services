@@ -34,6 +34,10 @@
         "tax",
         "captcha",
         "pow",
+        "gitea",
+        "devops",
+        "git",
+        "repository",
         "sdk"
     ],
     "authors": [

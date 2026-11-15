@@ -10,7 +10,7 @@
 
 ---
 
-## Desteklenen Bulut Servisleri (24 Servis, 240+ Üretilmiş Sınıf)
+## Desteklenen Bulut Servisleri (27 Servis, 530+ Üretilmiş Sınıf)
 
 | Servis Sınıfı | Açıklama | Kaynaklar (Resources) |
 | :--- | :--- | :--- |
@@ -40,6 +40,7 @@
 | `YakNet\Api\Authenticator` | Mobil YakNet Authenticator gerçek zamanlı 2FA giriş onayı (Push Prompt) dağıtımı | `$auth->prompts` |
 | `YakNet\Api\YakTube` | YakTube video platformu: Arama, HLS/MP4 akışları, kanal, oynatma listesi ve bulut arama geçmişi | `$yaktube->videos`, `$yaktube->channels`, `$yaktube->playlists`, `$yaktube->search`, `$yaktube->categories`, `$yaktube->instance`, `$yaktube->searchHistory` |
 | `YakNet\Api\CloudFinance` | TCMB döviz kurları, para birimi dönüştürücü, TR/Uluslararası IBAN doğrulama, VKN ve KDV hesaplama | `$finance->rates`, `$finance->iban`, `$finance->tax`, `$finance->vkn` |
+| `YakNet\Api\YakHub` | YakHub Git depoları, commitler, sürümler (releases), sorunlar (issues), organizasyonlar, admin ve DevOps | `$yakhub->repository`, `$yakhub->issue`, `$yakhub->organization`, `$yakhub->user`, `$yakhub->package`, `$yakhub->notification`, `$yakhub->settings`, `$yakhub->admin`, `$yakhub->miscellaneous` |
 
 ---
 
@@ -202,7 +203,29 @@ $ibanCheck = $finance->iban->validate(new \YakNet\Api\CloudFinance\IbanValidateR
 echo "Banka: " . $ibanCheck->getBankName() . " - Geçerli: " . ($ibanCheck->getValid() ? 'EVET' : 'HAYIR') . "\n";
 ```
 
-### 7. Gelen Webhook İmzalarını Doğrulama (`X-YakNet-Signature`)
+### 7. YakHub Git Forge & DevOps Platformu Kullanımı
+
+```php
+use YakNet\Api\YakHub;
+
+$yakhub = new YakHub($client);
+
+// 1. Depo arama
+$searchResults = $yakhub->repository->repoSearch(['q' => 'yaknet']);
+foreach ($searchResults->getData() ?? [] as $repo) {
+    echo "Depo: {$repo->getFullName()} ({$repo->getStarsCount()} yıldız) - {$repo->getHtmlUrl()}\n";
+}
+
+// 2. Depo detaylarını çekme
+$repo = $yakhub->repository->repoGet('yaknet', 'api-client-services');
+echo "Klonlama URL'i: {$repo->getCloneUrl()}\n";
+
+// 3. YakHub sunucu versiyonunu sorgulama
+$version = $yakhub->miscellaneous->getVersion();
+echo "YakHub Motor Sürümü: " . $version->getVersion() . "\n";
+```
+
+### 8. Gelen Webhook İmzalarını Doğrulama (`X-YakNet-Signature`)
 
 ```php
 use YakNet\Api\Webhook\SignatureVerifier;

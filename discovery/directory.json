@@ -9,7 +9,7 @@
             "version": "v1",
             "className": "Storage",
             "title": "YakNet Cloud Storage API",
-            "description": "Kova (bucket) ve nesne (object) tabanlı bulut dosya depolama servisi.",
+            "description": "Kova (bucket) ve nesne (object) tabanl\u0131 bulut dosya depolama servisi.",
             "discoveryRestUrl": "https://developer-console.yakhub.com.tr/api/discovery/v1/apis/storage/v1/rest",
             "documentationLink": "https://developer-console.yakhub.com.tr/console/apis",
             "preferred": true
@@ -21,7 +21,7 @@
             "version": "v1",
             "className": "Datastore",
             "title": "YakNet Cloud Datastore API",
-            "description": "Koleksiyon ve JSON belge tabanlı NoSQL veritabanı servisi.",
+            "description": "Koleksiyon ve JSON belge tabanl\u0131 NoSQL veritaban\u0131 servisi.",
             "discoveryRestUrl": "https://developer-console.yakhub.com.tr/api/discovery/v1/apis/datastore/v1/rest",
             "documentationLink": "https://developer-console.yakhub.com.tr/console/apis",
             "preferred": true
@@ -33,7 +33,7 @@
             "version": "v1",
             "className": "SecretManager",
             "title": "YakNet Secret Manager API",
-            "description": "AES-256 şifreli gizli anahtar kasası ve sürüm döndürme servisi.",
+            "description": "AES-256 \u015fifreli gizli anahtar kasas\u0131 ve s\u00fcr\u00fcm d\u00f6nd\u00fcrme servisi.",
             "discoveryRestUrl": "https://developer-console.yakhub.com.tr/api/discovery/v1/apis/secretmanager/v1/rest",
             "documentationLink": "https://developer-console.yakhub.com.tr/console/apis",
             "preferred": true
@@ -45,7 +45,7 @@
             "version": "v1",
             "className": "PubSub",
             "title": "YakNet Cloud Pub/Sub API",
-            "description": "Asenkron konu yayıncılığı, Pull/Push mesaj kuyrukları ve onaylama (ACK) servisi.",
+            "description": "Asenkron konu yay\u0131nc\u0131l\u0131\u011f\u0131, Pull/Push mesaj kuyruklar\u0131 ve onaylama (ACK) servisi.",
             "discoveryRestUrl": "https://developer-console.yakhub.com.tr/api/discovery/v1/apis/pubsub/v1/rest",
             "documentationLink": "https://developer-console.yakhub.com.tr/console/apis",
             "preferred": true
@@ -57,7 +57,7 @@
             "version": "v1",
             "className": "CloudKv",
             "title": "YakNet Cloud KV & Remote Config API",
-            "description": "Uygulamalar için düşük gecikmeli anahtar-değer ve özellik bayrağı servisi.",
+            "description": "Uygulamalar i\u00e7in d\u00fc\u015f\u00fck gecikmeli anahtar-de\u011fer ve \u00f6zellik bayra\u011f\u0131 servisi.",
             "discoveryRestUrl": "https://developer-console.yakhub.com.tr/api/discovery/v1/apis/cloudkv/v1/rest",
             "documentationLink": "https://developer-console.yakhub.com.tr/console/apis",
             "preferred": true
@@ -69,7 +69,7 @@
             "version": "v1",
             "className": "SmartLinks",
             "title": "YakNet SmartLinks & Dynamic QR API",
-            "description": "Akıllı kısa bağlantılar, dinamik QR kod üretimi ve tıklama analitiği servisi.",
+            "description": "Ak\u0131ll\u0131 k\u0131sa ba\u011flant\u0131lar, dinamik QR kod \u00fcretimi ve t\u0131klama analiti\u011fi servisi.",
             "discoveryRestUrl": "https://developer-console.yakhub.com.tr/api/discovery/v1/apis/smartlinks/v1/rest",
             "documentationLink": "https://developer-console.yakhub.com.tr/console/apis",
             "preferred": true
@@ -81,7 +81,7 @@
             "version": "v1",
             "className": "Monitoring",
             "title": "YakNet Cloud Monitoring API",
-            "description": "HTTP/HTTPS çalışma süresi (uptime) izleyicileri ve gecikme telemetrisi servisi.",
+            "description": "HTTP/HTTPS \u00e7al\u0131\u015fma s\u00fcresi (uptime) izleyicileri ve gecikme telemetrisi servisi.",
             "discoveryRestUrl": "https://developer-console.yakhub.com.tr/api/discovery/v1/apis/monitoring/v1/rest",
             "documentationLink": "https://developer-console.yakhub.com.tr/console/apis",
             "preferred": true
@@ -93,7 +93,7 @@
             "version": "v1",
             "className": "CloudScheduler",
             "title": "YakNet Cloud Scheduler API",
-            "description": "Cron ifadeleriyle zamanlanmış HTTP görevleri ve anlık tetikleme servisi.",
+            "description": "Cron ifadeleriyle zamanlanm\u0131\u015f HTTP g\u00f6revleri ve anl\u0131k tetikleme servisi.",
             "discoveryRestUrl": "https://developer-console.yakhub.com.tr/api/discovery/v1/apis/cloudscheduler/v1/rest",
             "documentationLink": "https://developer-console.yakhub.com.tr/console/apis",
             "preferred": true
@@ -105,7 +105,7 @@
             "version": "v1",
             "className": "Logging",
             "title": "YakNet Cloud Logging API",
-            "description": "Merkezi uygulama ve denetim günlüklerini okuma ve yazma servisi.",
+            "description": "Merkezi uygulama ve denetim g\u00fcnl\u00fcklerini okuma ve yazma servisi.",
             "discoveryRestUrl": "https://developer-console.yakhub.com.tr/api/discovery/v1/apis/logging/v1/rest",
             "documentationLink": "https://developer-console.yakhub.com.tr/console/apis",
             "preferred": true
@@ -117,7 +117,7 @@
             "version": "v1",
             "className": "CloudWebhooks",
             "title": "YakNet Cloud Webhooks & Eventarc API",
-            "description": "HMAC-SHA256 imzalı olay abonelikleri, özel olay tetikleme ve teslimat günlükleri servisi.",
+            "description": "HMAC-SHA256 imzal\u0131 olay abonelikleri, \u00f6zel olay tetikleme ve teslimat g\u00fcnl\u00fckleri servisi.",
             "discoveryRestUrl": "https://developer-console.yakhub.com.tr/api/discovery/v1/apis/cloudwebhooks/v1/rest",
             "documentationLink": "https://developer-console.yakhub.com.tr/console/apis",
             "preferred": true
@@ -129,7 +129,7 @@
             "version": "v1",
             "className": "ResourceManager",
             "title": "YakNet Cloud Resource Manager & Service Usage API",
-            "description": "Proje meta verileri, kota kullanımı ve bulut API etkinleştirme servisi.",
+            "description": "Proje meta verileri, kota kullan\u0131m\u0131 ve bulut API etkinle\u015ftirme servisi.",
             "discoveryRestUrl": "https://developer-console.yakhub.com.tr/api/discovery/v1/apis/cloudresourcemanager/v1/rest",
             "documentationLink": "https://developer-console.yakhub.com.tr/console/apis",
             "preferred": true
@@ -141,7 +141,7 @@
             "version": "v1",
             "className": "CloudKms",
             "title": "YakNet Cloud KMS (Cryptography & Signing) API",
-            "description": "Proje izoleli XChaCha20-Poly1305 AEAD zarf şifreleme, HMAC-SHA256/512 imzalama ve CSPRNG rastgele veri üretimi.",
+            "description": "Proje izoleli XChaCha20-Poly1305 AEAD zarf \u015fifreleme, HMAC-SHA256/512 imzalama ve CSPRNG rastgele veri \u00fcretimi.",
             "discoveryRestUrl": "https://developer-console.yakhub.com.tr/api/discovery/v1/apis/cloudkms/v1/rest",
             "documentationLink": "https://developer-console.yakhub.com.tr/console/apis",
             "preferred": true
@@ -153,7 +153,7 @@
             "version": "v1",
             "className": "Dlp",
             "title": "YakNet Cloud DLP (Sensitive Data Protection) API",
-            "description": "TC Kimlik No, TR IBAN, kredi kartı (Luhn), telefon ve e-posta tespiti ile KVKK veri maskeleme servisi.",
+            "description": "TC Kimlik No, TR IBAN, kredi kart\u0131 (Luhn), telefon ve e-posta tespiti ile KVKK veri maskeleme servisi.",
             "discoveryRestUrl": "https://developer-console.yakhub.com.tr/api/discovery/v1/apis/dlp/v1/rest",
             "documentationLink": "https://developer-console.yakhub.com.tr/console/apis",
             "preferred": true
@@ -165,7 +165,7 @@
             "version": "v1",
             "className": "CloudSecurity",
             "title": "YakNet Cloud Security & WebRisk API",
-            "description": "Harici WAF yük denetimi, SSRF/oltalama URL analizi ve durumsuz parola entropi denetçisi.",
+            "description": "Harici WAF y\u00fck denetimi, SSRF/oltalama URL analizi ve durumsuz parola entropi denet\u00e7isi.",
             "discoveryRestUrl": "https://developer-console.yakhub.com.tr/api/discovery/v1/apis/cloudsecurity/v1/rest",
             "documentationLink": "https://developer-console.yakhub.com.tr/console/apis",
             "preferred": true
@@ -177,7 +177,7 @@
             "version": "v1",
             "className": "Totp",
             "title": "YakNet Cloud Authenticator (TOTP / 2FA) API",
-            "description": "RFC 6238 iki aşamalı doğrulama kaydı, SVG QR üretimi, kurtarma kodları ve TOTP doğrulama servisi.",
+            "description": "RFC 6238 iki a\u015famal\u0131 do\u011frulama kayd\u0131, SVG QR \u00fcretimi, kurtarma kodlar\u0131 ve TOTP do\u011frulama servisi.",
             "discoveryRestUrl": "https://developer-console.yakhub.com.tr/api/discovery/v1/apis/totp/v1/rest",
             "documentationLink": "https://developer-console.yakhub.com.tr/console/apis",
             "preferred": true
@@ -189,7 +189,7 @@
             "version": "v1",
             "className": "DomainIntel",
             "title": "YakNet Domain, Email & SSL Intelligence API",
-            "description": "Geçici e-posta ve MX doğrulaması, DNS kayıt sorgulama ve X.509 SSL sertifika denetimi.",
+            "description": "Ge\u00e7ici e-posta ve MX do\u011frulamas\u0131, DNS kay\u0131t sorgulama ve X.509 SSL sertifika denetimi.",
             "discoveryRestUrl": "https://developer-console.yakhub.com.tr/api/discovery/v1/apis/domainintel/v1/rest",
             "documentationLink": "https://developer-console.yakhub.com.tr/console/apis",
             "preferred": true
@@ -201,7 +201,7 @@
             "version": "v1",
             "className": "CloudMedia",
             "title": "YakNet Cloud Media (QR, Avatar & Badge) API",
-            "description": "Özelleştirilebilir vektörel SVG QR kodları, deterministik Identicon/Initials avatarlar ve durum rozetleri.",
+            "description": "\u00d6zelle\u015ftirilebilir vekt\u00f6rel SVG QR kodlar\u0131, deterministik Identicon/Initials avatarlar ve durum rozetleri.",
             "discoveryRestUrl": "https://developer-console.yakhub.com.tr/api/discovery/v1/apis/cloudmedia/v1/rest",
             "documentationLink": "https://developer-console.yakhub.com.tr/console/apis",
             "preferred": true
@@ -213,7 +213,7 @@
             "version": "v1",
             "className": "DeviceIntel",
             "title": "YakNet Device & User-Agent Intelligence API",
-            "description": "User-Agent ve Accept-Language başlıklarından işletim sistemi, tarayıcı, cihaz türü ve bot tespiti.",
+            "description": "User-Agent ve Accept-Language ba\u015fl\u0131klar\u0131ndan i\u015fletim sistemi, taray\u0131c\u0131, cihaz t\u00fcr\u00fc ve bot tespiti.",
             "discoveryRestUrl": "https://developer-console.yakhub.com.tr/api/discovery/v1/apis/deviceintel/v1/rest",
             "documentationLink": "https://developer-console.yakhub.com.tr/console/apis",
             "preferred": true
@@ -225,7 +225,7 @@
             "version": "v1",
             "className": "TextUtils",
             "title": "YakNet Cloud Text, Markdown & Link Unfurl API",
-            "description": "Türkçe uyumlu metin/okuma süresi analizi, güvenli CommonMark HTML dönüştürücü, slug üretici ve OpenGraph önizleme.",
+            "description": "T\u00fcrk\u00e7e uyumlu metin/okuma s\u00fcresi analizi, g\u00fcvenli CommonMark HTML d\u00f6n\u00fc\u015ft\u00fcr\u00fcc\u00fc, slug \u00fcretici ve OpenGraph \u00f6nizleme.",
             "discoveryRestUrl": "https://developer-console.yakhub.com.tr/api/discovery/v1/apis/textutils/v1/rest",
             "documentationLink": "https://developer-console.yakhub.com.tr/console/apis",
             "preferred": true
@@ -237,7 +237,7 @@
             "version": "v1",
             "className": "CloudTime",
             "title": "YakNet Cloud Time & Cron Utilities API",
-            "description": "IANA zaman dilimi dönüştürücü, yaz saati (DST) bilgisi ve Cron sonraki çalışma zamanı hesaplayıcı.",
+            "description": "IANA zaman dilimi d\u00f6n\u00fc\u015ft\u00fcr\u00fcc\u00fc, yaz saati (DST) bilgisi ve Cron sonraki \u00e7al\u0131\u015fma zaman\u0131 hesaplay\u0131c\u0131.",
             "discoveryRestUrl": "https://developer-console.yakhub.com.tr/api/discovery/v1/apis/cloudtime/v1/rest",
             "documentationLink": "https://developer-console.yakhub.com.tr/console/apis",
             "preferred": true
@@ -249,7 +249,7 @@
             "version": "v1",
             "className": "CloudDns",
             "title": "YakNet Cloud DNS API",
-            "description": "Yönetilen DNS bölgeleri, A/AAAA/CNAME/MX/TXT kayıt setleri, BIND dışa aktarma ve çoklu çözümleyici DNS yayılma denetimi.",
+            "description": "Y\u00f6netilen DNS b\u00f6lgeleri, A/AAAA/CNAME/MX/TXT kay\u0131t setleri, BIND d\u0131\u015fa aktarma ve \u00e7oklu \u00e7\u00f6z\u00fcmleyici DNS yay\u0131lma denetimi.",
             "discoveryRestUrl": "https://developer-console.yakhub.com.tr/api/discovery/v1/apis/clouddns/v1/rest",
             "documentationLink": "https://developer-console.yakhub.com.tr/console/apis",
             "preferred": true
@@ -261,7 +261,7 @@
             "version": "v1",
             "className": "Yakopedia",
             "title": "YakNet Cloud Knowledge & Yakopedia API",
-            "description": "Yakopedia bilgi bankası üzerinden Türkçe ansiklopedi maddesi arama, makale özeti, kapak görseli ve rastgele içerik servisi.",
+            "description": "Yakopedia bilgi bankas\u0131 \u00fczerinden T\u00fcrk\u00e7e ansiklopedi maddesi arama, makale \u00f6zeti, kapak g\u00f6rseli ve rastgele i\u00e7erik servisi.",
             "discoveryRestUrl": "https://developer-console.yakhub.com.tr/api/discovery/v1/apis/yakopedia/v1/rest",
             "documentationLink": "https://developer-console.yakhub.com.tr/console/apis",
             "preferred": true
@@ -273,7 +273,7 @@
             "version": "v1",
             "className": "CloudArmor",
             "title": "YakNet Cloud Armor & yaCAPTCHA API",
-            "description": "Proof-of-Work (PoW) bot koruması challenge üretimi, çözülen jeton doğrulaması ve WAF tehdit analizi servisi.",
+            "description": "Proof-of-Work (PoW) bot korumas\u0131 challenge \u00fcretimi, \u00e7\u00f6z\u00fclen jeton do\u011frulamas\u0131 ve WAF tehdit analizi servisi.",
             "discoveryRestUrl": "https://developer-console.yakhub.com.tr/api/discovery/v1/apis/cloudarmor/v1/rest",
             "documentationLink": "https://developer-console.yakhub.com.tr/console/apis",
             "preferred": true
@@ -285,7 +285,7 @@
             "version": "v1",
             "className": "Authenticator",
             "title": "YakNet Cloud Authenticator & Push Prompts API",
-            "description": "Kullanıcıların mobil YakNet Authenticator cihazlarına gerçek zamanlı 2FA giriş onay bildirimi gönderme ve durum doğrulama servisi.",
+            "description": "Kullan\u0131c\u0131lar\u0131n mobil YakNet Authenticator cihazlar\u0131na ger\u00e7ek zamanl\u0131 2FA giri\u015f onay bildirimi g\u00f6nderme ve durum do\u011frulama servisi.",
             "discoveryRestUrl": "https://developer-console.yakhub.com.tr/api/discovery/v1/apis/authenticator/v1/rest",
             "documentationLink": "https://developer-console.yakhub.com.tr/console/apis",
             "preferred": true
@@ -297,7 +297,7 @@
             "version": "v1",
             "className": "YakTube",
             "title": "YakNet Cloud YakTube Video Platform API",
-            "description": "YakTube video platformu API servisi: Video arama, detaylar, oynatma listeleri, kanallar, kategoriler ve kullanıcı bulut arama geçmişi.",
+            "description": "YakTube video platformu API servisi: Video arama, detaylar, oynatma listeleri, kanallar, kategoriler ve kullan\u0131c\u0131 bulut arama ge\u00e7mi\u015fi.",
             "discoveryRestUrl": "https://developer-console.yakhub.com.tr/api/discovery/v1/apis/yaktube/v1/rest",
             "documentationLink": "https://developer-console.yakhub.com.tr/console/apis",
             "preferred": true
@@ -309,8 +309,20 @@
             "version": "v1",
             "className": "CloudFinance",
             "title": "YakNet Cloud Finance & Currency API",
-            "description": "TCMB döviz kurları, çoklu para birimi dönüştürücü, TR/Uluslararası IBAN doğrulama ve banka tespiti, VKN ve KDV hesaplama servisi.",
+            "description": "TCMB d\u00f6viz kurlar\u0131, \u00e7oklu para birimi d\u00f6n\u00fc\u015ft\u00fcr\u00fcc\u00fc, TR/Uluslararas\u0131 IBAN do\u011frulama ve banka tespiti, VKN ve KDV hesaplama servisi.",
             "discoveryRestUrl": "https://developer-console.yakhub.com.tr/api/discovery/v1/apis/cloudfinance/v1/rest",
+            "documentationLink": "https://developer-console.yakhub.com.tr/console/apis",
+            "preferred": true
+        },
+        {
+            "kind": "discovery#directoryItem",
+            "id": "yakhub:v1",
+            "name": "yakhub",
+            "version": "v1",
+            "className": "YakHub",
+            "title": "YakHub Git DevOps & Code Repositories API",
+            "description": "YakHub (Gitea) Git kod depolar\u0131, commitler, s\u00fcr\u00fcmler, sorunlar (issues), organizasyonlar ve DevOps API servisi.",
+            "discoveryRestUrl": "https://developer-console.yakhub.com.tr/api/discovery/v1/apis/yakhub/v1/rest",
             "documentationLink": "https://developer-console.yakhub.com.tr/console/apis",
             "preferred": true
         }

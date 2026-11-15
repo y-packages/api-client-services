@@ -216,12 +216,18 @@ final class DiscoveryGenerator
 
         foreach ($resources as $resourceKey => $resourceSpec) {
             $resClass = $this->sanitizeClassName($this->studly((string) $resourceKey));
-            $useLines[] = "use {$ns}\\{$serviceClass}\\Resource\\{$resClass};";
-            $propLines[] = "    public {$resClass} \${$resourceKey};";
+            if ($resClass === $serviceClass) {
+                $propType = "{$resClass}Resource";
+                $useLines[] = "use {$ns}\\{$serviceClass}\\Resource\\{$resClass} as {$propType};";
+            } else {
+                $propType = $resClass;
+                $useLines[] = "use {$ns}\\{$serviceClass}\\Resource\\{$resClass};";
+            }
+            $propLines[] = "    public {$propType} \${$resourceKey};";
 
             $methodsMapCode = $this->exportMethodsSpecification($resourceSpec['methods'] ?? []);
             $initLines[] = <<<PHP
-        \$this->{$resourceKey} = new {$resClass}(
+        \$this->{$resourceKey} = new {$propType}(
             \$this,
             \$this->serviceName,
             '{$resourceKey}',
@@ -326,9 +332,15 @@ PHP;
             // 2. Request model parameter if defined
             if (is_string($requestRef) && $requestRef !== '') {
                 $reqClass = $this->sanitizeClassName($requestRef);
-                $uses[] = "use {$modelNs}\\{$reqClass};";
-                $signatureArgs[] = "{$reqClass}|array \$postBody = []";
-                $docLines[] = "     * @param {$reqClass}|array<string, mixed> \$postBody";
+                if ($reqClass === $resourceClass) {
+                    $reqType = "{$reqClass}Model";
+                    $uses[] = "use {$modelNs}\\{$reqClass} as {$reqType};";
+                } else {
+                    $reqType = $reqClass;
+                    $uses[] = "use {$modelNs}\\{$reqClass};";
+                }
+                $signatureArgs[] = "{$reqType}|array \$postBody = []";
+                $docLines[] = "     * @param {$reqType}|array<string, mixed> \$postBody";
                 $bodyParamAssigns[] = "'postBody' => \$postBody";
             }
 
@@ -354,10 +366,16 @@ PHP;
 
             if (is_string($responseRef) && $responseRef !== '') {
                 $respClass = $this->sanitizeClassName($responseRef);
-                $uses[] = "use {$modelNs}\\{$respClass};";
-                $returnType = $respClass;
-                $docLines[] = "     * @return {$respClass}";
-                $callReturnLine = "return \$this->callTyped('{$methodName}', \$params, {$respClass}::class);";
+                if ($respClass === $resourceClass) {
+                    $respType = "{$respClass}Model";
+                    $uses[] = "use {$modelNs}\\{$respClass} as {$respType};";
+                } else {
+                    $respType = $respClass;
+                    $uses[] = "use {$modelNs}\\{$respClass};";
+                }
+                $returnType = $respType;
+                $docLines[] = "     * @return {$respType}";
+                $callReturnLine = "return \$this->callTyped('{$methodName}', \$params, {$respType}::class);";
             } else {
                 $docLines[] = '     * @return array<string, mixed>';
             }
