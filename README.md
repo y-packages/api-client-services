@@ -50,9 +50,33 @@
 
 ## Kurulum
 
+### Standart Kurulum (Önerilen — Tek İkili Dosya, 0 Disk Yükü)
+Composer varsayılan olarak 611 kaynak dosyasını tek tek kopyalamak yerine, **YakNet DynLink** tarafından derlenmiş tek bir ikili kütüphaneyi (`dist/api-client-services.ydl` ~301 KB) ve IDE stubs tanımlarını indirir:
+
 ```bash
 composer require yaknet/api-client-services
 ```
+
+### Ham Kaynak Kod Kurulumu (Geliştirici Modu)
+Eğer ham PHP kaynak kodlarını (`src/` altındaki 611 dosyayı) doğrudan diskinize indirmek isterseniz `--prefer-source` parametresini kullanabilirsiniz:
+
+```bash
+composer require yaknet/api-client-services --prefer-source
+```
+
+---
+
+## ⚡ DynLink (.ydl) İkili Kütüphane Mimarisi
+
+Bu SDK, **Google API Client Services** gibi kütüphanelerin binlerce küçük PHP dosyasından dolayı neden olduğu disk darboğazını (özellikle Windows NTFS ve yavaş HDD disklerdeki kopyalama gecikmelerini) çözmek amacıyla **YakNet DynLink** motoru ile donatılmıştır:
+
+1. **Ultra Hızlı Dağıtım:** 611 dosya yerine diskte sadece 1 adet sıkıştırılmış `.ydl` ikilisi (301 KB) bulunur.
+2. **Sıfır Disk I/O & Bellek Akışı:** `bootstrap.php` başlatıcısı ile sınıflar doğrudan bellek sanal dosya sistemi (`ydl://`) üzerinden talep anında (on-demand) yüklenir.
+3. **Eksiksiz IDE Desteği:** `stubs/api-client-services.stub.php` sayesinde PhpStorm, VS Code (Intelephense) ve PHPStan kod tamamlama ve tip güvenliğinden %100 faydalanır.
+4. **Yeniden Derleme:** Kaynak kodda değişiklik yapıldığında tek komutla ikili dosya güncellenir:
+   ```bash
+   composer build:ydl
+   ```
 
 ---
 

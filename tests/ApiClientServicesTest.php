@@ -1002,4 +1002,31 @@ final class ApiClientServicesTest extends TestCase
         }
         @rmdir($tempOut);
     }
+
+    public function testDynLinkBinaryAndBootstrap(): void
+    {
+        $rootDir = dirname(__DIR__);
+        $ydlPath = $rootDir . '/dist/api-client-services.ydl';
+        $stubsPath = $rootDir . '/stubs/api-client-services.stub.php';
+        $bootstrapPath = $rootDir . '/bootstrap.php';
+
+        $this->assertFileExists($ydlPath, 'The compiled .ydl binary dynamic library must exist in dist/');
+        $this->assertFileExists($stubsPath, 'The IDE autocomplete stubs must exist in stubs/');
+        $this->assertFileExists($bootstrapPath, 'The universal bootstrap.php loader must exist');
+
+        // Assert size of the .ydl binary is under 500 KB (extreme compression vs 611 files)
+        $ydlSize = filesize($ydlPath);
+        $this->assertLessThan(500 * 1024, $ydlSize, 'Binary .ydl must be compact and under 500 KB');
+
+        // If DynLink runtime is present, verify binary inspection
+        if (class_exists(\YakNet\DynLink\DynLink::class)) {
+            $inspected = \YakNet\DynLink\DynLink::inspect($ydlPath);
+            $this->assertSame('yaknet/api-client-services', $inspected->manifest->name);
+            $this->assertGreaterThan(1000, count($inspected->exportTable->all()));
+            $this->assertTrue($inspected->exportTable->has('YakNet\Api\Client'));
+            $this->assertTrue($inspected->exportTable->has('YakNet\Api\Turkiye'));
+            $this->assertTrue($inspected->exportTable->has('YakNet\Api\Accessibility'));
+            $this->assertTrue($inspected->exportTable->has('YakNet\Api\CdnJs'));
+        }
+    }
 }

@@ -1,4 +1,4 @@
-# Git attributes for clean Composer distribution (export-ignore development files)
+# Git attributes for clean Composer distribution (export-ignore development and raw source files)
 /.github export-ignore
 /.phpunit.cache export-ignore
 /bin export-ignore
@@ -9,3 +9,8 @@
 /.gitattributes export-ignore
 /phpstan.neon export-ignore
 /phpunit.xml export-ignore
+
+# By default, exclude the 611 raw PHP files from Composer dist zip to prevent disk thrashing.
+# The pre-compiled single binary `dist/api-client-services.ydl` (301 KB) and `stubs/` are delivered instead.
+# To download full source code, use `composer require --prefer-source` or `git clone`.
+/src export-ignore

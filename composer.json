@@ -65,12 +65,23 @@
         "source": "https://github.com/y-packages/api-client-services",
         "docs": "https://docs.yakhub.com.tr"
     },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../dynlink",
+            "options": {
+                "symlink": true
+            }
+        }
+    ],
     "require": {
         "php": "^8.2",
+        "yaknet/dynlink": "^1.0 || @dev",
         "ext-curl": "*",
         "ext-json": "*"
     },
     "suggest": {
+        "yaknet/dynlink": "PHP Dynamic Link Library (.ydl) ikili kütüphanesini doğrudan bellekten ultra hızlı çalıştırmak için",
         "yaknet/y-auth": "OAuth 2.0 / SSO kullanıcı kimlik doğrulaması ve giriş butonu entegrasyonu için",
         "yaknet/yacaptcha": "Altcha tabanlı PoW bot koruması ve Cloud Armor WAF bileşenleri için"
     },
@@ -79,6 +90,9 @@
         "phpstan/phpstan": "^2.2"
     },
     "autoload": {
+        "files": [
+            "bootstrap.php"
+        ],
         "psr-4": {
             "YakNet\\Api\\": "src/"
         }
@@ -91,6 +105,7 @@
     },
     "scripts": {
         "generate": "php bin/generate-services",
+        "build:ydl": "php bin/build-ydl",
         "test": "vendor/bin/phpunit",
         "analyze": "vendor/bin/phpstan analyse"
     },
