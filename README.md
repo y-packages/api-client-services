@@ -10,7 +10,7 @@
 
 ---
 
-## Desteklenen Bulut Servisleri (27 Servis, 530+ Üretilmiş Sınıf)
+## Desteklenen Bulut Servisleri (28 Servis, 550+ Üretilmiş Sınıf)
 
 | Servis Sınıfı | Açıklama | Kaynaklar (Resources) |
 | :--- | :--- | :--- |
@@ -41,6 +41,7 @@
 | `YakNet\Api\YakTube` | YakTube video platformu: Arama, HLS/MP4 akışları, kanal, oynatma listesi ve bulut arama geçmişi | `$yaktube->videos`, `$yaktube->channels`, `$yaktube->playlists`, `$yaktube->search`, `$yaktube->categories`, `$yaktube->instance`, `$yaktube->searchHistory` |
 | `YakNet\Api\CloudFinance` | TCMB döviz kurları, para birimi dönüştürücü, TR/Uluslararası IBAN doğrulama, VKN ve KDV hesaplama | `$finance->rates`, `$finance->iban`, `$finance->tax`, `$finance->vkn` |
 | `YakNet\Api\YakHub` | YakHub Git depoları, commitler, sürümler (releases), sorunlar (issues), organizasyonlar, admin ve DevOps | `$yakhub->repository`, `$yakhub->issue`, `$yakhub->organization`, `$yakhub->user`, `$yakhub->package`, `$yakhub->notification`, `$yakhub->settings`, `$yakhub->admin`, `$yakhub->miscellaneous` |
+| `YakNet\Api\Poetry` | Enes Yakıştır Şiir Merkezi: Şiir arşivi, günün şiiri/beyti, rastgele mısra, edebi lügat, kafiye bulucu ve yapay zekâ duygu analizi | `$poetry->poems`, `$poetry->daily`, `$poetry->random`, `$poetry->dictionary`, `$poetry->rhyme`, `$poetry->sentiment` |
 
 ---
 
@@ -225,7 +226,39 @@ $version = $yakhub->miscellaneous->getVersion();
 echo "YakHub Motor Sürümü: " . $version->getVersion() . "\n";
 ```
 
-### 8. Gelen Webhook İmzalarını Doğrulama (`X-YakNet-Signature`)
+### 8. Enes Yakıştır Şiir Merkezi API Kullanımı
+
+```php
+use YakNet\Api\Poetry;
+use YakNet\Api\Poetry\SentimentAnalyzeRequest;
+
+$poetry = new Poetry($client);
+
+// 1. Günün Şiiri ve Günün Beytini alma
+$daily = $poetry->daily->get();
+if ($daily->getSuccess()) {
+    $votd = $daily->getVerseOfTheDay();
+    echo "Günün Beyti: " . $votd->getVerse() . " (Şiir: " . $votd->getPoemTitle() . ")\n";
+}
+
+// 2. Edebi lügatte arama yapma
+$dict = $poetry->dictionary->lookup(['q' => 'vuslat']);
+if ($dict->getFound()) {
+    echo "Kelime: {$dict->getKelime()} ({$dict->getKoken()})\n";
+    foreach ($dict->getAnlamlar() ?? [] as $anlam) {
+        echo "- {$anlam->getAnlam()}\n";
+    }
+}
+
+// 3. Yapay Zekâ Şiir Duygu Analizi (ML)
+$sentiment = $poetry->sentiment->analyze(new SentimentAnalyzeRequest([
+    'text' => 'Gözlerin gözlerime değince felaketim olurdu ağlardım',
+]));
+echo "Baskın Duygu: " . $sentiment->getDominantMood() . " (Güven: %" . ($sentiment->getConfidence() * 100) . ")\n";
+echo "Açıklama: " . $sentiment->getDescription() . "\n";
+```
+
+### 9. Gelen Webhook İmzalarını Doğrulama (`X-YakNet-Signature`)
 
 ```php
 use YakNet\Api\Webhook\SignatureVerifier;

@@ -1,0 +1,445 @@
+{
+    "kind": "discovery#restDescription",
+    "discoveryVersion": "v1",
+    "id": "poetry:v1",
+    "name": "poetry",
+    "canonicalName": "Poetry",
+    "version": "v1",
+    "title": "Enes Yakıştır Şiir Merkezi API",
+    "description": "Açık Şiir REST API servisi: Şiir arşivi, günün şiiri/beyti, rastgele mısra seçimi, edebi lügat, kafiye bulucu ve yapay zekâ şiir duygu analizi.",
+    "ownerDomain": "yakhub.com.tr",
+    "ownerName": "YakNet",
+    "protocol": "rest",
+    "rootUrl": "https://developer-console.yakhub.com.tr/",
+    "servicePath": "api/cloud/poetry/",
+    "auth": {
+        "apiKey": {
+            "header": "X-API-Key",
+            "prefix": "yk_live_"
+        },
+        "oauth2Client": {
+            "clientIdHeader": "X-Client-ID",
+            "clientSecretHeader": "X-Client-Secret"
+        }
+    },
+    "schemas": {
+        "Poem": {
+            "id": "Poem",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "slug": {
+                    "type": "string"
+                },
+                "summary": {
+                    "type": "string"
+                },
+                "content": {
+                    "type": "string"
+                },
+                "content_html": {
+                    "type": "string"
+                },
+                "content_plain": {
+                    "type": "string"
+                },
+                "date_added": {
+                    "type": "string"
+                },
+                "tags": {
+                    "type": "string"
+                },
+                "likes": {
+                    "type": "integer"
+                },
+                "audio_url": {
+                    "type": "string"
+                }
+            }
+        },
+        "PoemListResponse": {
+            "id": "PoemListResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "count": {
+                    "type": "integer"
+                },
+                "poems": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "Poem"
+                    }
+                }
+            }
+        },
+        "PoemDetailResponse": {
+            "id": "PoemDetailResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "poem": {
+                    "$ref": "Poem"
+                }
+            }
+        },
+        "VerseOfTheDay": {
+            "id": "VerseOfTheDay",
+            "type": "object",
+            "properties": {
+                "verse": {
+                    "type": "string"
+                },
+                "poem_title": {
+                    "type": "string"
+                },
+                "poem_slug": {
+                    "type": "string"
+                },
+                "poem_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "DailyContentResponse": {
+            "id": "DailyContentResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "date": {
+                    "type": "string"
+                },
+                "poem_of_the_day": {
+                    "$ref": "Poem"
+                },
+                "verse_of_the_day": {
+                    "$ref": "VerseOfTheDay"
+                }
+            }
+        },
+        "RandomPoemInfo": {
+            "id": "RandomPoemInfo",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "slug": {
+                    "type": "string"
+                }
+            }
+        },
+        "RandomContentResponse": {
+            "id": "RandomContentResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "verse": {
+                    "type": "string"
+                },
+                "poem": {
+                    "$ref": "Poem"
+                }
+            }
+        },
+        "DictionaryExample": {
+            "id": "DictionaryExample",
+            "type": "object",
+            "properties": {
+                "ornek": {
+                    "type": "string"
+                },
+                "yazar_vd": {
+                    "type": "string"
+                }
+            }
+        },
+        "DictionaryMeaning": {
+            "id": "DictionaryMeaning",
+            "type": "object",
+            "properties": {
+                "anlam_sira": {
+                    "type": "integer"
+                },
+                "anlam": {
+                    "type": "string"
+                },
+                "ozellikler": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "ornekler": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "DictionaryExample"
+                    }
+                }
+            }
+        },
+        "DictionaryResponse": {
+            "id": "DictionaryResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "found": {
+                    "type": "boolean"
+                },
+                "kelime": {
+                    "type": "string"
+                },
+                "koken": {
+                    "type": "string"
+                },
+                "telaffuz": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "anlamlar": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "DictionaryMeaning"
+                    }
+                }
+            }
+        },
+        "RhymeResponse": {
+            "id": "RhymeResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "query": {
+                    "type": "string"
+                },
+                "zengin": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "tam": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "SentimentAnalyzeRequest": {
+            "id": "SentimentAnalyzeRequest",
+            "type": "object",
+            "properties": {
+                "text": {
+                    "type": "string"
+                }
+            }
+        },
+        "SentimentMetrics": {
+            "id": "SentimentMetrics",
+            "type": "object",
+            "properties": {
+                "word_count": {
+                    "type": "integer"
+                },
+                "character_count": {
+                    "type": "integer"
+                },
+                "reading_time_minutes": {
+                    "type": "number"
+                }
+            }
+        },
+        "SentimentAnalyzeResponse": {
+            "id": "SentimentAnalyzeResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "sentiment": {
+                    "type": "string"
+                },
+                "dominant_mood": {
+                    "type": "string"
+                },
+                "confidence": {
+                    "type": "number"
+                },
+                "probabilities": {
+                    "type": "object"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "color_hex": {
+                    "type": "string"
+                },
+                "metrics": {
+                    "$ref": "SentimentMetrics"
+                },
+                "error": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "resources": {
+        "poems": {
+            "methods": {
+                "list": {
+                    "id": "poetry.poems.list",
+                    "path": "poems",
+                    "httpMethod": "GET",
+                    "description": "Yayımlanmış tüm şiirlerin tam listesini döner.",
+                    "parameters": [],
+                    "response": {
+                        "$ref": "PoemListResponse"
+                    }
+                },
+                "get": {
+                    "id": "poetry.poems.get",
+                    "path": "poems/{id}",
+                    "httpMethod": "GET",
+                    "description": "Belirtilen benzersiz ID numarasına veya slug adına sahip tek bir şiirin tüm detaylarını getirir.",
+                    "parameters": {
+                        "id": {
+                            "type": "string",
+                            "location": "path",
+                            "required": true,
+                            "description": "Şiir ID veya slug"
+                        },
+                        "slug": {
+                            "type": "string",
+                            "location": "query",
+                            "required": false,
+                            "description": "Alternatif olarak şiir slug takısı"
+                        }
+                    },
+                    "response": {
+                        "$ref": "PoemDetailResponse"
+                    }
+                }
+            }
+        },
+        "daily": {
+            "methods": {
+                "get": {
+                    "id": "poetry.daily.get",
+                    "path": "daily",
+                    "httpMethod": "GET",
+                    "description": "Günün Şiiri ve anlam bütünlüğü korunmuş Günün Beyti içeriklerini getirir.",
+                    "parameters": [],
+                    "response": {
+                        "$ref": "DailyContentResponse"
+                    }
+                }
+            }
+        },
+        "random": {
+            "methods": {
+                "get": {
+                    "id": "poetry.random.get",
+                    "path": "random",
+                    "httpMethod": "GET",
+                    "description": "Sistemden rastgele bir şiir ya da rastgele bir beyit (2 mısra) getirir.",
+                    "parameters": {
+                        "type": {
+                            "type": "string",
+                            "location": "query",
+                            "required": false,
+                            "description": "İçerik türü: poem (varsayılan) veya verse"
+                        }
+                    },
+                    "response": {
+                        "$ref": "RandomContentResponse"
+                    }
+                }
+            }
+        },
+        "dictionary": {
+            "methods": {
+                "lookup": {
+                    "id": "poetry.dictionary.lookup",
+                    "path": "dictionary",
+                    "httpMethod": "GET",
+                    "description": "Edebi lügatte kelime arar, anlamlarını, kökenini ve edebi örneklerini listeler.",
+                    "parameters": {
+                        "q": {
+                            "type": "string",
+                            "location": "query",
+                            "required": true,
+                            "description": "Aranacak kelime"
+                        }
+                    },
+                    "response": {
+                        "$ref": "DictionaryResponse"
+                    }
+                }
+            }
+        },
+        "rhyme": {
+            "methods": {
+                "suggest": {
+                    "id": "poetry.rhyme.suggest",
+                    "path": "rhyme",
+                    "httpMethod": "GET",
+                    "description": "Verilen kelime için tam ve zengin kafiye önerileri üretir.",
+                    "parameters": {
+                        "q": {
+                            "type": "string",
+                            "location": "query",
+                            "required": true,
+                            "description": "Kafiyesi aranacak kelime"
+                        }
+                    },
+                    "response": {
+                        "$ref": "RhymeResponse"
+                    }
+                }
+            }
+        },
+        "sentiment": {
+            "methods": {
+                "analyze": {
+                    "id": "poetry.sentiment.analyze",
+                    "path": "sentiment/analyze",
+                    "httpMethod": "POST",
+                    "description": "Yapay zekâ ve ML modeliyle şiir/mısra metninin duygu analizini ve baskın temasını sınıflandırır.",
+                    "parameters": [],
+                    "request": {
+                        "$ref": "SentimentAnalyzeRequest"
+                    },
+                    "response": {
+                        "$ref": "SentimentAnalyzeResponse"
+                    }
+                }
+            }
+        }
+    }
+}

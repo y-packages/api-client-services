@@ -720,6 +720,103 @@ final class ApiClientServicesTest extends TestCase
         $this->assertSame('https://yakhub.com.tr/yaknet/yaknet-core.git', $repo->getCloneUrl());
     }
 
+    public function testPoetryService(): void
+    {
+        $mock = (new MockTransport())
+            ->queueJson([
+                'success' => true,
+                'count' => 1,
+                'poems' => [
+                    [
+                        'id' => 1,
+                        'title' => 'Ruhun Teninde Mühürlü Hürriyet',
+                        'slug' => 'ruhun-teninde-muhurlu-hurriyet',
+                        'summary' => 'Felsefi ve varoluşsal mısralar.',
+                        'content' => 'Gözlerin gözlerime değince...',
+                        'likes' => 10,
+                    ],
+                ],
+            ])
+            ->queueJson([
+                'success' => true,
+                'date' => '2026-11-15',
+                'poem_of_the_day' => [
+                    'id' => 1,
+                    'title' => 'Günün Şiiri',
+                    'slug' => 'gunun-siiri',
+                ],
+                'verse_of_the_day' => [
+                    'verse' => 'Karanlık gecede parlayan kandil / Gönül dergâhında bir ince ses.',
+                    'poem_title' => 'Günün Şiiri',
+                    'poem_id' => 1,
+                ],
+            ])
+            ->queueJson([
+                'success' => true,
+                'found' => true,
+                'kelime' => 'vuslat',
+                'koken' => 'Arapça',
+                'anlamlar' => [
+                    [
+                        'anlam_sira' => 1,
+                        'anlam' => 'Kavuşma, ulaşma.',
+                        'ozellikler' => ['isim', 'edebiyat'],
+                        'ornekler' => [
+                            ['ornek' => 'Vuslat artık pek uzak bir ihtimaldi.', 'yazar_vd' => 'Ahmet Haşim'],
+                        ],
+                    ],
+                ],
+            ])
+            ->queueJson([
+                'success' => true,
+                'dominant_mood' => 'Aşk',
+                'confidence' => 0.94,
+                'description' => 'Derin edebi temalar ve duygusal katmanlar içeren şiirsel ifade.',
+                'color_hex' => '#ef4444',
+                'metrics' => [
+                    'word_count' => 4,
+                    'character_count' => 32,
+                    'reading_time_minutes' => 0.1,
+                ],
+            ]);
+
+        $client = new Client(['api_key' => 'yk_live_test_key'], $mock);
+        $poetry = new \YakNet\Api\Poetry($client);
+
+        // 1. Poems: listResource
+        $poems = $poetry->poems->listResource();
+        $this->assertInstanceOf(\YakNet\Api\Poetry\PoemListResponse::class, $poems);
+        $this->assertTrue($poems->getSuccess());
+        $this->assertSame(1, $poems->getCount());
+        $poemList = $poems->getPoems();
+        $this->assertNotNull($poemList);
+        $this->assertSame('Ruhun Teninde Mühürlü Hürriyet', $poemList[0]->getTitle());
+
+        // 2. Daily: get
+        $daily = $poetry->daily->get();
+        $this->assertInstanceOf(\YakNet\Api\Poetry\DailyContentResponse::class, $daily);
+        $this->assertTrue($daily->getSuccess());
+        $this->assertNotNull($daily->getVerseOfTheDay());
+        $this->assertStringContainsString('Karanlık gecede', (string) $daily->getVerseOfTheDay()->getVerse());
+
+        // 3. Dictionary: lookup
+        $dict = $poetry->dictionary->lookup(['q' => 'vuslat']);
+        $this->assertInstanceOf(\YakNet\Api\Poetry\DictionaryResponse::class, $dict);
+        $this->assertTrue($dict->getSuccess());
+        $this->assertTrue($dict->getFound());
+        $this->assertSame('vuslat', $dict->getKelime());
+
+        // 4. Sentiment: analyze
+        $sentimentReq = new \YakNet\Api\Poetry\SentimentAnalyzeRequest([
+            'text' => 'Gözlerin gözlerime değince felaketim olurdu ağlardım',
+        ]);
+        $analysis = $poetry->sentiment->analyze($sentimentReq);
+        $this->assertInstanceOf(\YakNet\Api\Poetry\SentimentAnalyzeResponse::class, $analysis);
+        $this->assertTrue($analysis->getSuccess());
+        $this->assertSame('Aşk', $analysis->getDominantMood());
+        $this->assertEquals(0.94, $analysis->getConfidence());
+    }
+
     public function testDiscoveryGeneratorRegeneratesCleanlyFromLocalSpecs(): void
     {
         $discoveryDir = dirname(__DIR__).DIRECTORY_SEPARATOR.'discovery';
@@ -728,7 +825,7 @@ final class ApiClientServicesTest extends TestCase
         $generator = new DiscoveryGenerator();
         $stats = $generator->generateFromDirectory($discoveryDir, $tempOut);
 
-        $this->assertSame(27, $stats['services']);
+        $this->assertSame(28, $stats['services']);
         $this->assertGreaterThan(500, $stats['files']);
         $this->assertFileExists($tempOut.DIRECTORY_SEPARATOR.'Storage.php');
         $this->assertFileExists($tempOut.DIRECTORY_SEPARATOR.'CloudDns.php');
@@ -741,6 +838,9 @@ final class ApiClientServicesTest extends TestCase
         $this->assertFileExists($tempOut.DIRECTORY_SEPARATOR.'YakTube.php');
         $this->assertFileExists($tempOut.DIRECTORY_SEPARATOR.'CloudFinance.php');
         $this->assertFileExists($tempOut.DIRECTORY_SEPARATOR.'YakHub.php');
+        $this->assertFileExists($tempOut.DIRECTORY_SEPARATOR.'Poetry.php');
+        $this->assertFileExists($tempOut.DIRECTORY_SEPARATOR.'Poetry'.DIRECTORY_SEPARATOR.'Resource'.DIRECTORY_SEPARATOR.'Poems.php');
+        $this->assertFileExists($tempOut.DIRECTORY_SEPARATOR.'Poetry'.DIRECTORY_SEPARATOR.'Resource'.DIRECTORY_SEPARATOR.'Sentiment.php');
         $this->assertFileExists($tempOut.DIRECTORY_SEPARATOR.'YakHub'.DIRECTORY_SEPARATOR.'Resource'.DIRECTORY_SEPARATOR.'Repository.php');
         $this->assertFileExists($tempOut.DIRECTORY_SEPARATOR.'YakHub'.DIRECTORY_SEPARATOR.'Resource'.DIRECTORY_SEPARATOR.'Admin.php');
         $this->assertFileExists($tempOut.DIRECTORY_SEPARATOR.'CloudFinance'.DIRECTORY_SEPARATOR.'Resource'.DIRECTORY_SEPARATOR.'Rates.php');
