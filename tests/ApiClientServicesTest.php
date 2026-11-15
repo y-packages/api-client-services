@@ -817,6 +817,145 @@ final class ApiClientServicesTest extends TestCase
         $this->assertEquals(0.94, $analysis->getConfidence());
     }
 
+    public function testTurkiyeService(): void
+    {
+        $mock = (new MockTransport())
+            ->queueJson([
+                'success' => true,
+                'count' => 81,
+                'provinces' => [
+                    ['id' => 34, 'code' => '34', 'name' => 'İstanbul', 'slug' => 'istanbul', 'region' => 'Marmara'],
+                ],
+            ])
+            ->queueJson([
+                'success' => true,
+                'postal_code' => '34710',
+                'province' => ['id' => 34, 'code' => '34', 'name' => 'İstanbul'],
+                'district_count' => 39,
+            ])
+            ->queueJson([
+                'success' => true,
+                'valid' => true,
+                'tckn' => '10000000146',
+                'masked_tckn' => '10*******46',
+            ]);
+
+        $client = new Client(['api_key' => 'yk_live_test_key'], $mock);
+        $turkiye = new \YakNet\Api\Turkiye($client);
+
+        // 1. Provinces
+        $provinces = $turkiye->provinces->listResource(['region' => 'Marmara']);
+        $this->assertInstanceOf(\YakNet\Api\Turkiye\ProvinceListResponse::class, $provinces);
+        $this->assertTrue($provinces->getSuccess());
+        $this->assertCount(1, $provinces->getProvinces());
+        $this->assertSame('İstanbul', $provinces->getProvinces()[0]->getName());
+
+        // 2. Postal Code Lookup
+        $postal = $turkiye->postalCodes->lookup(['code' => '34710']);
+        $this->assertInstanceOf(\YakNet\Api\Turkiye\PostalCodeLookupResponse::class, $postal);
+        $this->assertTrue($postal->getSuccess());
+        $this->assertSame('34710', $postal->getPostalCode());
+
+        // 3. TCKN Validate
+        $tcknRes = $turkiye->identity->validateTckn(new \YakNet\Api\Turkiye\TcknValidateRequest([
+            'tckn' => '10000000146',
+        ]));
+        $this->assertInstanceOf(\YakNet\Api\Turkiye\TcknValidateResponse::class, $tcknRes);
+        $this->assertTrue($tcknRes->getValid());
+        $this->assertSame('10*******46', $tcknRes->getMaskedTckn());
+    }
+
+    public function testAccessibilityService(): void
+    {
+        $mock = (new MockTransport())
+            ->queueJson([
+                'success' => true,
+                'foreground' => '#000000',
+                'background' => '#ffffff',
+                'contrast_ratio' => 21.0,
+                'formatted_ratio' => '21:1',
+                'wcag_compliance' => [
+                    'normal_text' => ['aa' => true, 'aaa' => true],
+                ],
+            ])
+            ->queueJson([
+                'success' => true,
+                'original' => '#3b82f6',
+                'simulations' => [
+                    'protanopia' => ['name' => 'Protanopi', 'hex' => '#1d88f6'],
+                ],
+            ])
+            ->queueJson([
+                'success' => true,
+                'atesman_score' => 74.5,
+                'difficulty_level' => 'Kolay',
+            ]);
+
+        $client = new Client(['api_key' => 'yk_live_test_key'], $mock);
+        $a11y = new \YakNet\Api\Accessibility($client);
+
+        // 1. Contrast Calculate
+        $contrast = $a11y->contrast->calculate(new \YakNet\Api\Accessibility\ContrastCalculateRequest([
+            'foreground' => '#000000',
+            'background' => '#ffffff',
+        ]));
+        $this->assertInstanceOf(\YakNet\Api\Accessibility\ContrastCalculateResponse::class, $contrast);
+        $this->assertTrue($contrast->getSuccess());
+        $this->assertEquals(21.0, $contrast->getContrastRatio());
+
+        // 2. Colorblind Simulate
+        $sim = $a11y->colorblind->simulate(new \YakNet\Api\Accessibility\ColorblindSimulateRequest([
+            'color' => '#3b82f6',
+        ]));
+        $this->assertInstanceOf(\YakNet\Api\Accessibility\ColorblindSimulateResponse::class, $sim);
+        $this->assertTrue($sim->getSuccess());
+
+        // 3. Readability Score
+        $read = $a11y->readability->score(new \YakNet\Api\Accessibility\ReadabilityScoreRequest([
+            'text' => 'Erişilebilirlik herkes içindir.',
+        ]));
+        $this->assertInstanceOf(\YakNet\Api\Accessibility\ReadabilityScoreResponse::class, $read);
+        $this->assertTrue($read->getSuccess());
+        $this->assertEquals(74.5, $read->getAtesmanScore());
+    }
+
+    public function testCdnJsService(): void
+    {
+        $mock = (new MockTransport())
+            ->queueJson([
+                'success' => true,
+                'query' => 'vue',
+                'count' => 1,
+                'results' => [
+                    ['name' => 'vue', 'version' => '3.5.13', 'description' => 'The Progressive JavaScript Framework'],
+                ],
+            ])
+            ->queueJson([
+                'success' => true,
+                'hashes' => [
+                    'sha384' => 'sha384-mockhash123',
+                ],
+                'script_tag' => '<script src="https://cdnjs.yakhub.com.tr/vue.js" integrity="sha384-mockhash123" crossorigin="anonymous"></script>',
+            ]);
+
+        $client = new Client(['api_key' => 'yk_live_test_key'], $mock);
+        $cdnjs = new \YakNet\Api\CdnJs($client);
+
+        // 1. Libraries Search
+        $search = $cdnjs->libraries->search(['q' => 'vue']);
+        $this->assertInstanceOf(\YakNet\Api\CdnJs\LibrarySearchResponse::class, $search);
+        $this->assertTrue($search->getSuccess());
+        $this->assertSame('vue', $search->getResults()[0]->getName());
+
+        // 2. SRI Generate
+        $sri = $cdnjs->sri->generate(new \YakNet\Api\CdnJs\SriGenerateRequest([
+            'content' => 'console.log("hello");',
+        ]));
+        $this->assertInstanceOf(\YakNet\Api\CdnJs\SriGenerateResponse::class, $sri);
+        $this->assertTrue($sri->getSuccess());
+        $this->assertStringContainsString('integrity="sha384-mockhash123"', $sri->getScriptTag());
+    }
+
     public function testDiscoveryGeneratorRegeneratesCleanlyFromLocalSpecs(): void
     {
         $discoveryDir = dirname(__DIR__).DIRECTORY_SEPARATOR.'discovery';
@@ -825,8 +964,8 @@ final class ApiClientServicesTest extends TestCase
         $generator = new DiscoveryGenerator();
         $stats = $generator->generateFromDirectory($discoveryDir, $tempOut);
 
-        $this->assertSame(28, $stats['services']);
-        $this->assertGreaterThan(500, $stats['files']);
+        $this->assertSame(31, $stats['services']);
+        $this->assertGreaterThan(550, $stats['files']);
         $this->assertFileExists($tempOut.DIRECTORY_SEPARATOR.'Storage.php');
         $this->assertFileExists($tempOut.DIRECTORY_SEPARATOR.'CloudDns.php');
         $this->assertFileExists($tempOut.DIRECTORY_SEPARATOR.'CloudKms.php');
@@ -839,6 +978,12 @@ final class ApiClientServicesTest extends TestCase
         $this->assertFileExists($tempOut.DIRECTORY_SEPARATOR.'CloudFinance.php');
         $this->assertFileExists($tempOut.DIRECTORY_SEPARATOR.'YakHub.php');
         $this->assertFileExists($tempOut.DIRECTORY_SEPARATOR.'Poetry.php');
+        $this->assertFileExists($tempOut.DIRECTORY_SEPARATOR.'Turkiye.php');
+        $this->assertFileExists($tempOut.DIRECTORY_SEPARATOR.'Accessibility.php');
+        $this->assertFileExists($tempOut.DIRECTORY_SEPARATOR.'CdnJs.php');
+        $this->assertFileExists($tempOut.DIRECTORY_SEPARATOR.'Turkiye'.DIRECTORY_SEPARATOR.'Resource'.DIRECTORY_SEPARATOR.'Provinces.php');
+        $this->assertFileExists($tempOut.DIRECTORY_SEPARATOR.'Accessibility'.DIRECTORY_SEPARATOR.'Resource'.DIRECTORY_SEPARATOR.'Contrast.php');
+        $this->assertFileExists($tempOut.DIRECTORY_SEPARATOR.'CdnJs'.DIRECTORY_SEPARATOR.'Resource'.DIRECTORY_SEPARATOR.'Libraries.php');
         $this->assertFileExists($tempOut.DIRECTORY_SEPARATOR.'Poetry'.DIRECTORY_SEPARATOR.'Resource'.DIRECTORY_SEPARATOR.'Poems.php');
         $this->assertFileExists($tempOut.DIRECTORY_SEPARATOR.'Poetry'.DIRECTORY_SEPARATOR.'Resource'.DIRECTORY_SEPARATOR.'Sentiment.php');
         $this->assertFileExists($tempOut.DIRECTORY_SEPARATOR.'YakHub'.DIRECTORY_SEPARATOR.'Resource'.DIRECTORY_SEPARATOR.'Repository.php');

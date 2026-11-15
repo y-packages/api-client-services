@@ -1,0 +1,349 @@
+{
+    "kind": "discovery#restDescription",
+    "discoveryVersion": "v1",
+    "id": "accessibility:v1",
+    "name": "accessibility",
+    "canonicalName": "Accessibility",
+    "version": "v1",
+    "title": "YakNet Accessibility & WCAG Studio API",
+    "description": "WCAG 2.1 AA/AAA renk kontrastı oranı hesabı, renk körlüğü simülasyonu, HTML parçası erişilebilirlik denetimi ve Türkçe okunabilirlik indeksi.",
+    "ownerDomain": "yakhub.com.tr",
+    "ownerName": "YakNet",
+    "protocol": "rest",
+    "rootUrl": "https://developer-console.yakhub.com.tr/",
+    "servicePath": "api/cloud/accessibility/",
+    "auth": {
+        "apiKey": {
+            "header": "X-API-Key",
+            "prefix": "yk_live_"
+        },
+        "oauth2Client": {
+            "clientIdHeader": "X-Client-ID",
+            "clientSecretHeader": "X-Client-Secret"
+        }
+    },
+    "schemas": {
+        "ContrastCalculateRequest": {
+            "id": "ContrastCalculateRequest",
+            "type": "object",
+            "properties": {
+                "foreground": {
+                    "type": "string"
+                },
+                "background": {
+                    "type": "string"
+                }
+            }
+        },
+        "WcagLevel": {
+            "id": "WcagLevel",
+            "type": "object",
+            "properties": {
+                "aa": {
+                    "type": "boolean"
+                },
+                "aaa": {
+                    "type": "boolean"
+                },
+                "required_aa": {
+                    "type": "number"
+                },
+                "required_aaa": {
+                    "type": "number"
+                }
+            }
+        },
+        "WcagCompliance": {
+            "id": "WcagCompliance",
+            "type": "object",
+            "properties": {
+                "normal_text": {
+                    "$ref": "WcagLevel"
+                },
+                "large_text": {
+                    "$ref": "WcagLevel"
+                },
+                "ui_components_and_graphics": {
+                    "type": "object"
+                }
+            }
+        },
+        "ContrastCalculateResponse": {
+            "id": "ContrastCalculateResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "foreground": {
+                    "type": "string"
+                },
+                "background": {
+                    "type": "string"
+                },
+                "contrast_ratio": {
+                    "type": "number"
+                },
+                "formatted_ratio": {
+                    "type": "string"
+                },
+                "wcag_compliance": {
+                    "$ref": "WcagCompliance"
+                },
+                "evaluation": {
+                    "type": "string"
+                },
+                "error": {
+                    "type": "string"
+                }
+            }
+        },
+        "ColorblindSimulateRequest": {
+            "id": "ColorblindSimulateRequest",
+            "type": "object",
+            "properties": {
+                "color": {
+                    "type": "string"
+                }
+            }
+        },
+        "ColorblindVariant": {
+            "id": "ColorblindVariant",
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "hex": {
+                    "type": "string"
+                }
+            }
+        },
+        "ColorblindSimulations": {
+            "id": "ColorblindSimulations",
+            "type": "object",
+            "properties": {
+                "protanopia": {
+                    "$ref": "ColorblindVariant"
+                },
+                "deuteranopia": {
+                    "$ref": "ColorblindVariant"
+                },
+                "tritanopia": {
+                    "$ref": "ColorblindVariant"
+                },
+                "achromatopsia": {
+                    "$ref": "ColorblindVariant"
+                }
+            }
+        },
+        "ColorblindSimulateResponse": {
+            "id": "ColorblindSimulateResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "original": {
+                    "type": "string"
+                },
+                "rgb": {
+                    "type": "object"
+                },
+                "simulations": {
+                    "$ref": "ColorblindSimulations"
+                },
+                "error": {
+                    "type": "string"
+                }
+            }
+        },
+        "AuditHtmlRequest": {
+            "id": "AuditHtmlRequest",
+            "type": "object",
+            "properties": {
+                "html": {
+                    "type": "string"
+                }
+            }
+        },
+        "AuditIssue": {
+            "id": "AuditIssue",
+            "type": "object",
+            "properties": {
+                "rule": {
+                    "type": "string"
+                },
+                "severity": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "recommendation": {
+                    "type": "string"
+                }
+            }
+        },
+        "AuditHtmlResponse": {
+            "id": "AuditHtmlResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "accessibility_score": {
+                    "type": "integer"
+                },
+                "grade": {
+                    "type": "string"
+                },
+                "issue_count": {
+                    "type": "integer"
+                },
+                "issues": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "AuditIssue"
+                    }
+                },
+                "passed_checks": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "error": {
+                    "type": "string"
+                }
+            }
+        },
+        "ReadabilityScoreRequest": {
+            "id": "ReadabilityScoreRequest",
+            "type": "object",
+            "properties": {
+                "text": {
+                    "type": "string"
+                }
+            }
+        },
+        "ReadabilityMetrics": {
+            "id": "ReadabilityMetrics",
+            "type": "object",
+            "properties": {
+                "word_count": {
+                    "type": "integer"
+                },
+                "sentence_count": {
+                    "type": "integer"
+                },
+                "syllable_count": {
+                    "type": "integer"
+                },
+                "words_per_sentence": {
+                    "type": "number"
+                },
+                "syllables_per_word": {
+                    "type": "number"
+                },
+                "character_count": {
+                    "type": "integer"
+                }
+            }
+        },
+        "ReadabilityScoreResponse": {
+            "id": "ReadabilityScoreResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "atesman_score": {
+                    "type": "number"
+                },
+                "difficulty_level": {
+                    "type": "string"
+                },
+                "flesch_reading_ease": {
+                    "type": "number"
+                },
+                "metrics": {
+                    "$ref": "ReadabilityMetrics"
+                },
+                "error": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "resources": {
+        "contrast": {
+            "methods": {
+                "calculate": {
+                    "id": "accessibility.contrast.calculate",
+                    "path": "contrast/calculate",
+                    "httpMethod": "POST",
+                    "description": "WCAG 2.1 standardına göre iki renk arasındaki kontrast oranını ve uyumluluk seviyesini hesaplar.",
+                    "parameters": [],
+                    "request": {
+                        "$ref": "ContrastCalculateRequest"
+                    },
+                    "response": {
+                        "$ref": "ContrastCalculateResponse"
+                    }
+                }
+            }
+        },
+        "colorblind": {
+            "methods": {
+                "simulate": {
+                    "id": "accessibility.colorblind.simulate",
+                    "path": "colorblind/simulate",
+                    "httpMethod": "POST",
+                    "description": "Renk körlüğü türleri (Protanopi, Döteranopi, Tritanopi, Akromatopsi) altında rengin nasıl göründüğünü simüle eder.",
+                    "parameters": [],
+                    "request": {
+                        "$ref": "ColorblindSimulateRequest"
+                    },
+                    "response": {
+                        "$ref": "ColorblindSimulateResponse"
+                    }
+                }
+            }
+        },
+        "audit": {
+            "methods": {
+                "checkHtml": {
+                    "id": "accessibility.audit.checkHtml",
+                    "path": "audit/html",
+                    "httpMethod": "POST",
+                    "description": "HTML parçacığını WCAG erişilebilirlik ihlalleri (alt, aria-label, link, input) açısından kurallarla denetler.",
+                    "parameters": [],
+                    "request": {
+                        "$ref": "AuditHtmlRequest"
+                    },
+                    "response": {
+                        "$ref": "AuditHtmlResponse"
+                    }
+                }
+            }
+        },
+        "readability": {
+            "methods": {
+                "score": {
+                    "id": "accessibility.readability.score",
+                    "path": "readability/score",
+                    "httpMethod": "POST",
+                    "description": "Türkçe (Ateşman) ve İngilizce (Flesch) okunabilirlik skorunu, hece ve kelime zorluk düzeyini hesaplar.",
+                    "parameters": [],
+                    "request": {
+                        "$ref": "ReadabilityScoreRequest"
+                    },
+                    "response": {
+                        "$ref": "ReadabilityScoreResponse"
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,275 @@
+{
+    "kind": "discovery#restDescription",
+    "discoveryVersion": "v1",
+    "id": "cdnjs:v1",
+    "name": "cdnjs",
+    "canonicalName": "CdnJs",
+    "version": "v1",
+    "title": "YakNet CdnJs / Açık Kaynak Kütüphane & SRI API",
+    "description": "Açık kaynak JavaScript ve CSS kütüphaneleri arama, sürüm listeleme, Subresource Integrity (SRI) SHA-384/512 karması ve HTML tag üretme servisi.",
+    "ownerDomain": "yakhub.com.tr",
+    "ownerName": "YakNet",
+    "protocol": "rest",
+    "rootUrl": "https://developer-console.yakhub.com.tr/",
+    "servicePath": "api/cloud/cdnjs/",
+    "auth": {
+        "apiKey": {
+            "header": "X-API-Key",
+            "prefix": "yk_live_"
+        },
+        "oauth2Client": {
+            "clientIdHeader": "X-Client-ID",
+            "clientSecretHeader": "X-Client-Secret"
+        }
+    },
+    "schemas": {
+        "LibraryItem": {
+            "id": "LibraryItem",
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "version": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "keywords": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "homepage": {
+                    "type": "string"
+                }
+            }
+        },
+        "LibrarySearchResponse": {
+            "id": "LibrarySearchResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "query": {
+                    "type": "string"
+                },
+                "count": {
+                    "type": "integer"
+                },
+                "results": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "LibraryItem"
+                    }
+                }
+            }
+        },
+        "LibraryDetailResponse": {
+            "id": "LibraryDetailResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "latest_version": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "homepage": {
+                    "type": "string"
+                },
+                "license": {
+                    "type": "string"
+                },
+                "keywords": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "version_count": {
+                    "type": "integer"
+                },
+                "error": {
+                    "type": "string"
+                }
+            }
+        },
+        "LibraryVersionsResponse": {
+            "id": "LibraryVersionsResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "latest": {
+                    "type": "string"
+                },
+                "count": {
+                    "type": "integer"
+                },
+                "versions": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "error": {
+                    "type": "string"
+                }
+            }
+        },
+        "SriGenerateRequest": {
+            "id": "SriGenerateRequest",
+            "type": "object",
+            "properties": {
+                "url": {
+                    "type": "string"
+                },
+                "content": {
+                    "type": "string"
+                },
+                "algorithms": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "SriHashes": {
+            "id": "SriHashes",
+            "type": "object",
+            "properties": {
+                "sha256": {
+                    "type": "string"
+                },
+                "sha384": {
+                    "type": "string"
+                },
+                "sha512": {
+                    "type": "string"
+                }
+            }
+        },
+        "SriGenerateResponse": {
+            "id": "SriGenerateResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "url": {
+                    "type": "string"
+                },
+                "bytes": {
+                    "type": "integer"
+                },
+                "hashes": {
+                    "$ref": "SriHashes"
+                },
+                "preferred_integrity": {
+                    "type": "string"
+                },
+                "script_tag": {
+                    "type": "string"
+                },
+                "link_tag": {
+                    "type": "string"
+                },
+                "suggested_tag": {
+                    "type": "string"
+                },
+                "error": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "resources": {
+        "libraries": {
+            "methods": {
+                "search": {
+                    "id": "cdnjs.libraries.search",
+                    "path": "libraries",
+                    "httpMethod": "GET",
+                    "description": "Açık kaynak JavaScript ve CSS kütüphaneleri arasında arama yapar.",
+                    "parameters": {
+                        "q": {
+                            "type": "string",
+                            "location": "query",
+                            "required": false,
+                            "description": "Kütüphane arama sorgusu"
+                        }
+                    },
+                    "response": {
+                        "$ref": "LibrarySearchResponse"
+                    }
+                },
+                "get": {
+                    "id": "cdnjs.libraries.get",
+                    "path": "libraries/{name}",
+                    "httpMethod": "GET",
+                    "description": "Belirtilen kütüphanenin güncel sürümü, lisansı ve meta verilerini döner.",
+                    "parameters": {
+                        "name": {
+                            "type": "string",
+                            "location": "path",
+                            "required": true,
+                            "description": "Kütüphane / paket adı"
+                        }
+                    },
+                    "response": {
+                        "$ref": "LibraryDetailResponse"
+                    }
+                },
+                "versions": {
+                    "id": "cdnjs.libraries.versions",
+                    "path": "libraries/{name}/versions",
+                    "httpMethod": "GET",
+                    "description": "Belirtilen kütüphanenin mevcut tüm sürümlerini listeler.",
+                    "parameters": {
+                        "name": {
+                            "type": "string",
+                            "location": "path",
+                            "required": true,
+                            "description": "Kütüphane / paket adı"
+                        }
+                    },
+                    "response": {
+                        "$ref": "LibraryVersionsResponse"
+                    }
+                }
+            }
+        },
+        "sri": {
+            "methods": {
+                "generate": {
+                    "id": "cdnjs.sri.generate",
+                    "path": "sri/generate",
+                    "httpMethod": "POST",
+                    "description": "Verilen URL veya dosya içeriği için Subresource Integrity (SRI) karmalarını ve script/link etiketlerini üretir.",
+                    "parameters": [],
+                    "request": {
+                        "$ref": "SriGenerateRequest"
+                    },
+                    "response": {
+                        "$ref": "SriGenerateResponse"
+                    }
+                }
+            }
+        }
+    }
+}

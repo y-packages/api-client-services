@@ -337,6 +337,42 @@
             "discoveryRestUrl": "https://developer-console.yakhub.com.tr/api/discovery/v1/apis/poetry/v1/rest",
             "documentationLink": "https://developer-console.yakhub.com.tr/console/apis",
             "preferred": true
+        },
+        {
+            "kind": "discovery#directoryItem",
+            "id": "turkiye:v1",
+            "name": "turkiye",
+            "version": "v1",
+            "className": "Turkiye",
+            "title": "Türkiye Açık Veri, İl/İlçe & Mülki İdare API",
+            "description": "81 İl, 972 ilçe, posta kodları, plaka/alan kodları, yıllık resmi tatil takvimi ve algoritmik TCKN doğrulama servisi.",
+            "discoveryRestUrl": "https://developer-console.yakhub.com.tr/api/discovery/v1/apis/turkiye/v1/rest",
+            "documentationLink": "https://developer-console.yakhub.com.tr/console/apis",
+            "preferred": true
+        },
+        {
+            "kind": "discovery#directoryItem",
+            "id": "accessibility:v1",
+            "name": "accessibility",
+            "version": "v1",
+            "className": "Accessibility",
+            "title": "YakNet Accessibility & WCAG Studio API",
+            "description": "WCAG 2.1 AA/AAA renk kontrastı oranı hesabı, renk körlüğü simülasyonu, HTML parçası erişilebilirlik denetimi ve Türkçe okunabilirlik indeksi.",
+            "discoveryRestUrl": "https://developer-console.yakhub.com.tr/api/discovery/v1/apis/accessibility/v1/rest",
+            "documentationLink": "https://developer-console.yakhub.com.tr/console/apis",
+            "preferred": true
+        },
+        {
+            "kind": "discovery#directoryItem",
+            "id": "cdnjs:v1",
+            "name": "cdnjs",
+            "version": "v1",
+            "className": "CdnJs",
+            "title": "YakNet CdnJs / Açık Kaynak Kütüphane & SRI API",
+            "description": "Açık kaynak JavaScript ve CSS kütüphaneleri arama, sürüm listeleme, Subresource Integrity (SRI) SHA-384/512 karması ve HTML tag üretme servisi.",
+            "discoveryRestUrl": "https://developer-console.yakhub.com.tr/api/discovery/v1/apis/cdnjs/v1/rest",
+            "documentationLink": "https://developer-console.yakhub.com.tr/console/apis",
+            "preferred": true
         }
     ]
 }

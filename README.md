@@ -10,7 +10,7 @@
 
 ---
 
-## Desteklenen Bulut Servisleri (28 Servis, 550+ Üretilmiş Sınıf)
+## Desteklenen Bulut Servisleri (31 Servis, 600+ Üretilmiş Sınıf)
 
 | Servis Sınıfı | Açıklama | Kaynaklar (Resources) |
 | :--- | :--- | :--- |
@@ -42,6 +42,9 @@
 | `YakNet\Api\CloudFinance` | TCMB döviz kurları, para birimi dönüştürücü, TR/Uluslararası IBAN doğrulama, VKN ve KDV hesaplama | `$finance->rates`, `$finance->iban`, `$finance->tax`, `$finance->vkn` |
 | `YakNet\Api\YakHub` | YakHub Git depoları, commitler, sürümler (releases), sorunlar (issues), organizasyonlar, admin ve DevOps | `$yakhub->repository`, `$yakhub->issue`, `$yakhub->organization`, `$yakhub->user`, `$yakhub->package`, `$yakhub->notification`, `$yakhub->settings`, `$yakhub->admin`, `$yakhub->miscellaneous` |
 | `YakNet\Api\Poetry` | Enes Yakıştır Şiir Merkezi: Şiir arşivi, günün şiiri/beyti, rastgele mısra, edebi lügat, kafiye bulucu ve yapay zekâ duygu analizi | `$poetry->poems`, `$poetry->daily`, `$poetry->random`, `$poetry->dictionary`, `$poetry->rhyme`, `$poetry->sentiment` |
+| `YakNet\Api\Turkiye` | Türkiye Açık Veri & Mülki İdare: 81 İl, 972 ilçe, posta kodları, plaka/alan kodları, resmi tatiller ve TCKN doğrulama | `$turkiye->provinces`, `$turkiye->districts`, `$turkiye->postalCodes`, `$turkiye->holidays`, `$turkiye->identity` |
+| `YakNet\Api\Accessibility` | YakNet Accessibility & WCAG Studio: WCAG 2.1 renk kontrast oranı, renk körlüğü simülasyonu, HTML a11y ve okunabilirlik | `$a11y->contrast`, `$a11y->colorblind`, `$a11y->audit`, `$a11y->readability` |
+| `YakNet\Api\CdnJs` | YakNet CdnJs / Açık Kaynak Kütüphane & SRI: NPM/Cdnjs paket arama, sürümler, SRI bütünlük karması ve HTML tag üretimi | `$cdnjs->libraries`, `$cdnjs->sri` |
 
 ---
 
@@ -258,7 +261,78 @@ echo "Baskın Duygu: " . $sentiment->getDominantMood() . " (Güven: %" . ($senti
 echo "Açıklama: " . $sentiment->getDescription() . "\n";
 ```
 
-### 9. Gelen Webhook İmzalarını Doğrulama (`X-YakNet-Signature`)
+### 9. Türkiye Açık Veri & Mülki İdare Kullanımı
+
+```php
+use YakNet\Api\Turkiye;
+use YakNet\Api\Turkiye\TcknValidateRequest;
+
+$turkiye = new Turkiye($client);
+
+// 1. Posta kodundan il ve ilçe tespiti
+$postal = $turkiye->postalCodes->lookup(['code' => '34710']);
+echo "İl: " . $postal->getProvince()->getName() . " (" . $postal->getProvince()->getCode() . ")\n";
+
+// 2. 11 haneli TCKN matematiksel algoritma kontrolü
+$tckn = $turkiye->identity->validateTckn(new TcknValidateRequest([
+    'tckn' => '10000000146',
+]));
+echo "Geçerli: " . ($tckn->getValid() ? 'EVET' : 'HAYIR') . "\n";
+
+// 3. Resmi tatil ve bayram takvimi
+$holidays = $turkiye->holidays->listResource(['year' => 2026]);
+foreach ($holidays->getHolidays() ?? [] as $h) {
+    echo $h->getDate() . ' - ' . $h->getName() . ' (' . $h->getDays() . " gün)\n";
+}
+```
+
+### 10. Accessibility & WCAG Studio Kullanımı
+
+```php
+use YakNet\Api\Accessibility;
+use YakNet\Api\Accessibility\ContrastCalculateRequest;
+use YakNet\Api\Accessibility\ReadabilityScoreRequest;
+
+$a11y = new Accessibility($client);
+
+// 1. WCAG 2.1 Renk Kontrastı Hesaplama
+$contrast = $a11y->contrast->calculate(new ContrastCalculateRequest([
+    'foreground' => '#1e293b',
+    'background' => '#ffffff',
+]));
+echo "Kontrast Oranı: " . $contrast->getFormattedRatio() . "\n";
+echo "Değerlendirme: " . $contrast->getEvaluation() . "\n";
+
+// 2. Türkçe Ateşman Okunabilirlik Analizi
+$read = $a11y->readability->score(new ReadabilityScoreRequest([
+    'text' => 'Erişilebilir yazılımlar herkes için daha iyi bir dünya sunar.',
+]));
+echo "Ateşman Skoru: " . $read->getAtesmanScore() . " - Seviye: " . $read->getDifficultyLevel() . "\n";
+```
+
+### 11. CdnJs / Açık Kaynak Paket & SRI Kullanımı
+
+```php
+use YakNet\Api\CdnJs;
+use YakNet\Api\CdnJs\SriGenerateRequest;
+
+$cdnjs = new CdnJs($client);
+
+// 1. Kütüphane Arama
+$libs = $cdnjs->libraries->search(['q' => 'vue']);
+foreach ($libs->getResults() ?? [] as $lib) {
+    echo "Paket: " . $lib->getName() . " (v" . $lib->getVersion() . ")\n";
+}
+
+// 2. Subresource Integrity (SRI) Hash & Tag Üretimi
+$sri = $cdnjs->sri->generate(new SriGenerateRequest([
+    'content' => 'console.log("YakNet CDN");',
+    'url' => 'https://cdnjs.yakhub.com.tr/ajax/libs/vue/3.5.13/vue.global.prod.js',
+]));
+echo "SRI Tag: " . $sri->getScriptTag() . "\n";
+```
+
+### 12. Gelen Webhook İmzalarını Doğrulama (`X-YakNet-Signature`)
 
 ```php
 use YakNet\Api\Webhook\SignatureVerifier;

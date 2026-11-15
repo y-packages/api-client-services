@@ -45,6 +45,13 @@
         "nlp",
         "sozluk",
         "rhyme",
+        "turkiye",
+        "tckn",
+        "accessibility",
+        "wcag",
+        "contrast",
+        "cdnjs",
+        "sri",
         "sdk"
     ],
     "authors": [

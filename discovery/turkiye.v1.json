@@ -1,0 +1,396 @@
+{
+    "kind": "discovery#restDescription",
+    "discoveryVersion": "v1",
+    "id": "turkiye:v1",
+    "name": "turkiye",
+    "canonicalName": "Turkiye",
+    "version": "v1",
+    "title": "Türkiye Açık Veri, İl/İlçe & Mülki İdare API",
+    "description": "81 İl, 972 ilçe, posta kodları, plaka/alan kodları, yıllık resmi tatil takvimi ve algoritmik TCKN doğrulama servisi.",
+    "ownerDomain": "yakhub.com.tr",
+    "ownerName": "YakNet",
+    "protocol": "rest",
+    "rootUrl": "https://developer-console.yakhub.com.tr/",
+    "servicePath": "api/cloud/turkiye/",
+    "auth": {
+        "apiKey": {
+            "header": "X-API-Key",
+            "prefix": "yk_live_"
+        },
+        "oauth2Client": {
+            "clientIdHeader": "X-Client-ID",
+            "clientSecretHeader": "X-Client-Secret"
+        }
+    },
+    "schemas": {
+        "Province": {
+            "id": "Province",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "code": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "slug": {
+                    "type": "string"
+                },
+                "region": {
+                    "type": "string"
+                },
+                "area_code": {
+                    "type": "string"
+                },
+                "postal_code": {
+                    "type": "string"
+                },
+                "district_count": {
+                    "type": "integer"
+                },
+                "districts": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "ProvinceListResponse": {
+            "id": "ProvinceListResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "count": {
+                    "type": "integer"
+                },
+                "provinces": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "Province"
+                    }
+                }
+            }
+        },
+        "ProvinceDetailResponse": {
+            "id": "ProvinceDetailResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "province": {
+                    "$ref": "Province"
+                }
+            }
+        },
+        "DistrictItem": {
+            "id": "DistrictItem",
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "province_id": {
+                    "type": "integer"
+                },
+                "province_code": {
+                    "type": "string"
+                },
+                "province_name": {
+                    "type": "string"
+                },
+                "region": {
+                    "type": "string"
+                },
+                "postal_code_prefix": {
+                    "type": "string"
+                }
+            }
+        },
+        "DistrictSearchResponse": {
+            "id": "DistrictSearchResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "count": {
+                    "type": "integer"
+                },
+                "districts": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "DistrictItem"
+                    }
+                }
+            }
+        },
+        "PostalCodeProvinceInfo": {
+            "id": "PostalCodeProvinceInfo",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "code": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "region": {
+                    "type": "string"
+                },
+                "area_code": {
+                    "type": "string"
+                }
+            }
+        },
+        "PostalCodeLookupResponse": {
+            "id": "PostalCodeLookupResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "postal_code": {
+                    "type": "string"
+                },
+                "province": {
+                    "$ref": "PostalCodeProvinceInfo"
+                },
+                "district_count": {
+                    "type": "integer"
+                },
+                "sample_districts": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "error": {
+                    "type": "string"
+                }
+            }
+        },
+        "HolidayItem": {
+            "id": "HolidayItem",
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "date": {
+                    "type": "string"
+                },
+                "days": {
+                    "type": "number"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "is_half_day": {
+                    "type": "boolean"
+                },
+                "description": {
+                    "type": "string"
+                }
+            }
+        },
+        "HolidaysResponse": {
+            "id": "HolidaysResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "year": {
+                    "type": "integer"
+                },
+                "count": {
+                    "type": "integer"
+                },
+                "total_holiday_days": {
+                    "type": "number"
+                },
+                "holidays": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "HolidayItem"
+                    }
+                }
+            }
+        },
+        "TcknValidateRequest": {
+            "id": "TcknValidateRequest",
+            "type": "object",
+            "properties": {
+                "tckn": {
+                    "type": "string"
+                }
+            }
+        },
+        "TcknValidateResponse": {
+            "id": "TcknValidateResponse",
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "valid": {
+                    "type": "boolean"
+                },
+                "tckn": {
+                    "type": "string"
+                },
+                "masked_tckn": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "error": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "resources": {
+        "provinces": {
+            "methods": {
+                "list": {
+                    "id": "turkiye.provinces.list",
+                    "path": "provinces",
+                    "httpMethod": "GET",
+                    "description": "Türkiye'nin 81 ilini plaka kodu, bölge ve ilçe sayılarıyla listeler.",
+                    "parameters": {
+                        "region": {
+                            "type": "string",
+                            "location": "query",
+                            "required": false,
+                            "description": "Bölge filtresi (Marmara, Ege, vb.)"
+                        },
+                        "include_districts": {
+                            "type": "boolean",
+                            "location": "query",
+                            "required": false,
+                            "description": "Tüm ilçe listesini cevaba dahil et"
+                        }
+                    },
+                    "response": {
+                        "$ref": "ProvinceListResponse"
+                    }
+                },
+                "get": {
+                    "id": "turkiye.provinces.get",
+                    "path": "provinces/{id}",
+                    "httpMethod": "GET",
+                    "description": "Plaka kodu, slug veya il adı ile tek bir ilin tüm detaylarını ve ilçe listesini getirir.",
+                    "parameters": {
+                        "id": {
+                            "type": "string",
+                            "location": "path",
+                            "required": true,
+                            "description": "İl plaka kodu (örn: 34), slug (istanbul) veya adı"
+                        }
+                    },
+                    "response": {
+                        "$ref": "ProvinceDetailResponse"
+                    }
+                }
+            }
+        },
+        "districts": {
+            "methods": {
+                "search": {
+                    "id": "turkiye.districts.search",
+                    "path": "districts",
+                    "httpMethod": "GET",
+                    "description": "972 ilçe arasında arama yapar veya belirli bir ile ait ilçeleri listeler.",
+                    "parameters": {
+                        "q": {
+                            "type": "string",
+                            "location": "query",
+                            "required": false,
+                            "description": "İlçe adı arama terimi"
+                        },
+                        "province_id": {
+                            "type": "string",
+                            "location": "query",
+                            "required": false,
+                            "description": "İl plaka kodu filtresi"
+                        }
+                    },
+                    "response": {
+                        "$ref": "DistrictSearchResponse"
+                    }
+                }
+            }
+        },
+        "postalCodes": {
+            "methods": {
+                "lookup": {
+                    "id": "turkiye.postalCodes.lookup",
+                    "path": "postal-codes/lookup",
+                    "httpMethod": "GET",
+                    "description": "5 haneli posta koduna göre il ve dağıtım bölgesini tespit eder.",
+                    "parameters": {
+                        "code": {
+                            "type": "string",
+                            "location": "query",
+                            "required": true,
+                            "description": "5 haneli posta kodu (örn: 34710, 06100)"
+                        }
+                    },
+                    "response": {
+                        "$ref": "PostalCodeLookupResponse"
+                    }
+                }
+            }
+        },
+        "holidays": {
+            "methods": {
+                "list": {
+                    "id": "turkiye.holidays.list",
+                    "path": "holidays",
+                    "httpMethod": "GET",
+                    "description": "Belirtilen yılın tüm resmi, milli ve dini bayram tatillerini listeler.",
+                    "parameters": {
+                        "year": {
+                            "type": "integer",
+                            "location": "query",
+                            "required": false,
+                            "description": "Sorgulanacak yıl (varsayılan: geçerli yıl)"
+                        }
+                    },
+                    "response": {
+                        "$ref": "HolidaysResponse"
+                    }
+                }
+            }
+        },
+        "identity": {
+            "methods": {
+                "validateTckn": {
+                    "id": "turkiye.identity.validateTckn",
+                    "path": "identity/tckn/validate",
+                    "httpMethod": "POST",
+                    "description": "11 haneli T.C. Kimlik Numarası kontrol hanesi algoritma doğrulamasını gerçekleştirir.",
+                    "parameters": [],
+                    "request": {
+                        "$ref": "TcknValidateRequest"
+                    },
+                    "response": {
+                        "$ref": "TcknValidateResponse"
+                    }
+                }
+            }
+        }
+    }
+}
